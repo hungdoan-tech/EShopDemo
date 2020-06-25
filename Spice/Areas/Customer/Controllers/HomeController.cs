@@ -50,6 +50,12 @@ namespace Spice.Controllers
 
         public async Task<IActionResult> Search(string name = "")
         {
+            //Check name is null replace a empty string.
+            if (name == null)
+            {
+                name = "";
+            }
+
             IndexViewModel IndexVM = new IndexViewModel()
             {
                 MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
