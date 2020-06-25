@@ -26,7 +26,36 @@
         <link rel="stylesheet" href="~/css/jquery-ui.css" />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     </environment>
+    <style>
+        .icon_chat_facebook {
+            background: url("https://www.viettablet.com/design/themes/duchuymobile/media/images/facebook-messenger.png?1574736690") no-repeat;
+            width: 64px;
+            height: 64px;
+            background-size: cover;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .map-container {
+            overflow: hidden;
+            padding-bottom: 56.25%;
+            position: relative;
+            height: 0;
+        }
+
+            .map-container iframe {
+                left: 0;
+                top: 0;
+                height: 100%;
+                width: 100%;
+                position: absolute;
+            }
+    </style>
+    <link rel="stylesheet" href="~/css/Footer-Dark.css" />
+
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body class="search-background">
     <header>
@@ -41,6 +70,18 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
+
+                    <ul class="navbar-nav flex-grow-1">
+                        <form method="get" asp-action="Search" asp-controller="Home" class="form-inline my-2 my-md-0">
+                            <input class="form-control py-2 border-right-0 border" name="name" type="search" value="" id="example-search-input">
+                            <span class="input-group-append">
+                                <button class="btn btn-outline-secondary border-left-0 border" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </form>
+                    </ul>
+
                     <ul class="navbar-nav flex-grow-1">
 
                         @if (User.IsInRole(SD.ManagerUser))
@@ -61,7 +102,7 @@
                             </li>
                         }
 
-                        @if (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.CustomerEndUser) || User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser) )
+                        @if (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.CustomerEndUser) || User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser))
                         {
                             <li class="nav-item">
                                 <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory" class="nav-link">
@@ -85,7 +126,7 @@
                                     {
                                         <a class="dropdown-item" asp-action="OrderPickup" asp-controller="Order" asp-area="Customer">Order Pickup</a>
                                     }
-                                    </div>
+                                </div>
 
                             </li>
                         }
@@ -122,11 +163,46 @@
         </main>
     </div>
 
-    <footer class="border-top pl-3 footer text-white-50" style="background-color: #343a40;">
-        <div class="container">
-            &copy; 2018 - Spice
-        </div>
-    </footer>
+    <a href="https://www.messenger.com/" class="icon_chat_facebook"></a>
+
+    <div class="footer-dark">
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-md-3 item">
+                        <h3>Services</h3>
+                        <ul>
+                            <li><a href="#">Web design</a></li>
+                            <li><a href="#">Development</a></li>
+                            <li><a href="#">Hosting</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-md-3 item">
+                        <h3>About</h3>
+                        <ul>
+                            <li><a href="#">Company</a></li>
+                            <li><a href="#">Team</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+                    <div id="Map-ShopDaKi" class="col-md-6 item text">
+                        <h3>Google MAP</h3>
+                        <div id="map-container-google-1" class="z-depth-1-half map-container">
+                            <iframe allowfullscreen frameborder="0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAEBGNYcsskKEZ3wzdxCicHWrz_XAOnC3o&amp;q=University+of+Technology+and+Education+Ho+Chi+Minh+city%2C+V%C3%B5+V%C4%83n+Ng%C3%A2n%2C+Linh+Chi%E1%BB%83u%2C+Th%E1%BB%A7+%C4%90%E1%BB%A9c%2C+Ho+Chi+Minh+City&amp;zoom=15"
+                                    width="100%" height="250px"></iframe>
+                        </div>
+                    </div>
+                    <div class="col item social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-snapchat-ghost"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <p class="copyright">Spice © 2020</p>
+            </div>
+        </footer>
+    </div>
 
     <environment include="Development">
         <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=n94ifuzvl80pchikopiwgz2esrw8n28dwcywvpejlqrregfp"></script>
