@@ -72,7 +72,6 @@ namespace Spice.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Details(MenuItemsAndQuantity CartItemObject)
         {
-            CartItemObject.Item.Id = 0;
             if(ModelState.IsValid)
             {
                 List<MenuItemsAndQuantity> lstShoppingCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart");

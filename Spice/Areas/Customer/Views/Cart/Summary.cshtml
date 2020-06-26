@@ -12,7 +12,7 @@
     @if (Model.listCart.Count > 0)
     {
         <br />
-        <input id="userId" asp-for="@Model.listCart[0].ApplicationUserId" hidden />
+        <input id="userId" asp-for="@Model.OrderHeader.UserId" hidden />
         <div class="backgroundWhiteBorder">
             <div class="container">
                 <div class="card">
@@ -52,22 +52,6 @@
                                     </div>
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>Date</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <input asp-for="@Model.OrderHeader.PickUpDate" id="datepicker" value="" type="text" class="form-control" />
-                                        </div>
-                                    </div>
-                                    <div class="row my-1">
-                                        <div class="col-3">
-                                            <label>Time</label>
-                                        </div>
-                                        <div class="col-9">
-                                            <input asp-for="@Model.OrderHeader.PickUpTime" id="timepicker" value="" type="text" class="form-control" />
-                                        </div>
-                                    </div>
-                                    <div class="row my-1">
-                                        <div class="col-3">
                                             <label>Additional Instructions: </label>
                                         </div>
                                         <div class="col-9">
@@ -87,11 +71,11 @@
                                             {
                                                 <li class="list-group-item d-flex justify-content-between">
                                                     <div>
-                                                        <h6 class="my-0">@details.MenuItem.Name</h6>
-                                                        <small class="text-muted">Quantity: @details.Count</small>
+                                                        <h6 class="my-0">@details.Item.Name</h6>
+                                                        <small class="text-muted">Quantity: @details.Quantity</small>
                                                     </div>
-                                                    <span class="text-muted">$@(details.MenuItem.Price * details.Count)</span>
-                                                    @{ total += (details.MenuItem.Price * details.Count); }
+                                                    <span class="text-muted">$@(details.Item.Price * details.Quantity)</span>
+                                                    @{ total += (details.Item.Price * details.Quantity); }
                                                 </li>
                                             }
                                             @if (Model.OrderHeader.CouponCode != null)
