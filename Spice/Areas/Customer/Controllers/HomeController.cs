@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
+using Spice.Extensions;
 using Spice.Models;
 using Spice.Models.ViewModels;
 using Spice.Utility;
@@ -38,7 +39,7 @@ namespace Spice.Controllers
                 Category = await _db.Category.ToListAsync(),
                 Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
             };
-
+            
             //Pagination: - Url determine current pages.
             StringBuilder param = new StringBuilder();
             param.Append("?productPage=:");
@@ -67,7 +68,7 @@ namespace Spice.Controllers
                 TotalItem = count,
                 urlParam = param.ToString()
             };
-
+            
             return View(IndexVM);
         }
 
@@ -124,67 +125,55 @@ namespace Spice.Controllers
             return View(IndexVM);
         }
 
-        [Authorize]
         public async Task<IActionResult> Details(int id)
         {
             var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == id).FirstOrDefaultAsync();
-
-            ShoppingCart cartObj = new ShoppingCart()
+            MenuItemsAndQuantity menuItemsAndQuantity = new MenuItemsAndQuantity()
             {
-                MenuItem = menuItemFromDb,
-                MenuItemId = menuItemFromDb.Id
+                Item = menuItemFromDb,
+                Quantity = 1
             };
-
-            return View(cartObj);
+            return View(menuItemsAndQuantity);
         }
 
 
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Details(ShoppingCart CartObject)
+        public async Task<IActionResult> Details(MenuItemsAndQuantity CartItemObject)
         {
-            CartObject.Id = 0;
-            if (ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                var claimsIdentity = (ClaimsIdentity)this.User.Identity;
-                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-                CartObject.ApplicationUserId = claim.Value;
+                List<MenuItemsAndQuantity> lstShoppingCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart");
+                if (lstShoppingCart == null)
 
-                ShoppingCart cartFromDb = await _db.ShoppingCart.Where(c => c.ApplicationUserId == CartObject.ApplicationUserId
-                                                && c.MenuItemId == CartObject.MenuItemId).FirstOrDefaultAsync();
-
-                if (cartFromDb == null)
                 {
-                    await _db.ShoppingCart.AddAsync(CartObject);
+                    lstShoppingCart = new List<MenuItemsAndQuantity>();
                 }
-                else
+                foreach (var a in lstShoppingCart)
                 {
-                    cartFromDb.Count = cartFromDb.Count + CartObject.Count;
+                    if(a.Item.Id == CartItemObject.Item.Id)
+                    {
+                        a.Quantity += CartItemObject.Quantity;
+                        HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
+                        return RedirectToAction("Index");
+                    }
                 }
-                await _db.SaveChangesAsync();
-
-                var count = _db.ShoppingCart.Where(c => c.ApplicationUserId == CartObject.ApplicationUserId).ToList().Count();
-                HttpContext.Session.SetInt32(SD.ssShoppingCartCount, count);
-
+                lstShoppingCart.Add(CartItemObject);
+                HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);               
                 return RedirectToAction("Index");
             }
             else
             {
+                var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == CartItemObject.Item.Id).FirstOrDefaultAsync();
 
-                var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == CartObject.MenuItemId).FirstOrDefaultAsync();
-
-                ShoppingCart cartObj = new ShoppingCart()
+                MenuItemsAndQuantity cartObj = new MenuItemsAndQuantity()
                 {
-                    MenuItem = menuItemFromDb,
-                    MenuItemId = menuItemFromDb.Id
+                    Item = menuItemFromDb,
+                    Quantity = menuItemFromDb.Id
                 };
-
                 return View(cartObj);
             }
         }
-
-
 
 
 

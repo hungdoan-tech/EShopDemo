@@ -8,11 +8,9 @@ namespace Spice.Models
 {
     public class Category
     {
-        [Key]
         public int Id { get; set; }
-
-        [Display(Name="Category Name")]
-        [Required]
         public string Name { get; set; }
+        public virtual ICollection<SubCategory> SubCategories { get; set; }
+        public virtual ICollection<MenuItem> MenuItems { get; set; }
     }
 }
