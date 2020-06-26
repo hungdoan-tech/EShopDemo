@@ -33,11 +33,8 @@ namespace Spice.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
-            if (HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart) != null)
-            {
-                HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart).Clear();
-            }
-            _logger.LogInformation("User logged out.");
+            var lstShoppingCart = new List<MenuItemsAndQuantity>();
+            HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);
