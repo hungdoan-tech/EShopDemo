@@ -1,6 +1,7 @@
 ﻿@using Spice.Utility
 @using Microsoft.AspNetCore.Http
-
+@using Spice.Models.ViewModels
+@using Spice.Extensions
 @inject IHttpContextAccessor HttpContextAccessor
 
 <!DOCTYPE html>
@@ -132,12 +133,16 @@
                         }
 
 
-                        @if (HttpContextAccessor.HttpContext.Session.GetInt32(@SD.ssShoppingCartCount) != null)
+                        @if (HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart") != null)
                         {
                             <li style="color:white">
                                 <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-link">
                                     @{
-                                        var count = HttpContextAccessor.HttpContext.Session.GetInt32(@SD.ssShoppingCartCount);
+                                        int count = 0;
+                                        foreach(var item in HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart"))
+                                        {
+                                            count += item.Quantity;
+                                        }                                        
                                     }
                                     <i class="fas fa-shopping-cart"></i> &nbsp; (@count)
                                 </a>
