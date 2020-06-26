@@ -51,9 +51,9 @@
                         <th>
                             @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.ApplicationUser.Email)
                         </th>
-                        <th>
+                        @*<th>
                             @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.PickUpTime)
-                        </th>
+                        </th>*@
                         <th>
                             @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.OrderTotal)
                         </th>
@@ -75,9 +75,9 @@
                             <td>
                                 @Html.DisplayFor(m => item.OrderHeader.ApplicationUser.Email)
                             </td>
-                            <td>
+                            @*<td>
                                 @Html.DisplayFor(m => item.OrderHeader.PickUpTime)
-                            </td>
+                            </td>*@
                             <td>
                                 @Html.DisplayFor(m => item.OrderHeader.OrderTotal)
                             </td>
