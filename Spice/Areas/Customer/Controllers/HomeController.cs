@@ -52,15 +52,6 @@ namespace Spice.Controllers
                .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
 
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-            if (claim != null)
-            {
-                var cnt = _db.ShoppingCart.Where(u => u.ApplicationUserId == claim.Value).ToList().Count;
-                HttpContext.Session.SetInt32(SD.ssShoppingCartCount, cnt);
-            }
-
             IndexVM.PagingInfo = new PagingInfo()
             {
                 CurrentPage = productPage,
@@ -105,14 +96,6 @@ namespace Spice.Controllers
             IndexVM.MenuItem = IndexVM.MenuItem.OrderBy(p => p.Price)
                .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-            if (claim != null)
-            {
-                var cnt = _db.ShoppingCart.Where(u => u.ApplicationUserId == claim.Value).ToList().Count;
-                HttpContext.Session.SetInt32(SD.ssShoppingCartCount, cnt);
-            }
 
             IndexVM.PagingInfo = new PagingInfo()
             {
@@ -174,8 +157,6 @@ namespace Spice.Controllers
                 return View(cartObj);
             }
         }
-
-
 
         public IActionResult Privacy()
         {
