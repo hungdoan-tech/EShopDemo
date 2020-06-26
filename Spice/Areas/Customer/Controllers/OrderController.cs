@@ -51,10 +51,9 @@ namespace Spice.Areas.Customer.Controllers
         public IActionResult GetOrderStatus(int Id)
         {
             return PartialView("_OrderStatus", _db.OrderHeader.Where(m => m.Id == Id).FirstOrDefault().Status);
-
         }
 
-        [Authorize]
+        [Authorize(Roles = SD.CustomerEndUser)]
         public async Task<IActionResult> OrderHistory(int productPage=1)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -96,29 +95,27 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderListVM);
         }
 
-        //[Authorize(Roles = SD.KitchenUser + "," + SD.ManagerUser)]
-        //public async Task<IActionResult> ManageOrder(int productPage = 1)
-        //{
-           
-        //    List<OrderDetailsViewModel> orderDetailsVM = new List<OrderDetailsViewModel>();
+        [Authorize(Roles = SD.KitchenUser + "," + SD.ManagerUser)]
+        public async Task<IActionResult> ManageOrder(int productPage = 1)
+        {
 
-        //    //List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Where(o=>o.Status==SD.StatusSubmitted || o.Status==SD.StatusInProcess).OrderByDescending(u=>u.PickUpTime).ToListAsync();
-            
+            List<OrderDetailsViewModel> orderDetailsVM = new List<OrderDetailsViewModel>();
 
-        //    //foreach (OrderHeader item in OrderHeaderList)
-        //    //{
-        //    //    OrderDetailsViewModel individual = new OrderDetailsViewModel
-        //    //    {
-        //    //        OrderHeader = item,
-        //    //        OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
-        //    //    };
-        //    //    orderDetailsVM.Add(individual);
-        //    //}
+            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Where(o => o.Status == SD.StatusSubmitted || o.Status == SD.StatusInProcess).OrderByDescending(u => u.OrderDate).ToListAsync();
 
-            
 
-        //    //return View(orderDetailsVM.OrderBy(o=>o.OrderHeader.PickUpTime).ToList());
-        //}
+            foreach (OrderHeader item in OrderHeaderList)
+            {
+                OrderDetailsViewModel individual = new OrderDetailsViewModel
+                {
+                    OrderHeader = item,
+                    OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
+                };
+                orderDetailsVM.Add(individual);
+            }
+
+            return View(orderDetailsVM.OrderBy(o => o.OrderHeader.OrderDate).ToList());
+        }
 
 
         public async Task<IActionResult> GetOrderDetails(int Id)
@@ -128,12 +125,9 @@ namespace Spice.Areas.Customer.Controllers
                 OrderHeader = await _db.OrderHeader.Include(el => el.ApplicationUser).FirstOrDefaultAsync(m => m.Id == Id),
                 OrderDetails = await _db.OrderDetails.Where(m => m.OrderId == Id).ToListAsync()
             };
-            //orderDetailsViewModel.OrderHeader.ApplicationUser = await _db.ApplicationUser.FirstOrDefaultAsync(u => u.Id == orderDetailsViewModel.OrderHeader.UserId);
-
+            orderDetailsViewModel.OrderHeader.ApplicationUser = await _db.ApplicationUser.FirstOrDefaultAsync(u => u.Id == orderDetailsViewModel.OrderHeader.UserId);
             return PartialView("_IndividualOrderDetails", orderDetailsViewModel);
         }
-
-
 
 
         [Authorize(Roles =SD.KitchenUser + ","+ SD.ManagerUser)]
@@ -177,8 +171,8 @@ namespace Spice.Areas.Customer.Controllers
         [Authorize]
         public async Task<IActionResult> OrderPickup(int productPage = 1, string searchEmail=null, string searchPhone = null, string searchName = null)
         {
-            //var claimsIdentity = (ClaimsIdentity)User.Identity;
-            //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             OrderListViewModel orderListVM = new OrderListViewModel()
             {
