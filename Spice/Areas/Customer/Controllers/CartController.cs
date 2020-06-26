@@ -172,7 +172,6 @@ namespace Spice.Areas.Customer.Controllers
                 Currency = "usd",
                 Description = "Order ID : " + detailCart.OrderHeader.Id,
                 Source = stripeToken
-
             };
             var service = new ChargeService();
             Charge charge = service.Create(options);
