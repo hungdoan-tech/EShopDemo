@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,13 +21,16 @@ namespace Spice.Controllers
     {
         private readonly ApplicationDbContext _db;
 
+        //Once a page has limit 3 products.
+        private int PageSize = 3;
+
         public HomeController(ApplicationDbContext db)
         {
             _db = db;
         }
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int productPage = 1)
         {
             IndexViewModel IndexVM = new IndexViewModel()
             {
@@ -35,20 +39,39 @@ namespace Spice.Controllers
                 Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
             };
 
+            //Pagination: - Url determine current pages.
+            StringBuilder param = new StringBuilder();
+            param.Append("?productPage=:");
+
+            //Count a quantity in MenuItem.
+            var count = IndexVM.MenuItem.Count();
+
+            
+            IndexVM.MenuItem = IndexVM.MenuItem.OrderBy(p => p.Price)
+               .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
+
+
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            if(claim!=null)
+            if (claim != null)
             {
                 var cnt = _db.ShoppingCart.Where(u => u.ApplicationUserId == claim.Value).ToList().Count;
                 HttpContext.Session.SetInt32(SD.ssShoppingCartCount, cnt);
             }
 
+            IndexVM.PagingInfo = new PagingInfo()
+            {
+                CurrentPage = productPage,
+                ItemsPerPage = PageSize,
+                TotalItem = count,
+                urlParam = param.ToString()
+            };
 
             return View(IndexVM);
         }
 
-        public async Task<IActionResult> Search(string name = "")
+        public async Task<IActionResult> Search(string name = "", int productPage = 1)
         {
             //Check name is null replace a empty string.
             if (name == null)
@@ -63,6 +86,24 @@ namespace Spice.Controllers
                 Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
             };
 
+            //Pagination: - Url determine current pages.
+            StringBuilder param = new StringBuilder();
+            param.Append("/Customer/Home/Search?productPage=:");
+
+            param.Append("&name=");
+            if (name != null)
+            {
+                param.Append(name);
+            }
+
+            IndexVM.MenuItem = IndexVM.MenuItem.Where(m => m.Name.ToLower().Contains(name.ToLower()));
+
+            //Count a quantity in MenuItem.
+            var count = IndexVM.MenuItem.Count();
+
+            IndexVM.MenuItem = IndexVM.MenuItem.OrderBy(p => p.Price)
+               .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
+
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
@@ -72,8 +113,13 @@ namespace Spice.Controllers
                 HttpContext.Session.SetInt32(SD.ssShoppingCartCount, cnt);
             }
 
-            IndexVM.MenuItem = IndexVM.MenuItem.Where(m => m.Name.ToLower().Contains(name.ToLower()));
-
+            IndexVM.PagingInfo = new PagingInfo()
+            {
+                CurrentPage = productPage,
+                ItemsPerPage = PageSize,
+                TotalItem = count,
+                urlParam = param.ToString()
+            };
 
             return View(IndexVM);
         }
@@ -99,7 +145,7 @@ namespace Spice.Controllers
         public async Task<IActionResult> Details(ShoppingCart CartObject)
         {
             CartObject.Id = 0;
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var claimsIdentity = (ClaimsIdentity)this.User.Identity;
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -108,7 +154,7 @@ namespace Spice.Controllers
                 ShoppingCart cartFromDb = await _db.ShoppingCart.Where(c => c.ApplicationUserId == CartObject.ApplicationUserId
                                                 && c.MenuItemId == CartObject.MenuItemId).FirstOrDefaultAsync();
 
-                if(cartFromDb==null)
+                if (cartFromDb == null)
                 {
                     await _db.ShoppingCart.AddAsync(CartObject);
                 }

@@ -61,6 +61,14 @@
     }
 </div>
 
+<form method="get">
+    <div page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
+         page-class="btn border"
+         page-class-normal="btn btn-default active"
+         page-class-selected="btn btn-primary active" class="btn-group m-1">
+    </div>
+</form>
+
 
 @section Scripts{
     <script src="https://code.jquery.com/jquery-3.3.1.js"
@@ -69,26 +77,26 @@
 
     <script>
 
-    var posts = $('.post');
+        var posts = $('.post');
 
-    (function ($) {
+        (function ($) {
 
-        $("#menu-filters li").click(function () {
-            $("#menu-filters li").removeClass('active btn btn-secondary');
-            $(this).addClass('active btn btn-secondary');
+            $("#menu-filters li").click(function () {
+                $("#menu-filters li").removeClass('active btn btn-secondary');
+                $(this).addClass('active btn btn-secondary');
 
-            var selectedFilter = $(this).data("filter");
+                var selectedFilter = $(this).data("filter");
 
-            $(".menu-restaurant").fadeOut();
+                $(".menu-restaurant").fadeOut();
 
-            setTimeout(function () {
-                $(selectedFilter).slideDown();
-            }, 300);
-        });
+                setTimeout(function () {
+                    $(selectedFilter).slideDown();
+                }, 300);
+            });
 
 
 
-    })(jQuery);
+        })(jQuery);
 
     </script>
 }
