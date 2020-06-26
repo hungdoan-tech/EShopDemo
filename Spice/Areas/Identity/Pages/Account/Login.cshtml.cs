@@ -71,6 +71,7 @@ namespace Spice.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
+        [Route("~/Account/Login")]
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
@@ -83,12 +84,6 @@ namespace Spice.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     var user = await _db.Users.Where(u => u.Email == Input.Email).FirstOrDefaultAsync();
-
-                    List<ShoppingCart> lstShoppingCart = await _db.ShoppingCart.Where(u => u.ApplicationUserId == user.Id).ToListAsync();
-
-                    HttpContext.Session.SetInt32(SD.ssShoppingCartCount, lstShoppingCart.Count);
-
-
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

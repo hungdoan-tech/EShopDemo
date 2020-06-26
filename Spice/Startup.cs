@@ -101,6 +101,9 @@ namespace Spice
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapControllerRoute(name: "Login",
+                //    pattern: "Account/Login",
+                //    defaults: new { area="Identity", pagemodel = "LogoutModel", action = "Article" });
                 endpoints.MapControllerRoute(
                     name: "areas",
                     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");

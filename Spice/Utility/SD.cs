@@ -16,7 +16,7 @@ namespace Spice.Utility
         public const string FrontDeskUser = "FrontDesk";
         public const string CustomerEndUser = "Customer";
 
-        public const string ssShoppingCartCount = "ssCartCount";
+        public const string ssShoppingCart = "ssShoppingCart";
         public const string ssCouponCode = "ssCouponCode";
 
         public const string StatusSubmitted = "Submitted";
@@ -28,13 +28,6 @@ namespace Spice.Utility
         public const string PaymentStatusPending = "Pending";
         public const string PaymentStatusApproved = "Approved";
         public const string PaymentStatusRejected = "Rejected";
-
-
-
-
-
-
-
 
 
         public static string ConvertToRawHtml(string source)

@@ -12,15 +12,117 @@ namespace Spice.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-        }
 
+        }
         public DbSet<Category> Category { get; set; }
         public DbSet<SubCategory> SubCategory { get; set; }
         public DbSet<MenuItem> MenuItem { get; set; }
         public DbSet<Coupon> Coupon { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
-        public DbSet<ShoppingCart> ShoppingCart { get; set; }
         public DbSet<OrderHeader> OrderHeader { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Config Section
+            // Category model
+            modelBuilder.Entity<Category>().HasKey(a => a.Id);
+            modelBuilder.Entity<Category>()
+              .Property(a => a.Name)
+              .IsRequired();
+
+            //SubCategory model
+            modelBuilder.Entity<SubCategory>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<SubCategory>()
+                .HasOne(a => a.Category)
+                .WithMany(b => b.SubCategories)
+                .HasForeignKey(a => a.CategoryId);
+            modelBuilder.Entity<SubCategory>()
+                .Property(a => a.Name)
+                .IsRequired();
+            modelBuilder.Entity<SubCategory>()
+                .Property(a => a.CategoryId)
+                .IsRequired();
+
+            //MenuItems
+            modelBuilder.Entity<MenuItem>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<MenuItem>()
+                .HasOne(a => a.SubCategory)
+                .WithMany(b => b.MenuItems)
+                .HasForeignKey(a => a.SubCategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<MenuItem>()
+                .HasOne(a => a.Category)
+                .WithMany(b => b.MenuItems)
+                .HasForeignKey(a => a.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<MenuItem>()
+                .Property(a => a.Name)
+                .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.Price)
+               .IsRequired();
+
+            //Coupon 
+            modelBuilder.Entity<Coupon>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<Coupon>()
+                .Property(a => a.Name)
+                .IsRequired();
+            modelBuilder.Entity<Coupon>()
+                .Property(a => a.CouponType)
+                .IsRequired();
+            modelBuilder.Entity<Coupon>()
+                .Property(a => a.Discount)
+                .IsRequired();
+            modelBuilder.Entity<Coupon>()
+                .Property(a => a.MinimumAmount)
+                .IsRequired();
+
+            //OrderHeader
+            modelBuilder.Entity<OrderHeader>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<OrderHeader>()
+                .HasOne(a => a.ApplicationUser)
+                .WithMany(b => b.OrderHeaders)
+                .HasForeignKey(a => a.UserId);
+            modelBuilder.Entity<OrderHeader>()
+                .Property(a => a.UserId)
+                .IsRequired();
+            modelBuilder.Entity<OrderHeader>()
+                .Property(a => a.OrderDate)
+                .IsRequired();
+            modelBuilder.Entity<OrderHeader>()
+                .Property(a => a.OrderTotalOriginal)
+                .IsRequired();
+            modelBuilder.Entity<OrderHeader>()
+                .Property(a => a.OrderTotal)
+                .IsRequired();
+
+            //OrderDetails
+            modelBuilder.Entity<OrderDetails>()
+               .HasKey(a => a.Id);
+            modelBuilder.Entity<OrderDetails>()
+               .HasOne(a => a.OrderHeader)
+               .WithMany(b => b.OrderDetails)
+               .HasForeignKey(a => a.OrderId);
+            modelBuilder.Entity<OrderDetails>()
+               .HasOne(a => a.MenuItem)
+               .WithMany(b => b.OrderDetails)
+               .HasForeignKey(a => a.MenuItemId);
+            modelBuilder.Entity<OrderDetails>()
+               .Property(a => a.Price)
+               .IsRequired();
+            modelBuilder.Entity<OrderDetails>()
+               .Property(a => a.OrderId)
+               .IsRequired();
+            modelBuilder.Entity<OrderDetails>()
+               .Property(a => a.MenuItemId)
+               .IsRequired();
+        }
     }
 }
