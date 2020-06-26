@@ -112,97 +112,93 @@ namespace Spice.Areas.Customer.Controllers
             return View(detailCart);
         }
 
-        //[Authorize]
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //[ActionName("Summary")]
-        //public async Task<IActionResult> SummaryPost(string stripeToken)
-        //{
-        //    var claimsIdentity = (ClaimsIdentity)User.Identity;
-        //    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Summary")]
+        public async Task<IActionResult> SummaryPost(string stripeToken)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
+            detailCart.listCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart).ToList();
 
-        //    detailCart.listCart = await _db.ShoppingCart.Where(c => c.ApplicationUserId == claim.Value).ToListAsync();
+            detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
+            detailCart.OrderHeader.OrderDate = DateTime.Now;
+            detailCart.OrderHeader.UserId = claim.Value;
+            detailCart.OrderHeader.Status = SD.PaymentStatusPending;
 
-        //    detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
-        //    detailCart.OrderHeader.OrderDate = DateTime.Now;
-        //    detailCart.OrderHeader.UserId = claim.Value;
-        //    detailCart.OrderHeader.Status = SD.PaymentStatusPending;
-        //    detailCart.OrderHeader.PickUpTime = Convert.ToDateTime(detailCart.OrderHeader.PickUpDate.ToShortDateString() + " " + detailCart.OrderHeader.PickUpTime.ToShortTimeString());
+            List<OrderDetails> orderDetailsList = new List<OrderDetails>();
+            _db.OrderHeader.Add(detailCart.OrderHeader);
+            await _db.SaveChangesAsync();
 
-        //    List<OrderDetails> orderDetailsList = new List<OrderDetails>();
-        //    _db.OrderHeader.Add(detailCart.OrderHeader);
-        //    await _db.SaveChangesAsync();
+            detailCart.OrderHeader.OrderTotalOriginal = 0;
 
-        //    detailCart.OrderHeader.OrderTotalOriginal = 0;
+            foreach (var item in detailCart.listCart)
+            {
+                item.Item = await _db.MenuItem.FirstOrDefaultAsync(m => m.Id == item.Item.Id);
+                OrderDetails orderDetails = new OrderDetails
+                {
+                    MenuItemId = item.Item.Id,
+                    OrderId = detailCart.OrderHeader.Id,
+                    Description = item.Item.Description,
+                    Name = item.Item.Name,
+                    Price = item.Item.Price,
+                    Count = item.Quantity
+                };
+                detailCart.OrderHeader.OrderTotalOriginal += orderDetails.Count * orderDetails.Price;
+                _db.OrderDetails.Add(orderDetails);
 
+            }
 
-        //    foreach (var item in detailCart.listCart)
-        //    {
-        //        item.MenuItem = await _db.MenuItem.FirstOrDefaultAsync(m => m.Id == item.MenuItemId);
-        //        OrderDetails orderDetails = new OrderDetails
-        //        {
-        //            MenuItemId = item.MenuItemId,
-        //            OrderId = detailCart.OrderHeader.Id,
-        //            Description = item.MenuItem.Description,
-        //            Name = item.MenuItem.Name,
-        //            Price = item.MenuItem.Price,
-        //            Count = item.Count
-        //        };
-        //        detailCart.OrderHeader.OrderTotalOriginal += orderDetails.Count * orderDetails.Price;
-        //        _db.OrderDetails.Add(orderDetails);
+            if (HttpContext.Session.GetString(SD.ssCouponCode) != null)
+            {
+                detailCart.OrderHeader.CouponCode = HttpContext.Session.GetString(SD.ssCouponCode);
+                var couponFromDb = await _db.Coupon.Where(c => c.Name.ToLower() == detailCart.OrderHeader.CouponCode.ToLower()).FirstOrDefaultAsync();
+                detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
+            }
+            else
+            {
+                detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotalOriginal;
+            }
+            detailCart.OrderHeader.CouponCodeDiscount = detailCart.OrderHeader.OrderTotalOriginal - detailCart.OrderHeader.OrderTotal;
 
-        //    }
+            HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart).Clear();
+            await _db.SaveChangesAsync();
 
-        //    if (HttpContext.Session.GetString(SD.ssCouponCode) != null)
-        //    {
-        //        detailCart.OrderHeader.CouponCode = HttpContext.Session.GetString(SD.ssCouponCode);
-        //        var couponFromDb = await _db.Coupon.Where(c => c.Name.ToLower() == detailCart.OrderHeader.CouponCode.ToLower()).FirstOrDefaultAsync();
-        //        detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
-        //    }
-        //    else
-        //    {
-        //        detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotalOriginal;
-        //    }
-        //    detailCart.OrderHeader.CouponCodeDiscount = detailCart.OrderHeader.OrderTotalOriginal - detailCart.OrderHeader.OrderTotal;
+            var options = new ChargeCreateOptions
+            {
+                Amount = Convert.ToInt32(detailCart.OrderHeader.OrderTotal * 100),
+                Currency = "usd",
+                Description = "Order ID : " + detailCart.OrderHeader.Id,
+                Source = stripeToken
 
-        //    _db.ShoppingCart.RemoveRange(detailCart.listCart);
-        //    HttpContext.Session.SetInt32(SD.ssShoppingCartCount, 0);
-        //    await _db.SaveChangesAsync();
+            };
+            var service = new ChargeService();
+            Charge charge = service.Create(options);
 
-        //    var options = new ChargeCreateOptions
-        //    {
-        //        Amount = Convert.ToInt32(detailCart.OrderHeader.OrderTotal * 100),
-        //        Currency = "usd",
-        //        Description = "Order ID : " + detailCart.OrderHeader.Id,
-        //        Source = stripeToken
+            if (charge.BalanceTransactionId == null)
+            {
+                detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusRejected;
+            }
+            else
+            {
+                detailCart.OrderHeader.TransactionId = charge.BalanceTransactionId;
+            }
 
-        //    };
-        //    var service = new ChargeService();
-        //    Charge charge = service.Create(options);
+            if (charge.Status.ToLower() == "succeeded")
+            {
+                detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusApproved;
+                detailCart.OrderHeader.Status = SD.StatusSubmitted;
+            }
+            else
+            {
+                detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusRejected;
+            }
 
-        //    if (charge.BalanceTransactionId == null)
-        //    {
-        //        detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusRejected;
-        //    }
-        //    else
-        //    {
-        //        detailCart.OrderHeader.TransactionId = charge.BalanceTransactionId;
-        //    }
-
-        //    if (charge.Status.ToLower() == "succeeded")
-        //    {
-        //        detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusApproved;
-        //        detailCart.OrderHeader.Status = SD.StatusSubmitted;
-        //    }
-        //    else
-        //    {
-        //        detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusRejected;
-        //    }
-
-        //    await _db.SaveChangesAsync();
-        //    return RedirectToAction("Index", "Home");
-        //}
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index", "Home");
+        }
 
 
         public IActionResult AddCoupon()
