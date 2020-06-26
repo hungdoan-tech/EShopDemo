@@ -42,7 +42,7 @@ namespace Spice.Areas.Customer.Controllers
 
             detailCart.OrderHeader.OrderTotal = 0;
 
-            var cart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart");
+            var cart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
 
             if (cart != null)
             {
@@ -71,8 +71,7 @@ namespace Spice.Areas.Customer.Controllers
             return View(detailCart);
         }
 
-
-        [Authorize(Roles = SD.CustomerEndUser)]
+        [Authorize]
         public async Task<IActionResult> Summary()
         {
             detailCart = new OrderDetailsCart()
@@ -86,7 +85,7 @@ namespace Spice.Areas.Customer.Controllers
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             ApplicationUser applicationUser = await _db.ApplicationUser.Where(c => c.Id == claim.Value).FirstOrDefaultAsync();
 
-            var cart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart");
+            var cart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
 
             if (cart != null)
             {
@@ -102,7 +101,6 @@ namespace Spice.Areas.Customer.Controllers
             detailCart.OrderHeader.OrderTotalOriginal = detailCart.OrderHeader.OrderTotal;
             detailCart.OrderHeader.PickupName = applicationUser.Name;
             detailCart.OrderHeader.PhoneNumber = applicationUser.PhoneNumber;
-            detailCart.OrderHeader.PickUpTime = DateTime.Now;
             detailCart.OrderHeader.UserId = claim.Value;
 
             if (HttpContext.Session.GetString(SD.ssCouponCode) != null)
@@ -114,7 +112,7 @@ namespace Spice.Areas.Customer.Controllers
             return View(detailCart);
         }
 
-
+        //[Authorize]
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //[ActionName("Summary")]
@@ -227,15 +225,15 @@ namespace Spice.Areas.Customer.Controllers
 
         public IActionResult Plus(int cartId)
         {
-            List<MenuItemsAndQuantity> lstShoppingCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart");
+            List<MenuItemsAndQuantity> lstShoppingCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
             lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity += 1;
-            HttpContext.Session.Set("ssShoppingCart", lstShoppingCart);
+            HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Minus(int cartId)
         {
-            List<MenuItemsAndQuantity> lstShoppingCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart");
+            List<MenuItemsAndQuantity> lstShoppingCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
             var cartItem = lstShoppingCart.Find(c => c.Item.Id == cartId);
             if (cartItem.Quantity == 1)
             {
@@ -245,16 +243,16 @@ namespace Spice.Areas.Customer.Controllers
             {
                 lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity -= 1;
             }
-            HttpContext.Session.Set("ssShoppingCart", lstShoppingCart);
+            HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Remove(int cartId)
         {
-            List<MenuItemsAndQuantity> lstShoppingCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart");
+            List<MenuItemsAndQuantity> lstShoppingCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
             var cartItem = lstShoppingCart.Find(c => c.Item.Id == cartId);
             lstShoppingCart.Remove(cartItem);
-            HttpContext.Session.Set("ssShoppingCart", lstShoppingCart);
+            HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
             return RedirectToAction(nameof(Index));
         }
     }

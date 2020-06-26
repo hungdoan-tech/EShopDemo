@@ -29,21 +29,12 @@ namespace Spice.Models
         [Display(Name ="Order Total")]
         public double OrderTotal { get; set; }
 
-        [Required]
-        [Display(Name = "Pickup Time")]
-        public DateTime PickUpTime { get; set; }
-
-        [Required]
-        [NotMapped]
-        public DateTime PickUpDate { get; set; }
-
        [Display(Name ="Coupon Code")]
         public string CouponCode { get; set; }
         public double CouponCodeDiscount { get; set; }
         public string Status { get; set; }
         public string PaymentStatus { get; set; }
         public string Comments { get; set; }
-
 
         [Display(Name = "Pickup Name")]
         public string PickupName { get; set; }

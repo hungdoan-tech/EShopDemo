@@ -84,12 +84,12 @@ namespace Spice.Controllers
                     if(a.Item.Id == CartItemObject.Item.Id)
                     {
                         a.Quantity += CartItemObject.Quantity;
-                        HttpContext.Session.Set("ssShoppingCart", lstShoppingCart);
+                        HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
                         return RedirectToAction("Index");
                     }
                 }
                 lstShoppingCart.Add(CartItemObject);
-                HttpContext.Session.Set("ssShoppingCart", lstShoppingCart);               
+                HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);               
                 return RedirectToAction("Index");
             }
             else
