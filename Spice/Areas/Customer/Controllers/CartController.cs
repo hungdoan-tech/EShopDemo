@@ -143,7 +143,7 @@ namespace Spice.Areas.Customer.Controllers
                     OrderId = detailCart.OrderHeader.Id,
                     Description = item.Item.Description,
                     Name = item.Item.Name,
-                    Price = item.Item.Price,
+                    Price = item.Item.Price * item.Quantity,
                     Count = item.Quantity
                 };
                 detailCart.OrderHeader.OrderTotalOriginal += orderDetails.Count * orderDetails.Price;
@@ -196,6 +196,8 @@ namespace Spice.Areas.Customer.Controllers
             }
 
             await _db.SaveChangesAsync();
+            var lstShoppingCart = new List<MenuItemsAndQuantity>();
+            HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
             return RedirectToAction("Index", "Home");
         }
 
