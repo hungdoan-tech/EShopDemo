@@ -1,4 +1,4 @@
-﻿@*@model List<Spice.Models.ViewModels.OrderDetailsViewModel>
+﻿@model List<Spice.Models.ViewModels.OrderDetailsViewModel>
 @using Spice.Utility
 @{
     ViewData["Title"] = "ManageOrder";
@@ -26,12 +26,6 @@
                                 </ul>
                             </div>
                             <div class="col-lg-4 col-12 pb-2">
-                                <div class="input-group pb-2">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">Time</span>
-                                    </div>
-                                    <input type="text" class="border rounded form-control" readonly value="@item.OrderHeader.PickUpTime" />
-                                </div>
                                 @{ 
                                     var comments = item.OrderHeader.Comments;
                                     if(comments==null || comments.Trim().Length ==0)
@@ -75,5 +69,5 @@
             }
         </div>
     }
-</form>*@
+</form>
 
