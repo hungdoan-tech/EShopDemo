@@ -120,7 +120,6 @@ namespace Spice.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ///NewsVM.News.NewsCategoryId = Convert.ToInt32(Request.Form["NewsCategoryId"].ToString());
 
             if (!ModelState.IsValid)
             {
@@ -151,11 +150,11 @@ namespace Spice.Areas.Admin.Controllers
                 }
 
                 //we will upload the new file
-                using (var filesStream = new FileStream(Path.Combine(uploads, NewsVM.News.Id + extension_new), FileMode.Create))
+                using (var filesStream = new FileStream(Path.Combine(uploads, "News" + NewsVM.News.Id + extension_new), FileMode.Create))
                 {
                     files[0].CopyTo(filesStream);
                 }
-                NewsFromDb.Image = @"\images\" + NewsVM.News.Id + extension_new;
+                NewsFromDb.Image = @"\images\" + "News" + NewsVM.News.Id + extension_new;
             }
 
             NewsFromDb.Alias = NewsVM.News.Alias;

@@ -63,7 +63,7 @@
 <div>
     @foreach (var category in Model.NewsCategories)
     {
-        <div class="row">
+        <div class="row" >
             <partial name="_NewsPostPartial" model="@Model.News.Where(u=>u.NewsCategory.Name.Equals(category.Name))" />
         </div>
     }

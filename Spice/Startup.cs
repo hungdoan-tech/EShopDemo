@@ -18,6 +18,7 @@ using Stripe;
 using Spice.Service;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Routing.Template;
 
 namespace Spice
 {
@@ -74,6 +75,8 @@ namespace Spice
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
             });
+            services.AddControllers(options => options.EnableEndpointRouting = false);
+            services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -105,13 +108,17 @@ namespace Spice
                     name: "areas",
                     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
+
             });
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "areas",
-            //        template: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
-            //});
+                //app.UseMvc(routes =>
+                //{
+                //    routes.MapRoute(
+                //        name: "areas",
+                //        template: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
+                //});
+
+            }
         }
-    }
-}
+    
+} 
