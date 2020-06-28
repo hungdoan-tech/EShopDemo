@@ -110,6 +110,15 @@
                                     Order History
                                 </a>
                             </li>
+
+                            if (User.IsInRole(SD.CustomerEndUser))
+                            {
+                                <li class="nav-item">
+                                    <a asp-area="Customer" asp-controller="Order" asp-action="OrderTracking" class="nav-link">
+                                        <label id="trackingOrdering">Tracking Ordering</label>
+                                    </a>
+                                </li>
+                            }
                         }
 
                         @if (User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser) || User.IsInRole(SD.ManagerUser))
@@ -139,10 +148,10 @@
                                 <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-link">
                                     @{
                                         int count = 0;
-                                        foreach(var item in HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart"))
+                                        foreach (var item in HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart"))
                                         {
                                             count += item.Quantity;
-                                        }                                        
+                                        }
                                     }
                                     <i class="fas fa-shopping-cart"></i> &nbsp; (@count)
                                 </a>
@@ -208,6 +217,23 @@
             </div>
         </footer>
     </div>
+
+    <script>
+        const requestTrackingOrdering = async () => {
+            const countRaw = await fetch('/Customer/Order/TrackingOrder')
+            const count = await countRaw.json()
+
+            if (count) {
+                if (count === 0) {
+                    document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering'
+                }
+                else {
+                    document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering (' + count + ')'
+                }
+            }
+        }
+        requestTrackingOrdering()
+    </script>
 
     <environment include="Development">
         <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=n94ifuzvl80pchikopiwgz2esrw8n28dwcywvpejlqrregfp"></script>

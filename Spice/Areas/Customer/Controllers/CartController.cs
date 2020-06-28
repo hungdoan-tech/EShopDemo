@@ -51,14 +51,19 @@ namespace Spice.Areas.Customer.Controllers
 
             foreach (var eachItem in detailCart.listCart)
             {
-                eachItem.Item = await _db.MenuItem.FirstOrDefaultAsync(m => m.Id == eachItem.Item.Id);
-                detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotal + (eachItem.Item.Price * eachItem.Quantity);
-                eachItem.Item.Description = SD.ConvertToRawHtml(eachItem.Item.Description);
-                
-                if (eachItem.Item.Description.Length > 100)
+                try
                 {
-                    eachItem.Item.Description = eachItem.Item.Description.Substring(0, 99) + "...";
+                    eachItem.Item = await _db.MenuItem.FirstOrDefaultAsync(m => m.Id == eachItem.Item.Id);
+                    detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotal + (eachItem.Item.Price * eachItem.Quantity);
+
+                    eachItem.Item.Description = SD.ConvertToRawHtml(eachItem.Item.Description);
+
+                    if (eachItem.Item.Description.Length > 100)
+                    {
+                        eachItem.Item.Description = eachItem.Item.Description.Substring(0, 99) + "...";
+                    }
                 }
+                catch { }
             }
             detailCart.OrderHeader.OrderTotalOriginal = detailCart.OrderHeader.OrderTotal;
 
