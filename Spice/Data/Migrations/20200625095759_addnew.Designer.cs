@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Spice.Data;
 
-namespace Spice.Migrations
+namespace Spice.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200625095759_addnew")]
+    partial class addnew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -314,60 +316,13 @@ namespace Spice.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Alias")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DatePublished")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Header")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NewsCategoryId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("NewsCategoryId");
 
                     b.ToTable("News");
-                });
-
-            modelBuilder.Entity("Spice.Models.NewsCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Alias")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NewsCategories");
                 });
 
             modelBuilder.Entity("Spice.Models.OrderDetails", b =>
@@ -435,6 +390,9 @@ namespace Spice.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("PickUpTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PickupName")
                         .HasColumnType("nvarchar(max)");
 
@@ -453,6 +411,27 @@ namespace Spice.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("OrderHeader");
+                });
+
+            modelBuilder.Entity("Spice.Models.ShoppingCart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MenuItemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ShoppingCart");
                 });
 
             modelBuilder.Entity("Spice.Models.SubCategory", b =>
@@ -552,23 +531,14 @@ namespace Spice.Migrations
             modelBuilder.Entity("Spice.Models.MenuItem", b =>
                 {
                     b.HasOne("Spice.Models.Category", "Category")
-                        .WithMany("MenuItems")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Spice.Models.SubCategory", "SubCategory")
-                        .WithMany("MenuItems")
-                        .HasForeignKey("SubCategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Spice.Models.News", b =>
-                {
-                    b.HasOne("Spice.Models.NewsCategory", "NewsCategory")
                         .WithMany()
-                        .HasForeignKey("NewsCategoryId")
+                        .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -576,13 +546,13 @@ namespace Spice.Migrations
             modelBuilder.Entity("Spice.Models.OrderDetails", b =>
                 {
                     b.HasOne("Spice.Models.MenuItem", "MenuItem")
-                        .WithMany("OrderDetails")
+                        .WithMany()
                         .HasForeignKey("MenuItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Spice.Models.OrderHeader", "OrderHeader")
-                        .WithMany("OrderDetails")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -591,7 +561,7 @@ namespace Spice.Migrations
             modelBuilder.Entity("Spice.Models.OrderHeader", b =>
                 {
                     b.HasOne("Spice.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("OrderHeaders")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -600,7 +570,7 @@ namespace Spice.Migrations
             modelBuilder.Entity("Spice.Models.SubCategory", b =>
                 {
                     b.HasOne("Spice.Models.Category", "Category")
-                        .WithMany("SubCategories")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

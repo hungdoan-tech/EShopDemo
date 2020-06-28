@@ -70,6 +70,16 @@
             <partial name="_ThumbnailAreaPartial" model="@Model.MenuItem.Where(u=>u.Category.Name.Equals(category.Name))" />
         </div>
     }
+
+</div>
+
+<div>
+    @foreach (var category in Model.NewsCategories)
+    {
+        <div class="row">
+            <partial name="_NewsPostPartial" model="@Model.News.Where(u=>u.NewsCategory.Name.Equals(category.Name))" />
+        </div>
+    }
 </div>
 
 <form method="get">

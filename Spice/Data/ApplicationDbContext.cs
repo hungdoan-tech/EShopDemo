@@ -21,7 +21,8 @@ namespace Spice.Data
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<OrderHeader> OrderHeader { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
-
+        public DbSet<News> News { get; set; }
+        public DbSet<NewsCategory> NewsCategories { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
