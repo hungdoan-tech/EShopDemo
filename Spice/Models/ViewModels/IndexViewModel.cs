@@ -13,5 +13,5 @@ namespace Spice.Models.ViewModels
         public PagingInfo PagingInfo { get; set; }
         public IEnumerable<News> News { get; set; }
         public IEnumerable<NewsCategory> NewsCategories { get; set; }
-
+    }
 }
