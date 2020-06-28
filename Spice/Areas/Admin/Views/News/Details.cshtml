@@ -1,0 +1,75 @@
+﻿@model Spice.Models.ViewModels.NewsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<br />
+<h2 class="text-info">Details News</h2>
+<br />
+<script src="//cdn.ckeditor.com/4.14.1/full/ckeditor.js"></script>
+<div class="backgroundWhiteBorder row">
+    <div class="col-8">
+        <fieldset disabled>
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="News.Header" class="custom-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="News.Header" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="News.DatePublished" class="custom-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="News.DatePublished" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="News.Author" class="custom-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="News.Author" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="News.NewsCategoryId" class="custom-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="News.NewsCategory.Name" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="News.Content" class="custom-label"></label>
+                    </div>
+                    <div>
+                        <textarea rows="100" cols="50" id="editor1" asp-for="News.Content" readonly></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+        </fieldset>
+    </div>
+    <div class="col-3">
+        <img src="@Model.News.Image" width="100%" style="border-radius:5px;border:1px solid #bbb9b9;" />
+    </div>
+    <div class="col-8">
+        <div class="col-8 offset-4">
+            <partial name="_DetailsAndBackToListButton" model="Model.News.Id" />
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    CKEDITOR.replace('editor1', {width:1000, height:700});
+</script>
+
