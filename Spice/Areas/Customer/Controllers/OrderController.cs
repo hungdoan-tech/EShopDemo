@@ -129,6 +129,72 @@ namespace Spice.Areas.Customer.Controllers
             return PartialView("_IndividualOrderDetails", orderDetailsViewModel);
         }
 
+        [Authorize(Roles = SD.CustomerEndUser)]
+        public async Task<IActionResult> OrderTracking(int productPage = 1)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+
+            OrderListViewModel orderListVM = new OrderListViewModel()
+            {
+                Orders = new List<OrderDetailsViewModel>()
+            };
+
+
+
+            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
+
+            foreach (OrderHeader item in OrderHeaderList)
+            {
+                OrderDetailsViewModel individual = new OrderDetailsViewModel
+                {
+                    OrderHeader = item,
+                    OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
+                };
+                orderListVM.Orders.Add(individual);
+            }
+
+            var count = orderListVM.Orders.Count;
+            orderListVM.Orders = orderListVM.Orders.OrderByDescending(p => p.OrderHeader.Id)
+                                 .Skip((productPage - 1) * PageSize)
+                                 .Take(PageSize).ToList();
+
+            orderListVM.PagingInfo = new PagingInfo
+            {
+                CurrentPage = productPage,
+                ItemsPerPage = PageSize,
+                TotalItem = count,
+                urlParam = "/Customer/Order/OrderHistory?productPage=:"
+            };
+
+            return View(orderListVM);
+        }
+
+        [Authorize(Roles = SD.CustomerEndUser)]
+        public async Task<IActionResult> DetailTracking(int Id)
+        {
+            OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel()
+            {
+                OrderHeader = await _db.OrderHeader.Include(el => el.ApplicationUser).FirstOrDefaultAsync(m => m.Id == Id),
+                OrderDetails = await _db.OrderDetails.Where(m => m.OrderId == Id).ToListAsync()
+            };
+            orderDetailsViewModel.OrderHeader.ApplicationUser = await _db.ApplicationUser.FirstOrDefaultAsync(u => u.Id == orderDetailsViewModel.OrderHeader.UserId);
+
+            return View(orderDetailsViewModel);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> TrackingOrder()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
+
+            return Ok(OrderHeaderList.Where(o => !o.Status.Equals(SD.StatusCompleted)).Count());
+        }
+
 
         [Authorize(Roles =SD.KitchenUser + ","+ SD.ManagerUser)]
         public async Task<IActionResult> OrderPrepare(int OrderId)
