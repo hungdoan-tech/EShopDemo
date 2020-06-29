@@ -103,6 +103,12 @@
                             </li>
                         }
 
+                        <li class="nav-item">
+                            <a asp-area="Customer" asp-controller="ProductsList" asp-action="Index" class="nav-link">
+                                Products
+                            </a>
+                        </li>
+
                         @if (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.CustomerEndUser) || User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser))
                         {
                             <li class="nav-item">
@@ -220,16 +226,24 @@
 
     <script>
         const requestTrackingOrdering = async () => {
-            const countRaw = await fetch('/Customer/Order/TrackingOrder')
-            const count = await countRaw.json()
+            try {
+                const countRaw = await fetch('/Customer/Order/TrackingOrder')
 
-            if (count) {
-                if (count === 0) {
-                    document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering'
+                if (countRaw) {
+                    const count = await countRaw.json()
                 }
-                else {
-                    document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering (' + count + ')'
+
+                if (count) {
+                    if (count === 0) {
+                        document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering'
+                    }
+                    else {
+                        document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering (' + count + ')'
+                    }
                 }
+            }
+            catch (error) {
+                console.log(error)
             }
         }
         requestTrackingOrdering()
