@@ -20,7 +20,7 @@ namespace Spice.Models
 
         //public int ApplicationUserId { get; set; }
         //public virtual ApplicationUser ApplicationUser { get; set; }
-        public int MenuItemId { get; set; }
+        public int? MenuItemId { get; set; }
         public virtual MenuItem MenuItem { get; set; }
     }
 }
