@@ -160,7 +160,11 @@ namespace Spice.Areas.Admin.Controllers
             menuItemFromDb.Name = MenuItemVM.MenuItem.Name;
             menuItemFromDb.Description = MenuItemVM.MenuItem.Description;
             menuItemFromDb.Price = MenuItemVM.MenuItem.Price;
-            menuItemFromDb.Spicyness = MenuItemVM.MenuItem.Spicyness;
+            menuItemFromDb.Color = MenuItemVM.MenuItem.Color;
+            menuItemFromDb.Tag = MenuItemVM.MenuItem.Tag;
+            menuItemFromDb.PublishedDate = DateTime.Now();
+            menuItemFromDb.Quantity = MenuItemVM.MenuItem.Quantity;
+            menuItemFromDb.IsPublish = MenuItemVM.MenuItem.IsPublish;
             menuItemFromDb.CategoryId = MenuItemVM.MenuItem.CategoryId;
             menuItemFromDb.SubCategoryId = MenuItemVM.MenuItem.SubCategoryId;
 

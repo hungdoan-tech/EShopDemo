@@ -27,7 +27,6 @@ namespace Spice.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Config Section
             // Category model
             modelBuilder.Entity<Category>().HasKey(a => a.Id);
             modelBuilder.Entity<Category>()
@@ -48,7 +47,7 @@ namespace Spice.Data
                 .Property(a => a.CategoryId)
                 .IsRequired();
 
-            //MenuItems
+            //MenuItem
             modelBuilder.Entity<MenuItem>()
                 .HasKey(a => a.Id);
             modelBuilder.Entity<MenuItem>()
@@ -66,6 +65,18 @@ namespace Spice.Data
                 .IsRequired();
             modelBuilder.Entity<MenuItem>()
                .Property(a => a.Price)
+               .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.Color)
+               .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.IsPublish)
+               .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.Quantity)
+               .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.PublishedDate)
                .IsRequired();
 
             //Coupon 
@@ -124,6 +135,44 @@ namespace Spice.Data
             modelBuilder.Entity<OrderDetails>()
                .Property(a => a.MenuItemId)
                .IsRequired();
+
+
+            // News
+            modelBuilder.Entity<News>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<News>()
+                .Property(a => a.Header)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.Content)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.ImageHeader)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.Alias)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.PublishedDate)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.Type)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.ApplicationUserId)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.MenuItemId)
+                .IsRequired(false);
+
+            modelBuilder.Entity<News>()
+                .HasOne(a => a.MenuItem)
+                .WithMany(b => b.News)
+                .HasForeignKey(a => a.MenuItemId);
+            modelBuilder.Entity<News>()
+                .HasOne(a => a.ApplicationUser)
+                .WithMany(b => b.News)
+                .HasForeignKey(a => a.ApplicationUserId);
         }
     }
 }
