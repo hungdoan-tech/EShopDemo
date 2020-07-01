@@ -46,6 +46,11 @@ namespace Spice.Areas.Admin.Controllers
         //GET - CREATE
         public IActionResult Create()
         {
+            
+            if(NewsVM.News.Type != "IntergratedInItem")
+            {
+                NewsVM.News.MenuItemId = null;
+            }
             return View(NewsVM);
         }
 
@@ -91,7 +96,7 @@ namespace Spice.Areas.Admin.Controllers
                 NewsFromDb.ImageHeader = @"\images\" + "DefaultNewsImage" + ".png";
             }
             //_db.News.Add(NewsVM.News);
-            //await _db.SaveChangesAsync();
+            await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
