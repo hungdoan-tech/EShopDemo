@@ -162,7 +162,7 @@ namespace Spice.Areas.Admin.Controllers
             menuItemFromDb.Price = MenuItemVM.MenuItem.Price;
             menuItemFromDb.Color = MenuItemVM.MenuItem.Color;
             menuItemFromDb.Tag = MenuItemVM.MenuItem.Tag;
-            menuItemFromDb.PublishedDate = DateTime.Now();
+            menuItemFromDb.PublishedDate = DateTime.Now;
             menuItemFromDb.Quantity = MenuItemVM.MenuItem.Quantity;
             menuItemFromDb.IsPublish = MenuItemVM.MenuItem.IsPublish;
             menuItemFromDb.CategoryId = MenuItemVM.MenuItem.CategoryId;

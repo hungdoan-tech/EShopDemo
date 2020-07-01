@@ -37,9 +37,7 @@ namespace Spice.Controllers
             {
                 MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
                 Category = await _db.Category.ToListAsync(),
-                Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync(),
-                News = await _db.News.Include(m => m.NewsCategory).ToListAsync(),
-                NewsCategories = await _db.NewsCategories.ToListAsync()
+                Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
             };
             
             //Pagination: - Url determine current pages.

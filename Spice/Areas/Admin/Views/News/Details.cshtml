@@ -23,27 +23,42 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-4">
-                        <label asp-for="News.DatePublished" class="custom-label"></label>
+                        <label asp-for="News.PublishedDate" class="custom-label"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="News.DatePublished" class="form-control" />
+                        <input asp-for="News.PublishedDate" class="form-control" />
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-4">
-                        <label asp-for="News.Author" class="custom-label"></label>
+                        <label asp-for="News.Alias" class="custom-label"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="News.Author" class="form-control" />
+                        <input asp-for="News.Alias" class="form-control" />
                     </div>
                 </div>
-
                 <div class="form-group row">
                     <div class="col-4">
-                        <label asp-for="News.NewsCategoryId" class="custom-label"></label>
+                        <label asp-for="News.ApplicationUserId" class="custom-label"></label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="News.NewsCategory.Name" class="form-control" />
+                        <input asp-for="News.ApplicationUser.Name" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="News.Type" class="custom-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <select asp-for="News.Type" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="News.MenuItemId" class="custom-label"></label>
+                    </div>
+                    <div class="col-8">
+                        <input asp-for="News.MenuItem.Name" class="form-control" />
                     </div>
                 </div>
 
@@ -61,7 +76,7 @@
         </fieldset>
     </div>
     <div class="col-3">
-        <img src="@Model.News.Image" width="100%" style="border-radius:5px;border:1px solid #bbb9b9;" />
+        <img src="@Model.News.ImageHeader" width="100%" style="border-radius:5px;border:1px solid #bbb9b9;" />
     </div>
     <div class="col-8">
         <div class="col-8 offset-4">
