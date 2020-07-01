@@ -32,13 +32,13 @@ namespace Spice.Areas.Customer.Controllers
         }
 
         public async Task<IActionResult> Index(int productPage = 1, string searchName = null, string groupProductsSelected = "Default"
-            , string orderBy = "ascName")
+            , string orderBy = "descDate")
         {
 
             ProductsListVM.Products = await _db.MenuItem.Include(m => m.Category).ToListAsync();
 
             StringBuilder param = new StringBuilder();
-            param.Append("/Customers/ProductsList?productPage=:");
+            param.Append("/Customer/ProductsList?productPage=:");
 
             if (searchName != null)
             {
@@ -76,6 +76,14 @@ namespace Spice.Areas.Customer.Controllers
                         ProductsListVM.Products = ProductsListVM.Products.OrderByDescending(p => p.Price)
                        .Skip((productPage - 1) * PageSize).Take(PageSize).Where(m => m.Category.Name.Equals(groupProductsSelected)).ToList();
                         break;
+                    case "ascDate":
+                        ProductsListVM.Products = ProductsListVM.Products.OrderBy(p => p.PublishedDate)
+                        .Skip((productPage - 1) * PageSize).Take(PageSize).Where(m => m.Category.Name.Equals(groupProductsSelected)).ToList();
+                        break;
+                    case "descDate":
+                        ProductsListVM.Products = ProductsListVM.Products.OrderByDescending(p => p.PublishedDate)
+                        .Skip((productPage - 1) * PageSize).Take(PageSize).Where(m => m.Category.Name.Equals(groupProductsSelected)).ToList();
+                        break;
                 }
             }
             else
@@ -98,6 +106,14 @@ namespace Spice.Areas.Customer.Controllers
                         ProductsListVM.Products = ProductsListVM.Products.OrderByDescending(p => p.Price)
                        .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
                         break;
+                    case "ascDate":
+                        ProductsListVM.Products = ProductsListVM.Products.OrderBy(p => p.PublishedDate)
+                        .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
+                        break;
+                    case "descDate":
+                        ProductsListVM.Products = ProductsListVM.Products.OrderByDescending(p => p.PublishedDate)
+                        .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
+                        break;
                 }
             }
 
@@ -112,7 +128,7 @@ namespace Spice.Areas.Customer.Controllers
             };
 
             ViewBag.orderBy = orderBy;
-            ViewBag.groupProductsSelected = groupProductsSelected;
+            //ViewBag.groupProductsSelected = groupProductsSelected;
 
             return View(ProductsListVM);
         }
