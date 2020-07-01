@@ -17,6 +17,7 @@ namespace Spice.Models
         public double Price { get; set; }
         public Boolean IsPublish { get; set; }
         // Quantity In repository
+        [Range(1, int.MaxValue, ErrorMessage = " Quantity should be greater than 1")]
         public int Quantity { get; set; }
         public enum EColor { Red = 0, White = 1, Blue = 2, Black = 3, Yellow = 4 }
         public string Color { get; set; }
