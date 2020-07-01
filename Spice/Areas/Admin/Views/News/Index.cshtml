@@ -26,13 +26,16 @@
                         @Html.DisplayNameFor(m => m.Header)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(m => m.Author)
+                        @Html.DisplayNameFor(m => m.ApplicationUser)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(m => m.DatePublished)
+                        @Html.DisplayNameFor(m => m.PublishedDate)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(m => m.NewsCategory)
+                        @Html.DisplayNameFor(m => m.Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(m => m.MenuItem.Name)
                     </th>
                     <th></th>
                     <th></th>
@@ -44,14 +47,18 @@
                     @Html.DisplayFor(m => item.Header)
                 </td>
                 <td>
-                    @Html.DisplayFor(m => item.Author)
+                    @Html.DisplayFor(m => item.ApplicationUser.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(m => item.DatePublished)
+                    @Html.DisplayFor(m => item.PublishedDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(m => item.NewsCategory.Name)
+                    @Html.DisplayFor(m => item.Type)
                 </td>
+                <td>
+                    @Html.DisplayFor(m => item.MenuItem.Name)
+                </td>
+
                 <td>
                     <partial name="_TableButtonPartial" model="item.Id" />
                 </td>
