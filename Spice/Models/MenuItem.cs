@@ -19,7 +19,7 @@ namespace Spice.Models
         // Quantity In repository
         [Range(1, int.MaxValue, ErrorMessage = " Quantity should be greater than 1")]
         public int Quantity { get; set; }
-        public enum EColor { Red = 0, White = 1, Blue = 2, Black = 3, Yellow = 4 }
+        public enum EColor { Red = 0, White = 1, Blue = 2, Black = 3, Yellow = 4, NA=5}
         public string Color { get; set; }
         public enum ETag { BestSeller = 0, New = 1, Popular = 2, NA=3 }
         public string Tag { get; set; }
