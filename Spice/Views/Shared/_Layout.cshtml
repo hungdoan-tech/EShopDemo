@@ -385,7 +385,7 @@
         const requestTrackingOrdering = async () => {
             try {
                 const countRaw = await fetch('/Customer/Order/TrackingOrder')
-                const count
+                let count = 0
 
                 if (countRaw) {
                     count = await countRaw.json()
