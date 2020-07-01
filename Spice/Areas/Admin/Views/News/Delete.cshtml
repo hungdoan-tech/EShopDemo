@@ -2,43 +2,66 @@
 
 @{
     ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
 
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | Simple Tables</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
 
-<br />
-<h2 class="text-info">Delete News</h2>
-<br />
-<script src="//cdn.ckeditor.com/4.14.1/full/ckeditor.js"></script>
-<form method="post">
-    <div class="backgroundWhiteBorder row">
-        <div class="col-8">
-            <input type="hidden" asp-for="News.Id" />
-            <fieldset disabled>
-                <div class="form-group row">
-                    <div class="col-4">
-                        <label asp-for="News.Header" class="custom-label"></label>
-                    </div>
-                    <div class="col-8">
-                        <input asp-for="News.Header" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-4">
-                        <label asp-for="News.PublishedDate" class="custom-label"></label>
-                    </div>
-                    <div class="col-8">
-                        <input asp-for="News.PublishedDate" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-4">
-                        <label asp-for="News.Alias" class="custom-label"></label>
-                    </div>
-                    <div class="col-8">
-                        <input asp-for="News.Alias" class="form-control" />
-                    </div>
-                </div>
-                @*<div class="form-group row">
+<div id="content">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+
+            <br />
+            <h2 class="text-info">Delete News</h2>
+            <br />
+            <script src="//cdn.ckeditor.com/4.14.1/full/ckeditor.js"></script>
+            <form method="post">
+                <div class="backgroundWhiteBorder row">
+                    <div class="container-fluid">
+                        <div class="col-8">
+                            <input type="hidden" asp-for="News.Id" />
+                            <div class="container-fluid">
+                                <fieldset disabled>
+                                    <div class="form-group row">
+
+                                        <div class="col-4">
+                                            <label asp-for="News.Header" class="custom-label"></label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="News.Header" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label asp-for="News.PublishedDate" class="custom-label"></label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="News.PublishedDate" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-4">
+                                            <label asp-for="News.Alias" class="custom-label"></label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input asp-for="News.Alias" class="form-control" />
+                                        </div>
+                                    </div>
+                                    @*<div class="form-group row">
                     <div class="col-4">
                         <label asp-for="News.ApplicationUserId" class="custom-label"></label>
                     </div>
@@ -46,37 +69,45 @@
                         <input asp-for="News.ApplicationUser.Name" class="form-control" />
                     </div>
                 </div>*@
-                <div class="form-group row">
-                    <div class="col-4">
-                        <label asp-for="News.MenuItemId" class="custom-label"></label>
+                                 
+                                        <div class="form-group row">
+                                            <div class="col-4">
+                                                <label asp-for="News.MenuItemId" class="custom-label"></label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input asp-for="News.MenuItem.Name" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-4">
+                                                <label asp-for="News.Type" class="custom-label"></label>
+                                            </div>
+                                            <div class="col-8">
+                                                <select asp-for="News.Type" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-4">
+                                                <label asp-for="News.Content" class="custom-label"></label>
+                                            </div>
+                                            <textarea id="editor1" asp-for="News.Content" readonly></textarea>
+                                        </div>
+                              
+
+                            </fieldset>
+                                </div>
+                        </div>
+                        <div class="col-8">
+                            <div class="col-8 offset-4">
+                                <partial name="_DeleteAndBackToListButton" model="Model.News.Id" />
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-8">
-                        <input asp-for="News.MenuItem.Name" class="form-control" />
                     </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-4">
-                        <label asp-for="News.Type" class="custom-label"></label>
-                    </div>
-                    <div class="col-8">
-                        <select asp-for="News.Type" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-4">
-                        <label asp-for="News.Content" class="custom-label"></label>
-                    </div>
-                    <textarea id="editor1" asp-for="News.Content" readonly></textarea>
-                </div>
-            </fieldset>
+            </form>
+            <script type="text/javascript">
+                CKEDITOR.replace('editor1', { width: 1000, height: 700 });
+            </script>
         </div>
-        <div class="col-8">
-            <div class="col-8 offset-4">
-                <partial name="_DeleteAndBackToListButton" model="Model.News.Id" />
-            </div>
-        </div>
-    </div>
-</form>
-<script type="text/javascript">
-    CKEDITOR.replace('editor1', { width: 1000, height: 700 });
-</script>
+    </nav>
+</div>
