@@ -14,15 +14,14 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="../../assets/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="../../assets/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-
 <div id="content">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -74,57 +73,50 @@
 
                 </div>
 
-                </div>
-
-                @section Scripts{
-                    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-                    <script>
-
-                        function updateSubCategoryList() {
-                            var categorySelected = document.getElementById("ddlCategorylist").value;
-
-                            $list = $('#SubCategoryList');
-
-                            $.ajax({
-                                url: '/Admin/SubCategory/GetSubCategory/' + categorySelected,
-                                type: 'GET',
-                                dataType: 'text',
-                                success: function (data) {
-                                    results = JSON.parse(data);
-                                    $list.html('');
-                                    $list.append(' <ul class="list-group"> ');
-                                    for (i in results) {
-                                        $list.append('<li class="list-group-item">' + results[i].text + '</li>');
-                                    }
-                                    $list.append('</ul>');
-                                }
-
-                            });
-
-                        }
-
-                        $(document).ready(function () {
-                            updateSubCategoryList();
-                        });
-
-                        $("#ddlCategorylist").on("change", function () {
-                            updateSubCategoryList();
-                        });
-
-
-                    </script>
-
-
-                }
-
             </div>
-              <script src="../../assets/plugins/jquery/jquery.min.js"></script>
-        <!-- Bootstrap 4 -->
-        <script src="../../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <!-- AdminLTE App -->
-        <script src="../../assets/dist/js/adminlte.min.js"></script>
-        <!-- AdminLTE for demo purposes -->
-        <script src="../../assets/dist/js/demo.js"></script>
+
+            @section Scripts{
+                @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+                <script>
+
+                    function updateSubCategoryList() {
+                        var categorySelected = document.getElementById("ddlCategorylist").value;
+
+                        $list = $('#SubCategoryList');
+
+                        $.ajax({
+                            url: '/Admin/SubCategory/GetSubCategory/' + categorySelected,
+                            type: 'GET',
+                            dataType: 'text',
+                            success: function (data) {
+                                results = JSON.parse(data);
+                                $list.html('');
+                                $list.append(' <ul class="list-group"> ');
+                                for (i in results) {
+                                    $list.append('<li class="list-group-item">' + results[i].text + '</li>');
+                                }
+                                $list.append('</ul>');
+                            }
+
+                        });
+
+                    }
+
+                    $(document).ready(function () {
+                        updateSubCategoryList();
+                    });
+
+                    $("#ddlCategorylist").on("change", function () {
+                        updateSubCategoryList();
+                    });
+
+
+                </script>
+
+
+            }
+
+        </div>
     </nav>
 </div>
