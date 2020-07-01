@@ -146,9 +146,6 @@ namespace Spice.Data
                 .Property(a => a.Content)
                 .IsRequired();
             modelBuilder.Entity<News>()
-                .Property(a => a.ImageHeader)
-                .IsRequired();
-            modelBuilder.Entity<News>()
                 .Property(a => a.Alias)
                 .IsRequired();
             modelBuilder.Entity<News>()
@@ -157,21 +154,15 @@ namespace Spice.Data
             modelBuilder.Entity<News>()
                 .Property(a => a.Type)
                 .IsRequired();
-            modelBuilder.Entity<News>()
-                .Property(a => a.ApplicationUserId)
-                .IsRequired();
-            modelBuilder.Entity<News>()
-                .Property(a => a.MenuItemId)
-                .IsRequired(false);
 
             modelBuilder.Entity<News>()
                 .HasOne(a => a.MenuItem)
                 .WithMany(b => b.News)
                 .HasForeignKey(a => a.MenuItemId);
-            modelBuilder.Entity<News>()
-                .HasOne(a => a.ApplicationUser)
-                .WithMany(b => b.News)
-                .HasForeignKey(a => a.ApplicationUserId);
+            //modelBuilder.Entity<News>()
+            //    .HasOne(a => a.ApplicationUser)
+            //    .WithMany(b => b.News)
+            //    .HasForeignKey(a => a.ApplicationUserId);
         }
     }
 }

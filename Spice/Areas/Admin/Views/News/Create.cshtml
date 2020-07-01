@@ -21,14 +21,14 @@
             </div>
             <span asp-validation-for="News.Header" class="text-danger"></span>
         </div>
-        <div class="form-group row">
+        @*<div class="form-group row">
             <div class="col-2">
                 <label asp-for="News.ApplicationUserId" class="col-form-label"></label>
             </div>
             <div class="col-5">
                 <select asp-for="@Model.News.ApplicationUserId" id="ApplicationUserId" asp-items="Model.ApplicationUsers.ToSelectListItem(Model.News.ApplicationUserId)" class="form-control"></select>
             </div>
-        </div>
+        </div>*@
         <div class="form-group row">
             <div class="col-2">
                 <label asp-for="News.Alias" class="col-form-label"></label>

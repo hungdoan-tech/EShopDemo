@@ -38,7 +38,8 @@ namespace Spice.Areas.Admin.Controllers
         //GET 
         public async Task<IActionResult> Index()
         {
-            var news = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).ToListAsync();
+            //var news = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).ToListAsync();
+            var news = await _db.News.Include(m => m.MenuItem).ToListAsync();
             return View(news);
         }
 
@@ -89,8 +90,8 @@ namespace Spice.Areas.Admin.Controllers
                 System.IO.File.Copy(uploads, webRootPath + @"\images\" +  "DefaultNewsImage" + ".png");
                 NewsFromDb.ImageHeader = @"\images\" + "DefaultNewsImage" + ".png";
             }
-
-            await _db.SaveChangesAsync();
+            //_db.News.Add(NewsVM.News);
+            //await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
@@ -104,8 +105,9 @@ namespace Spice.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            NewsVM.News = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).SingleOrDefaultAsync(m => m.Id == id);
-            
+            //NewsVM.News = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).SingleOrDefaultAsync(m => m.Id == id);
+            NewsVM.News = await _db.News.Include(m => m.MenuItem).SingleOrDefaultAsync(m => m.Id == id);
+
             if (NewsVM.News == null)
             {
                 return NotFound();
@@ -159,7 +161,7 @@ namespace Spice.Areas.Admin.Controllers
             }
 
             NewsFromDb.Alias = NewsVM.News.Alias;
-            NewsFromDb.ApplicationUserId = NewsVM.News.ApplicationUserId;
+            //NewsFromDb.ApplicationUserId = NewsVM.News.ApplicationUserId;
             NewsFromDb.PublishedDate = NewsVM.News.PublishedDate;
             NewsFromDb.Content = NewsVM.News.Content;
             NewsFromDb.Header = NewsVM.News.Header;
@@ -180,7 +182,8 @@ namespace Spice.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            NewsVM.News = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).SingleOrDefaultAsync(m => m.Id == id);
+            //NewsVM.News = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).SingleOrDefaultAsync(m => m.Id == id);
+            NewsVM.News = await _db.News.Include(m => m.MenuItem).SingleOrDefaultAsync(m => m.Id == id);
 
             if (NewsVM.News == null)
             {
@@ -221,7 +224,8 @@ namespace Spice.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            NewsVM.News = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).SingleOrDefaultAsync(m => m.Id == id);
+            //NewsVM.News = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).SingleOrDefaultAsync(m => m.Id == id);
+            NewsVM.News = await _db.News.Include(m => m.MenuItem).SingleOrDefaultAsync(m => m.Id == id);
 
             if (NewsVM.News == null)
             {

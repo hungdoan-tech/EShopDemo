@@ -34,7 +34,7 @@ namespace Spice.Data
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex);
             }
 
             if (_db.Roles.Any(r => r.Name == SD.ManagerUser)) return;
@@ -54,10 +54,7 @@ namespace Spice.Data
             }, "Admin123*").GetAwaiter().GetResult();
 
             IdentityUser user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "admin@gmail.com");
-
             await _userManager.AddToRoleAsync(user, SD.ManagerUser);
-
         }
-
     }
 }

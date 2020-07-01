@@ -14,6 +14,6 @@ namespace Spice.Models
         public string State { get; set; }
         public string PostalCode { get; set; }
         public virtual ICollection<OrderHeader> OrderHeaders { get; set; }
-        public virtual ICollection<News> News { get; set; }
+        //public virtual ICollection<News> News { get; set; }
     }
 }

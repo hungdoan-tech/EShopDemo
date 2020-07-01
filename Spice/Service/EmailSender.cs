@@ -41,7 +41,7 @@ namespace Spice.Service
             }
             catch(Exception ex)
             {
-                
+                Console.WriteLine(ex);
             }
             return null;
         }
