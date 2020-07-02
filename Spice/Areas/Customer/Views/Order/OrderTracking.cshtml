@@ -69,13 +69,13 @@
                             </button>
                             -->
 
-                            <a asp-area="Customer" asp-controller="Order" asp-action="DetailTracking" asp-route-Id="@item.OrderHeader.Id" class="btn btn-success anchorDetail">
+                            <a asp-area="Customer" asp-controller="Order" asp-action="DetailTracking" asp-route-Id="@item.OrderHeader.Id" class="genric-btn info large  anchorDetail">
                                 <i class="far fa-list-alt"></i> Details
                             </a>
 
                             @if (item.OrderHeader.Status == SD.StatusSubmitted || item.OrderHeader.Status == SD.StatusInProcess || item.OrderHeader.Status == SD.StatusCompleted || item.OrderHeader.Status == SD.StatusReady)
                             {
-                                <button type="button" class="btn btn-info btnOrderStatus" data-id="@item.OrderHeader.Id" data-toggle="modal">
+                                <button type="button" class="genric-btn info-border large btnOrderStatus" data-id="@item.OrderHeader.Id" data-toggle="modal">
                                     <i class="far fa-clock"></i> Status
                                 </button>
                             }
@@ -83,8 +83,8 @@
                     </tr>
                 }
             </table>
-            <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border"
-                 page-class-normal="btn btn-light" page-class-selected="btn btn-info active"
+            <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="page-link"
+                 page-class-normal="" page-class-selected="active btn-primary"
                  class="btn-group float-right">
             </div>
             <br />
