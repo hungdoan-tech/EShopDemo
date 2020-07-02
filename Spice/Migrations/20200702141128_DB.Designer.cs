@@ -10,8 +10,8 @@ using Spice.Data;
 namespace Spice.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200702043344_a")]
-    partial class a
+    [Migration("20200702141128_DB")]
+    partial class DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -453,16 +453,11 @@ namespace Spice.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("SubCategory");
                 });
@@ -545,13 +540,13 @@ namespace Spice.Migrations
                     b.HasOne("Spice.Models.Category", "Category")
                         .WithMany("MenuItems")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Spice.Models.SubCategory", "SubCategory")
                         .WithMany("MenuItems")
                         .HasForeignKey("SubCategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -582,15 +577,6 @@ namespace Spice.Migrations
                     b.HasOne("Spice.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("OrderHeaders")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Spice.Models.SubCategory", b =>
-                {
-                    b.HasOne("Spice.Models.Category", "Category")
-                        .WithMany("SubCategories")
-                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

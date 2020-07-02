@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Spice.Migrations
 {
-    public partial class InitDB : Migration
+    public partial class DB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -81,6 +81,19 @@ namespace Spice.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Coupon", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubCategory",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategory", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -220,26 +233,6 @@ namespace Spice.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SubCategory",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false),
-                    CategoryId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubCategory", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SubCategory_Category_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Category",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "MenuItem",
                 columns: table => new
                 {
@@ -264,12 +257,14 @@ namespace Spice.Migrations
                         name: "FK_MenuItem_Category_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Category",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_MenuItem_SubCategory_SubCategoryId",
                         column: x => x.SubCategoryId,
                         principalTable: "SubCategory",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -284,7 +279,7 @@ namespace Spice.Migrations
                     PublishedDate = table.Column<DateTime>(nullable: false),
                     ImageHeader = table.Column<string>(nullable: true),
                     Type = table.Column<string>(nullable: false),
-                    MenuItemId = table.Column<int>(nullable: false)
+                    MenuItemId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -294,7 +289,7 @@ namespace Spice.Migrations
                         column: x => x.MenuItemId,
                         principalTable: "MenuItem",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -395,11 +390,6 @@ namespace Spice.Migrations
                 name: "IX_OrderHeader_UserId",
                 table: "OrderHeader",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SubCategory_CategoryId",
-                table: "SubCategory",
-                column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -438,13 +428,13 @@ namespace Spice.Migrations
                 name: "OrderHeader");
 
             migrationBuilder.DropTable(
+                name: "Category");
+
+            migrationBuilder.DropTable(
                 name: "SubCategory");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Category");
         }
     }
 }
