@@ -1,0 +1,41 @@
+﻿.icon_chat_facebook {
+    background: url("https://www.viettablet.com/design/themes/duchuymobile/media/images/facebook-messenger.png?1574736690") no-repeat;
+    width: 64px;
+    height: 64px;
+    background-size: cover;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+.map-container {
+    overflow: hidden;
+    padding-bottom: 56.25%;
+    position: relative;
+    height: 0;
+}
+
+    .map-container iframe {
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+    }
+
+.btn-logout {
+    height: 25px;
+}
+
+a.black-link {
+    color: black;
+}
+
+button.black-link {
+    color: black;
+}
+
+.black-link {
+    color: black;
+    margin-right: 10px;
+}

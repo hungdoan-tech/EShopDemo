@@ -29,49 +29,7 @@
     <link rel="stylesheet" href="~/assets/css/nice-select.css">
     <link rel="stylesheet" href="~/assets/css/style.css">
 
-    @*<environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/jquery-ui.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" />
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
-              crossorigin="anonymous"
-              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
-        <link rel="stylesheet" href="~/css/jquery-ui.css" />
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    </environment>*@
-    <style>
-        .icon_chat_facebook {
-            background: url("https://www.viettablet.com/design/themes/duchuymobile/media/images/facebook-messenger.png?1574736690") no-repeat;
-            width: 64px;
-            height: 64px;
-            background-size: cover;
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-        }
-
-        .map-container {
-            overflow: hidden;
-            padding-bottom: 56.25%;
-            position: relative;
-            height: 0;
-        }
-
-            .map-container iframe {
-                left: 0;
-                top: 0;
-                height: 100%;
-                width: 100%;
-                position: absolute;
-            }
-    </style>
-
+    <link rel="stylesheet" href="~/css/MapAndChat.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -99,40 +57,36 @@
                     <div class="menu-wrapper">
                         <!-- Logo -->
                         <div class="logo">
-                            <a href="index.html"><img src="assets/img/logo/logo.png" alt=""></a>
+                            <a href="index.html">
+                                <a asp-action="Index" asp-controller="Home" asp-area="Customer">
+                                    <img src="~/assets/img/logo/logo.png" alt="">
+                                </a>
                         </div>
                         <!-- Main-menu -->
                         <div class="main-menu d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="shop.html">shop</a></li>
-                                    <li><a href="about.html">about</a></li>
-                                    <li class="hot">
-                                        <a href="#">Latest</a>
+                                    <li><a asp-action="Index" asp-controller="Home" asp-area="Customer">Home</a></li>
+                                    <li>
+                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Brands</a>
                                         <ul class="submenu">
-                                            <li><a href="shop.html"> Product list</a></li>
-                                            <li><a href="product_details.html"> Product Details</a></li>
+                                            <li>
+                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> HTC </a></li>
+                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Sony </a></li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="blog.html">Blog</a>
+                                        <a asp-action="OrderHistory" asp-controller="Order" asp-area="Customer"> Order History </a>
                                         <ul class="submenu">
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
+                                            <li>
+                                                <a asp-area="Customer" asp-controller="Order" asp-action="OrderTracking">
+                                                    <label id="trackingOrdering">Tracking Ordering</label>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </li>
-                                    <li>
-                                        <a href="#">Pages</a>
-                                        <ul class="submenu">
-                                            <li><a href="login.html">Login</a></li>
-                                            <li><a href="cart.html">Cart</a></li>
-                                            <li><a href="elements.html">Element</a></li>
-                                            <li><a href="confirmation.html">Confirmation</a></li>
-                                            <li><a href="checkout.html">Product Checkout</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="contact.html">Contact</a></li>
+                                    <li><a asp-action="Privacy" asp-controller="Home" asp-area="Customer">Contact</a></li>
+                                    <li><a asp-action="Privacy" asp-controller="Home" asp-area="Customer">Privacy</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -144,8 +98,26 @@
                                         <span class="flaticon-search"></span>
                                     </div>
                                 </li>
-                                <li> <a href="login.html"><span class="flaticon-user"></span></a></li>
-                                <li><a href="cart.html"><span class="flaticon-shopping-cart"></span></a> </li>
+
+                                @*<li>
+                                <a href="#"><span class="flaticon-user"></span></a>*@
+
+                                @*</li>*@
+
+                                @if (HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart") != null)
+                                {
+                                    int count = 0;
+                                    foreach (var item in HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart"))
+                                    {
+                                        count += item.Quantity;
+                                    }
+                                    <li><a asp-area="Customer" asp-controller="Cart" asp-action="Index"><span class="flaticon-shopping-cart">@count</span> &nbsp; </a> </li>
+                                }
+                                else
+                                {
+                                    <li><a asp-area="Customer" asp-controller="Cart" asp-action="Index"><span class="flaticon-shopping-cart">0</span> &nbsp;</a> </li>
+                                }
+                                <partial name="_LoginPartial" />
                             </ul>
                         </div>
                     </div>
@@ -157,121 +129,6 @@
             </div>
         </div>
         <!-- Header End -->
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="Customer" asp-controller="Home" asp-action="Index">
-                    <label class="text-info" style="cursor:pointer;">Spice</label>
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
-
-                    <ul class="navbar-nav flex-grow-1">
-                        <form method="get" asp-action="Search" asp-controller="Home" class="form-inline my-2 my-md-0">
-                            <input class="form-control py-2 border-right-0 border" name="name" type="search" value="" id="example-search-input">
-                            <span class="input-group-append">
-                                <button class="btn btn-outline-secondary border-left-0 border" type="submit">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                        </form>
-                    </ul>
-
-                    <ul class="navbar-nav flex-grow-1">
-
-                        @if (User.IsInRole(SD.ManagerUser))
-                        {
-                            <li class="nav-item dropdown text-white-50">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Content Management
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="Category" asp-area="Admin">Category</a>
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="SubCategory" asp-area="Admin">Sub Category</a>
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="MenuItem" asp-area="Admin">MenuItem</a>
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="Coupon" asp-area="Admin">Coupons</a>
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="User" asp-area="Admin">Users</a>
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="News" asp-area="Admin">News</a>
-                                </div>
-
-                            </li>
-                        }
-
-                        <li class="nav-item">
-                            <a asp-area="Customer" asp-controller="ProductsList" asp-action="Index" class="nav-link">
-                                Products
-                            </a>
-                        </li>
-
-                        @if (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.CustomerEndUser) || User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser))
-                        {
-                            <li class="nav-item">
-                                <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory" class="nav-link">
-                                    Order History
-                                </a>
-                            </li>
-
-                            if (User.IsInRole(SD.CustomerEndUser))
-                            {
-                                <li class="nav-item">
-                                    <a asp-area="Customer" asp-controller="Order" asp-action="OrderTracking" class="nav-link">
-                                        <label id="trackingOrdering">Tracking Ordering</label>
-                                    </a>
-                                </li>
-                            }
-                        }
-
-                        @if (User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser) || User.IsInRole(SD.ManagerUser))
-                        {
-                            <li class="nav-item dropdown text-white-50">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Order
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
-                                    @if (User.IsInRole(SD.KitchenUser) || User.IsInRole(SD.ManagerUser))
-                                    {
-                                        <a class="dropdown-item" asp-action="ManageOrder" asp-controller="Order" asp-area="Customer">Manage Order</a>
-                                    }
-                                    @if (User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.ManagerUser))
-                                    {
-                                        <a class="dropdown-item" asp-action="OrderPickup" asp-controller="Order" asp-area="Customer">Order Pickup</a>
-                                    }
-                                </div>
-
-                            </li>
-                        }
-
-
-                        @if (HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart") != null)
-                        {
-                            <li style="color:white">
-                                <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-link">
-                                    @{
-                                        int count = 0;
-                                        foreach (var item in HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart"))
-                                        {
-                                            count += item.Quantity;
-                                        }
-                                    }
-                                    <i class="fas fa-shopping-cart"></i> &nbsp; (@count)
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li style="color:white">
-                                <a href="#" class="nav-link">
-                                    <i class="fas fa-shopping-cart"></i> &nbsp; (0)
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </nav>
     </header>
     <div class="container">
         <partial name="_CookieConsentPartial" />
@@ -380,34 +237,6 @@
         </div>
     </div>
     <!-- Search model end -->
-
-    <script>
-        const requestTrackingOrdering = async () => {
-            try {
-                const countRaw = await fetch('/Customer/Order/TrackingOrder')
-                let count = 0
-
-                if (countRaw) {
-                    count = await countRaw.json()
-                }
-
-                if (count) {
-                    if (count === 0) {
-                        document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering'
-                    }
-                    else {
-                        document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering (' + count + ')'
-                    }
-                }
-            }
-            catch (error) {
-                console.log(error)
-            }
-        }
-        requestTrackingOrdering()
-    </script>
-
-    <!-- Search model end -->
     <!-- JS here -->
 
     <script src="~/assets/js/vendor/modernizr-3.5.0.min.js"></script>
@@ -443,28 +272,7 @@
     <script src="~/assets/js/plugins.js"></script>
     <script src="~/assets/js/main.js"></script>
 
-    @*<environment include="Development">
-        <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=n94ifuzvl80pchikopiwgz2esrw8n28dwcywvpejlqrregfp"></script>
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-        <script src="~/js/jquery-ui.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=n94ifuzvl80pchikopiwgz2esrw8n28dwcywvpejlqrregfp"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
-        </script>
-        <script src="~/js/jquery-ui.js"></script>
-    </environment>*@
+    <script src="~/js/OrderTracking.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
