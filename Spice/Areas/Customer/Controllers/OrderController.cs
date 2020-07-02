@@ -96,6 +96,7 @@ namespace Spice.Areas.Customer.Controllers
         }
 
         [Authorize(Roles = SD.KitchenUser + "," + SD.ManagerUser)]
+        [Route("~/Admin/Order/ManageOrder")]
         public async Task<IActionResult> ManageOrder(int productPage = 1)
         {
 
@@ -235,6 +236,7 @@ namespace Spice.Areas.Customer.Controllers
 
 
         [Authorize]
+        [Route("~/Admin/Order/OrderPickup")]
         public async Task<IActionResult> OrderPickup(int productPage = 1, string searchEmail=null, string searchPhone = null, string searchName = null)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;

@@ -4,275 +4,302 @@
 @using Spice.Extensions
 @inject IHttpContextAccessor HttpContextAccessor
 
+
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Spice</title>
+@if (User.IsInRole(SD.ManagerUser))
+{
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/jquery-ui.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" />
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
-              crossorigin="anonymous"
-              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
-        <link rel="stylesheet" href="~/css/jquery-ui.css" />
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    </environment>
-    <style>
-        .icon_chat_facebook {
-            background: url("https://www.viettablet.com/design/themes/duchuymobile/media/images/facebook-messenger.png?1574736690") no-repeat;
-            width: 64px;
-            height: 64px;
-            background-size: cover;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-        }
 
-        .map-container {
-            overflow: hidden;
-            padding-bottom: 56.25%;
-            position: relative;
-            height: 0;
-        }
+    @*<li class="nav-item dropdown text-white-50">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Content Management
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
+                <a class="dropdown-item" asp-action="Index" asp-controller="Category" asp-area="Admin">Category</a>
+                <a class="dropdown-item" asp-action="Index" asp-controller="SubCategory" asp-area="Admin">Sub Category</a>
+                <a class="dropdown-item" asp-action="Index" asp-controller="MenuItem" asp-area="Admin">MenuItem</a>
+                <a class="dropdown-item" asp-action="Index" asp-controller="Coupon" asp-area="Admin">Coupons</a>
+                <a class="dropdown-item" asp-action="Index" asp-controller="User" asp-area="Admin">Users</a>
+                <a class="dropdown-item" asp-action="Index" asp-controller="News" asp-area="Admin">News</a>
+            </div>
 
-            .map-container iframe {
-                left: 0;
-                top: 0;
-                height: 100%;
-                width: 100%;
-                position: absolute;
+        </li>*@
+    @*<li class="nav-item dropdown text-white-50">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Order
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
+            @if (User.IsInRole(SD.KitchenUser) || User.IsInRole(SD.ManagerUser))
+            {
+                <a class="dropdown-item" asp-action="ManageOrder" asp-controller="Order" asp-area="Customer">Manage Order</a>
             }
-    </style>
-    <link rel="stylesheet" href="~/css/Footer-Dark.css" />
+            @if (User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.ManagerUser))
+            {
+                <a class="dropdown-item" asp-action="OrderPickup" asp-controller="Order" asp-area="Customer">Order Pickup</a>
+            }
+        </div>
 
-    <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-<body class="search-background">
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="Customer" asp-controller="Home" asp-action="Index">
-                    <label class="text-info" style="cursor:pointer;">Spice</label>
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
+    </li>*@
+}
+else
+{
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - Spice</title>
 
-                    <ul class="navbar-nav flex-grow-1">
-                        <form method="get" asp-action="Search" asp-controller="Home" class="form-inline my-2 my-md-0">
-                            <input class="form-control py-2 border-right-0 border" name="name" type="search" value="" id="example-search-input">
-                            <span class="input-group-append">
-                                <button class="btn btn-outline-secondary border-left-0 border" type="submit">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                        </form>
-                    </ul>
+        <environment include="Development">
+            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+            <link rel="stylesheet" href="~/css/jquery-ui.css" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" />
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        </environment>
+        <environment exclude="Development">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.css" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css"
+                  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
+                  crossorigin="anonymous"
+                  integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
+            <link rel="stylesheet" href="~/css/jquery-ui.css" />
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        </environment>
+        <style>
+            .icon_chat_facebook {
+                background: url("https://www.viettablet.com/design/themes/duchuymobile/media/images/facebook-messenger.png?1574736690") no-repeat;
+                width: 64px;
+                height: 64px;
+                background-size: cover;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+            }
 
-                    <ul class="navbar-nav flex-grow-1">
+            .map-container {
+                overflow: hidden;
+                padding-bottom: 56.25%;
+                position: relative;
+                height: 0;
+            }
 
-                        @if (User.IsInRole(SD.ManagerUser))
-                        {
-                            <li class="nav-item dropdown text-white-50">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropDownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Content Management
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="Category" asp-area="Admin">Category</a>
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="SubCategory" asp-area="Admin">Sub Category</a>
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="MenuItem" asp-area="Admin">MenuItem</a>
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="Coupon" asp-area="Admin">Coupons</a>
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="User" asp-area="Admin">Users</a>
-                                    <a class="dropdown-item" asp-action="Index" asp-controller="News" asp-area="Admin">News</a>
-                                </div>
+                .map-container iframe {
+                    left: 0;
+                    top: 0;
+                    height: 100%;
+                    width: 100%;
+                    position: absolute;
+                }
+        </style>
+        <link rel="stylesheet" href="~/css/Footer-Dark.css" />
 
-                            </li>
-                        }
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
 
-                        <li class="nav-item">
-                            <a asp-area="Customer" asp-controller="ProductsList" asp-action="Index" class="nav-link">
-                                Products
-                            </a>
-                        </li>
 
-                        @if (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.CustomerEndUser) || User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser))
-                        {
+
+    <body class="search-background">
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+                <div class="container">
+                    <a class="navbar-brand" asp-area="Customer" asp-controller="Home" asp-action="Index">
+                        <label class="text-info" style="cursor:pointer;">Spice</label>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                        <partial name="_LoginPartial" />
+
+                        <ul class="navbar-nav flex-grow-1">
+                            <form method="get" asp-action="Search" asp-controller="Home" class="form-inline my-2 my-md-0">
+                                <input class="form-control py-2 border-right-0 border" name="name" type="search" value="" id="example-search-input">
+                                <span class="input-group-append">
+                                    <button class="btn btn-outline-secondary border-left-0 border" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </form>
+                        </ul>
+
+                        <ul class="navbar-nav flex-grow-1">
+
+
                             <li class="nav-item">
-                                <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory" class="nav-link">
-                                    Order History
+                                <a asp-area="Customer" asp-controller="ProductsList" asp-action="Index" class="nav-link">
+                                    Products
                                 </a>
                             </li>
 
-                            if (User.IsInRole(SD.CustomerEndUser))
+                            @if (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.CustomerEndUser) || User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser))
                             {
                                 <li class="nav-item">
-                                    <a asp-area="Customer" asp-controller="Order" asp-action="OrderTracking" class="nav-link">
-                                        <label id="trackingOrdering">Tracking Ordering</label>
+                                    <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory" class="nav-link">
+                                        Order History
+                                    </a>
+                                </li>
+
+                                if (User.IsInRole(SD.CustomerEndUser))
+                                {
+                                    <li class="nav-item">
+                                        <a asp-area="Customer" asp-controller="Order" asp-action="OrderTracking" class="nav-link">
+                                            <label id="trackingOrdering">Tracking Ordering</label>
+                                        </a>
+                                    </li>
+                                }
+                            }
+
+                            @*@if (User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser) || User.IsInRole(SD.ManagerUser))
+                            {
+                                <li class="nav-item dropdown text-white-50">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Order
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
+                                        @if (User.IsInRole(SD.KitchenUser) || User.IsInRole(SD.ManagerUser))
+                                        {
+                                            <a class="dropdown-item" asp-action="ManageOrder" asp-controller="Order" asp-area="Customer">Manage Order</a>
+                                        }
+                                        @if (User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.ManagerUser))
+                                        {
+                                            <a class="dropdown-item" asp-action="OrderPickup" asp-controller="Order" asp-area="Customer">Order Pickup</a>
+                                        }
+                                    </div>
+
+                                </li>
+                            }*@
+
+
+                            @if (HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart") != null)
+                            {
+                                <li style="color:white">
+                                    <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-link">
+                                        @{
+                                            int count = 0;
+                                            foreach (var item in HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart"))
+                                            {
+                                                count += item.Quantity;
+                                            }
+                                        }
+                                        <i class="fas fa-shopping-cart"></i> &nbsp; (@count)
                                     </a>
                                 </li>
                             }
-                        }
-
-                        @if (User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser) || User.IsInRole(SD.ManagerUser))
-                        {
-                            <li class="nav-item dropdown text-white-50">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Order
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropDownMenuLink">
-                                    @if (User.IsInRole(SD.KitchenUser) || User.IsInRole(SD.ManagerUser))
-                                    {
-                                        <a class="dropdown-item" asp-action="ManageOrder" asp-controller="Order" asp-area="Customer">Manage Order</a>
-                                    }
-                                    @if (User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.ManagerUser))
-                                    {
-                                        <a class="dropdown-item" asp-action="OrderPickup" asp-controller="Order" asp-area="Customer">Order Pickup</a>
-                                    }
-                                </div>
-
-                            </li>
-                        }
-
-
-                        @if (HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart") != null)
-                        {
-                            <li style="color:white">
-                                <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="nav-link">
-                                    @{
-                                        int count = 0;
-                                        foreach (var item in HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart"))
-                                        {
-                                            count += item.Quantity;
-                                        }
-                                    }
-                                    <i class="fas fa-shopping-cart"></i> &nbsp; (@count)
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li style="color:white">
-                                <a href="#" class="nav-link">
-                                    <i class="fas fa-shopping-cart"></i> &nbsp; (0)
-                                </a>
-                            </li>
-                        }
-                    </ul>
+                            else
+                            {
+                                <li style="color:white">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-shopping-cart"></i> &nbsp; (0)
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <partial name="_CookieConsentPartial" />
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+            </nav>
+        </header>
+        <div class="container">
+            <partial name="_CookieConsentPartial" />
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
 
-    <a href="https://www.messenger.com/" class="icon_chat_facebook"></a>
+        <a href="https://www.messenger.com/" class="icon_chat_facebook"></a>
 
-    <div class="footer-dark">
-        <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-6 col-md-3 item">
-                        <h3>Services</h3>
-                        <ul>
-                            <li><a href="#">Web design</a></li>
-                            <li><a href="#">Development</a></li>
-                            <li><a href="#">Hosting</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-6 col-md-3 item">
-                        <h3>About</h3>
-                        <ul>
-                            <li><a href="#">Company</a></li>
-                            <li><a href="#">Team</a></li>
-                            <li><a href="#">Careers</a></li>
-                        </ul>
-                    </div>
-                    <div id="Map-ShopDaKi" class="col-md-6 item text">
-                        <h3>Google MAP</h3>
-                        <div id="map-container-google-1" class="z-depth-1-half map-container">
-                            <iframe allowfullscreen frameborder="0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAEBGNYcsskKEZ3wzdxCicHWrz_XAOnC3o&amp;q=University+of+Technology+and+Education+Ho+Chi+Minh+city%2C+V%C3%B5+V%C4%83n+Ng%C3%A2n%2C+Linh+Chi%E1%BB%83u%2C+Th%E1%BB%A7+%C4%90%E1%BB%A9c%2C+Ho+Chi+Minh+City&amp;zoom=15"
-                                    width="100%" height="250px"></iframe>
+        <div class="footer-dark">
+            <footer>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6 col-md-3 item">
+                            <h3>Services</h3>
+                            <ul>
+                                <li><a href="#">Web design</a></li>
+                                <li><a href="#">Development</a></li>
+                                <li><a href="#">Hosting</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6 col-md-3 item">
+                            <h3>About</h3>
+                            <ul>
+                                <li><a href="#">Company</a></li>
+                                <li><a href="#">Team</a></li>
+                                <li><a href="#">Careers</a></li>
+                            </ul>
+                        </div>
+                        <div id="Map-ShopDaKi" class="col-md-6 item text">
+                            <h3>Google MAP</h3>
+                            <div id="map-container-google-1" class="z-depth-1-half map-container">
+                                <iframe allowfullscreen frameborder="0" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyAEBGNYcsskKEZ3wzdxCicHWrz_XAOnC3o&amp;q=University+of+Technology+and+Education+Ho+Chi+Minh+city%2C+V%C3%B5+V%C4%83n+Ng%C3%A2n%2C+Linh+Chi%E1%BB%83u%2C+Th%E1%BB%A7+%C4%90%E1%BB%A9c%2C+Ho+Chi+Minh+City&amp;zoom=15"
+                                        width="100%" height="250px"></iframe>
+                            </div>
+                        </div>
+                        <div class="col item social">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-snapchat-ghost"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
-                    <div class="col item social">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-snapchat-ghost"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
+                    <p class="copyright">Spice © 2020</p>
                 </div>
-                <p class="copyright">Spice © 2020</p>
-            </div>
-        </footer>
-    </div>
+            </footer>
+        </div>
 
-    <script>
-        const requestTrackingOrdering = async () => {
-            try {
-                const countRaw = await fetch('/Customer/Order/TrackingOrder')
 
-                if (countRaw) {
-                    const count = await countRaw.json()
-                }
+    </body>
+}
+<script>
+    const requestTrackingOrdering = async () => {
+        try {
+            const countRaw = await fetch('/Customer/Order/TrackingOrder')
 
-                if (count) {
-                    if (count === 0) {
-                        document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering'
-                    }
-                    else {
-                        document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering (' + count + ')'
-                    }
-                }
+            if (countRaw) {
+                const count = await countRaw.json()
             }
-            catch (error) {
-                console.log(error)
+
+            if (count) {
+                if (count === 0) {
+                    document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering'
+                }
+                else {
+                    document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering (' + count + ')'
+                }
             }
         }
-        requestTrackingOrdering()
+        catch (error) {
+            console.log(error)
+        }
+    }
+    requestTrackingOrdering()
+</script>
+
+<environment include="Development">
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=n94ifuzvl80pchikopiwgz2esrw8n28dwcywvpejlqrregfp"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="~/js/jquery-ui.js"></script>
+</environment>
+<environment exclude="Development">
+    <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=n94ifuzvl80pchikopiwgz2esrw8n28dwcywvpejlqrregfp"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery"
+            crossorigin="anonymous"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
+            asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+            crossorigin="anonymous"
+            integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
+    </script>
+    <script src="~/js/jquery-ui.js"></script>
+</environment>
+<script src="~/js/site.js" asp-append-version="true"></script>
 
-    <environment include="Development">
-        <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=n94ifuzvl80pchikopiwgz2esrw8n28dwcywvpejlqrregfp"></script>
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-        <script src="~/js/jquery-ui.js"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://cloud.tinymce.com/stable/tinymce.min.js?apiKey=n94ifuzvl80pchikopiwgz2esrw8n28dwcywvpejlqrregfp"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha256-E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=">
-        </script>
-        <script src="~/js/jquery-ui.js"></script>
-    </environment>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
-    @RenderSection("Scripts", required: false)
-</body>
+@RenderSection("Scripts", required: false)
 </html>
