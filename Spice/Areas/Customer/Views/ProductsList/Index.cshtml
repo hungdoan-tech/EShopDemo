@@ -82,16 +82,13 @@
         </div>
         <!-- End Nav Card -->
     </div>
+    <form method="get">
+        <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="page-link"
+             page-class-normal="" page-class-selected="active btn-primary"
+             class="btn-group float-right">
+        </div>
+    </form>
 </section>
-
-<form method="get">
-    <div page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
-         page-class="btn border"
-         page-class-normal="btn btn-default active"
-         page-class-selected="btn btn-primary active" class="btn-group m-1"
-         style="width: 70px; height: 70px;">
-    </div>
-</form>
 
 <!-- Latest Products End -->
 <!--? Shop Method Start-->
