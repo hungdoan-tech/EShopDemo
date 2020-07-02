@@ -95,7 +95,8 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderListVM);
         }
 
-        [Authorize(Roles = SD.KitchenUser + "," + SD.ManagerUser)]
+        [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
+        [Route("~/Admin/Order/ManageOrder")]
         public async Task<IActionResult> ManageOrder(int productPage = 1)
         {
 
@@ -196,7 +197,7 @@ namespace Spice.Areas.Customer.Controllers
         }
 
 
-        [Authorize(Roles =SD.KitchenUser + ","+ SD.ManagerUser)]
+        [Authorize(Roles =SD.RepositoryManager + ","+ SD.ManagerUser)]
         public async Task<IActionResult> OrderPrepare(int OrderId)
         {
             OrderHeader orderHeader = await _db.OrderHeader.FindAsync(OrderId);
@@ -206,7 +207,7 @@ namespace Spice.Areas.Customer.Controllers
         }
 
 
-        [Authorize(Roles = SD.KitchenUser + "," + SD.ManagerUser)]
+        [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
         public async Task<IActionResult> OrderReady(int OrderId)
         {
             OrderHeader orderHeader = await _db.OrderHeader.FindAsync(OrderId);
@@ -221,7 +222,7 @@ namespace Spice.Areas.Customer.Controllers
         }
 
 
-        [Authorize(Roles = SD.KitchenUser + "," + SD.ManagerUser)]
+        [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
         public async Task<IActionResult> OrderCancel(int OrderId)
         {
             OrderHeader orderHeader = await _db.OrderHeader.FindAsync(OrderId);
@@ -235,6 +236,7 @@ namespace Spice.Areas.Customer.Controllers
 
 
         [Authorize]
+        [Route("~/Admin/Order/OrderPickup")]
         public async Task<IActionResult> OrderPickup(int productPage = 1, string searchEmail=null, string searchPhone = null, string searchName = null)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -327,7 +329,7 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderListVM);
         }
 
-        [Authorize(Roles =SD.FrontDeskUser + ","+ SD.ManagerUser)]
+        [Authorize(Roles =SD.Shipper + ","+ SD.ManagerUser)]
         [HttpPost]
         [ActionName("OrderPickup")]
         public async Task<IActionResult> OrderPickupPost(int orderId)

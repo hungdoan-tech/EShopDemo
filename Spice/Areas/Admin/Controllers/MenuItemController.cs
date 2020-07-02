@@ -31,6 +31,7 @@ namespace Spice.Areas.Admin.Controllers
             MenuItemVM = new MenuItemViewModel()
             {
                 Category = _db.Category,
+                SubCategory = _db.SubCategory,
                 MenuItem = new Models.MenuItem()
             };
         }
@@ -51,7 +52,7 @@ namespace Spice.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePOST()
         {
-            MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
+            //MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
             if(!ModelState.IsValid)
             {
@@ -103,7 +104,7 @@ namespace Spice.Areas.Admin.Controllers
             }
 
             MenuItemVM.MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).SingleOrDefaultAsync(m => m.Id == id);
-            MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
+            //MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
 
             if(MenuItemVM.MenuItem ==null)
             {
@@ -120,11 +121,11 @@ namespace Spice.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
+            //MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
             if (!ModelState.IsValid)
             {
-                MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
+                //MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
                 return View(MenuItemVM);
             }
 

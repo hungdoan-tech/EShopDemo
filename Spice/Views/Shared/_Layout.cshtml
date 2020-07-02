@@ -4,6 +4,7 @@
 @using Spice.Extensions
 @inject IHttpContextAccessor HttpContextAccessor
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,7 +37,7 @@
 
 
 
-<body class="search-background">
+<body>
     <!--? Preloader Start -->
     <div id="preloader-active">
         <div class="preloader d-flex align-items-center justify-content-center">
@@ -57,10 +58,9 @@
                     <div class="menu-wrapper">
                         <!-- Logo -->
                         <div class="logo">
-                            <a href="index.html">
-                                <a asp-action="Index" asp-controller="Home" asp-area="Customer">
-                                    <img src="~/assets/img/logo/logo.png" alt="">
-                                </a>
+                            <a asp-action="Index" asp-controller="Home" asp-area="Customer">
+                                <img src="~/assets/img/logo/logo.png" alt="">
+                            </a>
                         </div>
                         <!-- Main-menu -->
                         <div class="main-menu d-none d-lg-block">
@@ -98,12 +98,9 @@
                                         <span class="flaticon-search"></span>
                                     </div>
                                 </li>
-
                                 @*<li>
-                                <a href="#"><span class="flaticon-user"></span></a>*@
-
+                                    <a href="#"><span class="flaticon-user"></span></a>*@
                                 @*</li>*@
-
                                 @if (HttpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart") != null)
                                 {
                                     int count = 0;
@@ -130,15 +127,13 @@
         </div>
         <!-- Header End -->
     </header>
+    <a href="https://www.messenger.com/" class="icon_chat_facebook"></a>
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
-    <a href="https://www.messenger.com/" class="icon_chat_facebook"></a>
-
     <footer>
         <!-- Footer Start-->
         <div class="footer-area footer-padding">

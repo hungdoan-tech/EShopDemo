@@ -1,67 +1,90 @@
 ﻿@model IEnumerable<Coupon>
 
-    @{
-        ViewData["Title"] = "Index";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
+}
 
-    <br /><br />
-    <div class="border backgroundWhite">
-        <div class="row">
-            <div class="col-6">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | Simple Tables</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+
+<div id="content">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+
+            <br />
                 <h2 class="text-info"> Coupon List</h2>
-            </div>
-            <div class="col-6 text-right">
-                <partial name="_CreateButtonPartial" />
+            <br />
+            <div class="border backgroundWhite">
+                <div class="row">
+                    <div class="col-6 text-right">
+                        <partial name="_CreateButtonPartial" />
+                    </div>
+                </div>
+                <br />
+                <div>
+                    <div class="container-fluid">
+                        @if (Model.Count() > 0)
+                        {
+                            <table class="table table-striped border">
+                                <tr class="table-secondary">
+                                    <th>
+                                        @Html.DisplayNameFor(m => m.Name)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => m.Discount)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => m.MinimumAmount)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => m.IsActive)
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(m => item.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.Discount)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.MinimumAmount)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.IsActive)
+                                        </td>
+                                        <td>
+                                            <partial name="_TableButtonPartial" model="item.Id" />
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        }
+                        else
+                        {
+                            <p>No coupons exists...</p>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
-        <br />
-        <div>
-            @if (Model.Count() > 0)
-            {
-                <table class="table table-striped border">
-                    <tr class="table-secondary">
-                        <th>
-                            @Html.DisplayNameFor(m => m.Name)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(m => m.Discount)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(m => m.MinimumAmount)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(m => m.IsActive)
-                        </th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    @foreach (var item in Model)
-                    {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(m => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(m => item.Discount)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(m => item.MinimumAmount)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(m => item.IsActive)
-                        </td>
-                        <td>
-                            <partial name="_TableButtonPartial" model="item.Id" />
-                        </td>
-                    </tr>
-                    }
-                </table>
-            }
-            else
-            {
-                <p>No coupons exists...</p>
-            }
-        </div>
-    </div>
-
+    </nav>
+</div>

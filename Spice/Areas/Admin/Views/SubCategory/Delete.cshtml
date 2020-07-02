@@ -1,37 +1,55 @@
 ﻿@model Spice.Models.SubCategory
 @{
     ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
-<br />
-<h2 class="text-info">Sub Category Delete</h2>
-<br />
-<form method="post">
-    <div class="border backgroundWhite">
-        <input type="hidden" asp-for="Id" />
-        <fieldset disabled>
-            <div class="form-group row">
-                <div class="col-2">
-                    <label asp-for="Name" class="custom-label"></label>
-                </div>
-                <div class="col-5">
-                    <input asp-for="Name" class="form-control" />
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-2">
-                    <label asp-for="Category.Name" class="custom-label"></label>
-                </div>
-                <div class="col-5">
-                    <input asp-for="Category.Name" class="form-control" />
-                </div>
-            </div>
-        </fieldset>
-        <br />
-        <div class="form-group row">
-            <div class="col-5 offset-2">
-                <partial name="_DeleteAndBackToListButton" model="Model.Id" />
-            </div>
-        </div>
-    </div>
-</form>
 
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | Simple Tables</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+
+<div id="content">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <br />
+            <h2 class="text-info">Sub Category Delete</h2>
+            <br />
+            <form method="post">
+                <div class="border backgroundWhite">
+                    <div class="container-fluid">
+                        <input type="hidden" asp-for="Id" />
+                        <fieldset disabled>
+                            <div class="form-group row">
+                                <div class="col-2">
+                                    <label asp-for="Name" class="custom-label"></label>
+                                </div>
+                                <div class="col-5">
+                                    <input asp-for="Name" class="form-control" />
+                                </div>
+                            </div>
+                        </fieldset>
+                        <br />
+                        <div class="form-group row">
+                            <div class="col-5 offset-2">
+                                <partial name="_DeleteAndBackToListButton" model="Model.Id" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </nav>
+</div>

@@ -342,7 +342,7 @@ namespace Spice.Migrations
                     b.Property<string>("ImageHeader")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MenuItemId")
+                    b.Property<int?>("MenuItemId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PublishedDate")
@@ -451,16 +451,11 @@ namespace Spice.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("SubCategory");
                 });
@@ -543,13 +538,13 @@ namespace Spice.Migrations
                     b.HasOne("Spice.Models.Category", "Category")
                         .WithMany("MenuItems")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Spice.Models.SubCategory", "SubCategory")
                         .WithMany("MenuItems")
                         .HasForeignKey("SubCategoryId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -557,9 +552,7 @@ namespace Spice.Migrations
                 {
                     b.HasOne("Spice.Models.MenuItem", "MenuItem")
                         .WithMany("News")
-                        .HasForeignKey("MenuItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MenuItemId");
                 });
 
             modelBuilder.Entity("Spice.Models.OrderDetails", b =>
@@ -582,15 +575,6 @@ namespace Spice.Migrations
                     b.HasOne("Spice.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("OrderHeaders")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Spice.Models.SubCategory", b =>
-                {
-                    b.HasOne("Spice.Models.Category", "Category")
-                        .WithMany("SubCategories")
-                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

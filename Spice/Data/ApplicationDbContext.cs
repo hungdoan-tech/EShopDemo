@@ -36,14 +36,7 @@ namespace Spice.Data
             modelBuilder.Entity<SubCategory>()
                 .HasKey(a => a.Id);
             modelBuilder.Entity<SubCategory>()
-                .HasOne(a => a.Category)
-                .WithMany(b => b.SubCategories)
-                .HasForeignKey(a => a.CategoryId);
-            modelBuilder.Entity<SubCategory>()
                 .Property(a => a.Name)
-                .IsRequired();
-            modelBuilder.Entity<SubCategory>()
-                .Property(a => a.CategoryId)
                 .IsRequired();
 
             //MenuItem
@@ -52,13 +45,11 @@ namespace Spice.Data
             modelBuilder.Entity<MenuItem>()
                 .HasOne(a => a.SubCategory)
                 .WithMany(b => b.MenuItems)
-                .HasForeignKey(a => a.SubCategoryId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(a => a.SubCategoryId);
             modelBuilder.Entity<MenuItem>()
                 .HasOne(a => a.Category)
                 .WithMany(b => b.MenuItems)
-                .HasForeignKey(a => a.CategoryId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(a => a.CategoryId);
             modelBuilder.Entity<MenuItem>()
                 .Property(a => a.Name)
                 .IsRequired();
@@ -159,6 +150,7 @@ namespace Spice.Data
                 .HasOne(a => a.MenuItem)
                 .WithMany(b => b.News)
                 .HasForeignKey(a => a.MenuItemId);
+
             //modelBuilder.Entity<News>()
             //    .HasOne(a => a.ApplicationUser)
             //    .WithMany(b => b.News)
