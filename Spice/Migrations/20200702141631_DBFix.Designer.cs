@@ -10,8 +10,8 @@ using Spice.Data;
 namespace Spice.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200702135238_FixDBSubCategoryv2")]
-    partial class FixDBSubCategoryv2
+    [Migration("20200702141631_DBFix")]
+    partial class DBFix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

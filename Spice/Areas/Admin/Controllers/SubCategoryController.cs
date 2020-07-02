@@ -29,7 +29,11 @@ namespace Spice.Areas.Admin.Controllers
         {
             return View(await _db.SubCategory.ToListAsync());
         }
-
+        [HttpGet]
+        public IActionResult Create ()
+        {
+            return View();
+        }
         //GET - CREATE
         [HttpPost]
         [ValidateAntiForgeryToken]
