@@ -14,7 +14,7 @@ using Spice.Utility;
 namespace Spice.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.ManagerUser)]
+    [Authorize(Roles = SD.ManagerUser +"," + SD.RepositoryManager)]
     public class SubCategoryController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -23,7 +23,7 @@ namespace Spice.Areas.Admin.Controllers
         {
             _db = db;
         }
-
+        [Authorize(Roles = SD.ManagerUser + "," + SD.RepositoryManager)]
         //Get INDEX
         public async Task<IActionResult> Index()
         {

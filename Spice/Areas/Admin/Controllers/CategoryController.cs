@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Models;
@@ -11,7 +12,7 @@ using Spice.Utility;
 
 namespace Spice.Areas.Admin.Controllers
 {
-    [Authorize(Roles = SD.ManagerUser)]
+    [Authorize(Roles = SD.ManagerUser + "," + SD.RepositoryManager)]
     [Area("Admin")]
     public class CategoryController : Controller
     {
@@ -24,6 +25,8 @@ namespace Spice.Areas.Admin.Controllers
 
 
         //GET 
+        [Authorize(Roles = SD.ManagerUser + "," + SD.RepositoryManager)]
+
         public async Task<IActionResult> Index()
         {
             return View(await _db.Category.ToListAsync());

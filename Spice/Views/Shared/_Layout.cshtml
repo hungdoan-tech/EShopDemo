@@ -7,7 +7,7 @@
 
 <!DOCTYPE html>
 <html>
-@if (User.IsInRole(SD.ManagerUser))
+@if (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.RepositoryManager) || User.IsInRole(SD.Shipper))
 {
     Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 
