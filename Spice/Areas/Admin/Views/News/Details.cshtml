@@ -32,6 +32,7 @@
             <div class="backgroundWhiteBorder row">
                 <div class="container-fluid">
                     <div class="col-8">
+
                         <div class="container-fluid">
                             <fieldset disabled>
                                 <div class="col-8">
@@ -72,7 +73,7 @@
                                             <label asp-for="News.Type" class="custom-label"></label>
                                         </div>
                                         <div class="col-8">
-                                            <select asp-for="News.Type" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
+                                            <select id="TypeField" asp-for="News.Type" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -102,7 +103,7 @@
                     <div class="col-8">
                         <div class="col-8 offset-4">
                             <partial name="_DetailsAndBackToListButton" model="Model.News.Id" />
-                        </div>
+                      </div>                       
                     </div>
                 </div>
                 <script type="text/javascript">
@@ -112,3 +113,24 @@
         </div>
     </nav>
 </div>
+
+<script type="text/javascript">
+    CKEDITOR.replace('editor1', {width:1000, height:700});
+</script>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            $("#TypeField").html(function () {
+                if ($(this).val() == 0) {
+                    //$("#valueOfMenuItem").val($("#valueOfMenuItem option:first").val());
+                    $("#MenuItemField").show();
+                } else {
+                    //$("#valueOfMenuItem").val(null);
+                    $("#MenuItemField").hide();
+                }
+            });
+        });
+    </script>
+}
+
