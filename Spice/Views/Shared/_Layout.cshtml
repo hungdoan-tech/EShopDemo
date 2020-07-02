@@ -134,7 +134,7 @@ else
                                 </a>
                             </li>
 
-                            @if (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.CustomerEndUser) || User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser))
+                            @if (User.IsInRole(SD.CustomerEndUser) )
                             {
                                 <li class="nav-item">
                                     <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory" class="nav-link">
@@ -142,14 +142,12 @@ else
                                     </a>
                                 </li>
 
-                                if (User.IsInRole(SD.CustomerEndUser))
-                                {
-                                    <li class="nav-item">
-                                        <a asp-area="Customer" asp-controller="Order" asp-action="OrderTracking" class="nav-link">
-                                            <label id="trackingOrdering">Tracking Ordering</label>
-                                        </a>
-                                    </li>
-                                }
+                                <li class="nav-item">
+                                    <a asp-area="Customer" asp-controller="Order" asp-action="OrderTracking" class="nav-link">
+                                        <label id="trackingOrdering">Tracking Ordering</label>
+                                    </a>
+                                </li>
+                                
                             }
 
                             @*@if (User.IsInRole(SD.FrontDeskUser) || User.IsInRole(SD.KitchenUser) || User.IsInRole(SD.ManagerUser))

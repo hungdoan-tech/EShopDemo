@@ -12,8 +12,8 @@ namespace Spice.Utility
 
 
         public const string ManagerUser = "Manager";
-        public const string KitchenUser = "Kitchen";
-        public const string FrontDeskUser = "FrontDesk";
+        public const string RepositoryManager = "RepositoryManager";
+        public const string Shipper = "Shipper";
         public const string CustomerEndUser = "Customer";
 
         public const string ssShoppingCart = "ssShoppingCart";

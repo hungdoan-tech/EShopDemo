@@ -94,7 +94,7 @@
                 </li>
 
             </ul>
-            @if (Model.OrderHeader.Status.Equals(SD.StatusReady) && (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.FrontDeskUser)))
+            @if (Model.OrderHeader.Status.Equals(SD.StatusReady) && (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.Shipper)))
             {
                 <button type="submit"  class="btn btn-success form-control"><i class="far fa-thumbs-up"></i> Confirm Pickup</button>
             }
