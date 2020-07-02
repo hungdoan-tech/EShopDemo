@@ -30,7 +30,7 @@
                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                         <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descDate" class="nav-item nav-link active" id="nav-descDate-tab">NewestArrivals</a>
                         <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descPrice" class="nav-item nav-link" id="nav-descPrice-tab"> Price high to low</a>
-                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descName" class="nav-item nav-link" id="nav-descName-tab">Most populer </a>
+                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="mostPopuler" class="nav-item nav-link" id="nav-mostPopuler-tab">Most populer </a>
                     </div>
                 </nav>
                 <!--End Nav Button  -->
@@ -236,7 +236,7 @@
 
     $('#nav-descDate-tab').removeClass('active')
     $('#nav-descPrice-tab').removeClass('active')
-    $('#nav-descName-tab').removeClass('active')
+    $('#nav-mostPopuler-tab').removeClass('active')
 
     switch (orderBy) {
         case "descDate":
@@ -245,8 +245,8 @@
         case "descPrice":
             $('#nav-descPrice-tab').addClass('active')
             break
-        case "descName":
-            $('#nav-descName-tab').addClass('active')
+        case "mostPopuler":
+            $('#nav-mostPopuler-tab').addClass('active')
             break
         default:
             $('#nav-descDate-tab').addClass('active')

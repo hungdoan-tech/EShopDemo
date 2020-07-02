@@ -84,6 +84,10 @@ namespace Spice.Areas.Customer.Controllers
                         ProductsListVM.Products = ProductsListVM.Products.OrderByDescending(p => p.PublishedDate)
                         .Skip((productPage - 1) * PageSize).Take(PageSize).Where(m => m.Category.Name.Equals(groupProductsSelected)).ToList();
                         break;
+                    case "mostPopuler":
+                        ProductsListVM.Products = ProductsListVM.Products.OrderByDescending(p => p.PublishedDate)
+                        .Skip((productPage - 1) * PageSize).Take(PageSize).Where(m => m.Tag == MenuItem.ETag.Popular.ToString()).ToList();
+                        break;
                 }
             }
             else
@@ -113,6 +117,10 @@ namespace Spice.Areas.Customer.Controllers
                     case "descDate":
                         ProductsListVM.Products = ProductsListVM.Products.OrderByDescending(p => p.PublishedDate)
                         .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
+                        break;
+                    case "mostPopuler":
+                        ProductsListVM.Products = ProductsListVM.Products.OrderByDescending(p => p.PublishedDate)
+                        .Skip((productPage - 1) * PageSize).Take(PageSize).Where(m => m.Tag == MenuItem.ETag.Popular.ToString()).ToList();
                         break;
                 }
             }
