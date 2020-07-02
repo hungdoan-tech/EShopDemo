@@ -47,10 +47,10 @@
                                         @Html.DisplayNameFor(m => m.Price)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(m => m.CategoryId)
+                                        @Html.DisplayNameFor(m => m.Category)
                                     </th>
                                     <th>
-                                        @Html.DisplayNameFor(m => m.SubCategoryId)
+                                        @Html.DisplayNameFor(m => m.SubCategory)
                                     </th>
                                     <th>
                                         @Html.DisplayNameFor(m => m.Quantity)
@@ -84,16 +84,16 @@
                                             @Html.DisplayFor(m => item.SubCategory.Name)
                                         </td>
                                         <td>
-                                            @Html.DisplayNameFor(m => m.Quantity)
+                                            @Html.DisplayFor(m => item.Quantity)
                                         </td>
                                         <td>
-                                            @Html.DisplayNameFor(m => m.IsPublish)
+                                            @Html.DisplayFor(m => item.IsPublish)
                                         </td>
                                         <td>
-                                            @Html.DisplayNameFor(m => m.Tag)
+                                            @Html.DisplayFor(m => item.Tag)
                                         </td>
                                         <td>
-                                            @Html.DisplayNameFor(m => m.PublishedDate)
+                                            @Html.DisplayFor(m => item.PublishedDate)
                                         </td>
                                         <td>
                                             <partial name="_TableButtonPartial" model="item.Id" />
