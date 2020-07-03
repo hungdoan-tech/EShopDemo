@@ -6,8 +6,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<br />
 
+<br />
 <form method="post">
     <div class="card">
         <div class="row">
@@ -15,7 +15,7 @@
                 <article class="gallery-wrap">
                     <div class="img-big-wrap">
                         <img src="@Model.Item.Image" width="100%" style="border-radius:5px;border: 1px solid #bbb9b9;" />
-                    </div> 
+                    </div>
                     <!-- slider-product.// -->
                     <!--
                         <div class="img-small-wrap">
@@ -26,7 +26,7 @@
                         </div>
                     -->
                     <!-- gallery-wrap .end// -->
-                </article> 
+                </article>
             </aside>
             <aside class="col-sm-7">
                 <article class="card-body p-5">
@@ -41,14 +41,15 @@
                         <dt>Description</dt>
                         <dd>
                             <p>
-                                @Html.Raw(Model.Item.Description)
+                                @*@Html.Raw(Model.Item.Description)*@
+                                Model.Item.Description
                             </p>
                         </dd>
                     </dl>
                     <dl class="param param-feature">
                         <dt>Model#</dt>
                         <dd>@Model.Item.Id</dd>
-                    </dl>  <!-- item-property-hor .// -->
+                    </dl>   @*item-property-hor .//*@ 
                     <dl class="param param-feature">
                         <dt>Color: </dt>
                         <dd>
@@ -98,6 +99,5 @@
 </form>
 
 @section Scripts{
-
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
