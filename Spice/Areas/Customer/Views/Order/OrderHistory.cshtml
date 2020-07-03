@@ -12,7 +12,6 @@
             <h2 class="text-info"> Past Order List</h2>
         </div>
         <div class="col-6 text-right">
-            <partial name="_CreateButtonPartial" />
         </div>
     </div>
     <br />
@@ -58,12 +57,12 @@
                             @Html.DisplayFor(m => item.OrderDetails.Count)
                         </td>
                         <td>
-                            <button type="submit" class="btn btn-success anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
+                            <button type="submit" class="genric-btn info large  anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
                                 <i class="far fa-list-alt"></i> Details
                             </button>
                             @if (item.OrderHeader.Status == SD.StatusSubmitted || item.OrderHeader.Status == SD.StatusInProcess || item.OrderHeader.Status == SD.StatusCompleted || item.OrderHeader.Status == SD.StatusReady)
                             {
-                                <button type="button" class="btn btn-info btnOrderStatus" data-id="@item.OrderHeader.Id" data-toggle="modal">
+                                <button type="button" class="genric-btn info-border large btnOrderStatus" data-id="@item.OrderHeader.Id" data-toggle="modal">
                                     <i class="far fa-clock"></i> Status
                                 </button>
                             }
@@ -79,7 +78,7 @@
         }
         else
         {
-            <p>No category exists...</p>
+            <p>No order exists...</p>
         }
     </div>
 </div>

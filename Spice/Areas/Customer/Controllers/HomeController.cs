@@ -65,8 +65,10 @@ namespace Spice.Controllers
 
             IndexHomeVM IndexVM = new IndexHomeVM()
             {
-                ListPopularMenuItem = await _db.MenuItem.Where(a => a.Tag == "2").OrderByDescending(a => a.Id).Take(4).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
-                ListNewMenuItem = await _db.MenuItem.Where(a => a.Tag == "1").OrderByDescending(a => a.Id).Take(4).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
+                ListPopularMenuItem = await _db.MenuItem.Where(a => a.Tag == "2" && a.IsPublish == true).OrderByDescending(a => a.Id).Take(6).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
+                ListNewMenuItem = await _db.MenuItem.Where(a => a.Tag == "1" && a.IsPublish == true).OrderByDescending(a => a.Id).Take(6).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
+                ListBestSellerMenuItem = await _db.MenuItem.Where(a => a.Tag == "0" && a.IsPublish == true).OrderByDescending(a => a.Id).Take(2).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
+                ListNews = await _db.News.Where(a => a.Type != "0").OrderByDescending(a => a.PublishedDate).Take(2).ToListAsync()
             };
             return View(IndexVM);
         }
