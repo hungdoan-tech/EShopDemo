@@ -33,7 +33,7 @@
                     <div class=" row backgroundWhiteBorder">
 
                         <br />
-                        <div class="container-fluid">
+                        <div class="container">
                             <div class="col-12 pt-4">
                                 <input hidden asp-for="News.Id" />
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -42,36 +42,42 @@
                                         <label asp-for="News.Header" class="custom-label"></label>
                                     </div>
                                     <div class="col-5">
-                                        <input asp-for="News.Header" class="form-control" />
+                                        <div style="height:50px;;width:400px">
+                                            <input asp-for="News.Header" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="News.Header" class="text-danger"></span>
                                     </div>
-                                    <span asp-validation-for="News.Header" class="text-danger"></span>
                                 </div>
-
                                 <div class="form-group row">
                                     <div class="col-2">
                                         <label asp-for="News.Alias" class="custom-label"></label>
                                     </div>
                                     <div class="col-5">
-                                        <input asp-for="News.Alias" class="form-control" />
+                                        <div style="height:50px;;width:400px">
+                                            <input asp-for="News.Alias" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="News.Alias" class="text-danger"></span>
                                     </div>
-                                    <span asp-validation-for="News.Alias" class="text-danger"></span>
                                 </div>
-
                                 <div class="form-group row">
                                     <div class="col-2">
                                         <label asp-for="News.PublishedDate" class="custom-label"></label>
                                     </div>
                                     <div class="col-5">
-                                        <input id="today" type="date" asp-for="News.PublishedDate" class="form-control" readonly />
+                                        <div style="height:50px;;width:400px">
+                                            <input id="today" type="date" asp-for="News.PublishedDate" class="form-control" readonly />
+                                        </div>
+                                        <span asp-validation-for="News.PublishedDate" class="text-danger"></span>
                                     </div>
-                                    <span asp-validation-for="News.PublishedDate" class="text-danger"></span>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-2">
                                         <label asp-for="News.Type" class="col-form-label"></label>
                                     </div>
                                     <div class="col-5">
-                                        <select id="TypeField" asp-for="News.Type" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
+                                        <div style="height:50px;;width:400px">
+                                            <select id="TypeField" asp-for="News.Type" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row" id="MenuItemField">
@@ -79,7 +85,9 @@
                                         <label asp-for="News.MenuItem" class="col-form-label"></label>
                                     </div>
                                     <div class="col-5">
-                                        <select id="valueOfMenuItem" asp-for="@Model.News.MenuItemId" asp-items="Model.MenuItems.ToSelectListItem(Model.News.MenuItemId)" class="form-control"></select>
+                                        <div style="height:50px;;width:400px">
+                                            <select id="valueOfMenuItem" asp-for="@Model.News.MenuItemId" asp-items="Model.MenuItems.ToSelectListItem(Model.News.MenuItemId)" class="form-control"></select>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -87,7 +95,9 @@
                                         <label asp-for="News.ImageHeader" class="col-form-label"></label>
                                     </div>
                                     <div class="col-5">
-                                        <input type="file" name="files" multiple class="form-control" />
+                                        <div style="height:50px;;width:400px">
+                                            <input type="file" name="files" multiple class="form-control" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-3 offset-1">
@@ -104,10 +114,11 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-5 offset-2">
-                                        <partial name="_EditAndBackToListButton" model="Model.News.Id" />
+                                        <div style="height:100px;;width:400px">
+                                            <partial name="_EditAndBackToListButton" model="Model.News.Id" />
+                                        </div>
                                     </div>
                                 </div>
-
                                 <br />
 
                             </div>

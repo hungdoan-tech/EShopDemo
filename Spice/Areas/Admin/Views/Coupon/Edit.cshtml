@@ -46,7 +46,7 @@
                                     <label asp-for="Name" class="custom-label"></label>
                                 </div>
                                 <div class="col-5">
-                                    <div style="height:100px;width:400px">
+                                    <div style="height:50px;width:400px">
                                         <input asp-for="Name" class="form-control" />
                                     </div>
                                     <span asp-validation-for="Name" class="text-danger"></span>
@@ -57,7 +57,7 @@
                                     <label asp-for="Picture" class="custom-label"></label>
                                 </div>
                                 <div class="col-5">
-                                    <div style="height:100px;width:400px">
+                                    <div style="height:50px;width:400px">
                                         <input type="file" id="projectImage" name="files" multiple class="form-control" />
                                     </div>
                                 </div>
@@ -67,7 +67,7 @@
                                     <label asp-for="CouponType" class="custom-label"></label>
                                 </div>
                                 <div class="col-5">
-                                    <div style="height:100px;width:400px">
+                                    <div style="height:50px;width:400px">
                                         <select asp-for="CouponType" asp-items="Html.GetEnumSelectList<Coupon.ECouponType>()" class="form-control"></select>
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@
                                     <label asp-for="Discount" class="custom-label"></label>
                                 </div>
                                 <div class="col-5">
-                                    <div style="height:100px;width:400px">
+                                    <div style="height:50px;width:400px">
                                         <input asp-for="Discount" class="form-control" />
                                     </div>
                                     <span asp-validation-for="Discount" class="text-danger"></span>
@@ -88,7 +88,7 @@
                                     <label asp-for="MinimumAmount" class="custom-label"></label>
                                 </div>
                                 <div class="col-5">
-                                    <div style="height:100px;width:400px">
+                                    <div style="height:50px;width:400px">
                                         <input asp-for="MinimumAmount" class="form-control" />
                                     </div>
                                     <span asp-validation-for="MinimumAmount" class="text-danger"></span>
@@ -99,8 +99,8 @@
                                     <label asp-for="IsActive" class="custom-label"></label>
                                 </div>
                                 <div class="col-5">
-                                    <div style="height:100px;width:400px">
-                                        <input type="checkbox" asp-for="IsActive" class="form-control" />
+                                    <div style="height:50px;width:400px">
+                                        <input class="form-check-input mx-1" type="checkbox" asp-for="IsActive">
                                     </div>
                                 </div>
                             </div>
