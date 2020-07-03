@@ -111,6 +111,9 @@ namespace Spice.Areas.Customer.Controllers
             detailCart.OrderHeader.PickupName = applicationUser.Name;
             detailCart.OrderHeader.PhoneNumber = applicationUser.PhoneNumber;
             detailCart.OrderHeader.UserId = claim.Value;
+            detailCart.OrderHeader.StreetAddress = applicationUser.StreetAddress;
+            detailCart.OrderHeader.Email = applicationUser.Email;
+            detailCart.OrderHeader.City = applicationUser.City;
 
             if (HttpContext.Session.GetString(SD.ssCouponCode) != null)
             {
@@ -229,11 +232,25 @@ namespace Spice.Areas.Customer.Controllers
         }
 
 
-        public IActionResult Plus(int cartId)
+        public async Task<IActionResult> Plus(int cartId)
         {
             List<MenuItemsAndQuantity> lstShoppingCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
-            lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity += 1;
-            HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
+
+            var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == cartId).FirstOrDefaultAsync();
+
+            int currentQuantity = lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity;
+
+            ViewBag.Alert = false;
+            if (currentQuantity >= menuItemFromDb.Quantity)
+            {
+                ViewBag.Alert = true;
+            }
+            else
+            {
+                lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity += 1;
+                HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 

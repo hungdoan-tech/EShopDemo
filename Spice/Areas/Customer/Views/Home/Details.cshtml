@@ -6,28 +6,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
 <br />
-<form method="post">
-    <div>
+
+<form id="myform" method="post">
+    <div class="card">
         <div class="row">
-            <aside class="col-sm-2"></aside> 
-            <aside class="col-sm-3">
+            <aside class="col-sm-5 border-right">
                 <article class="gallery-wrap">
                     <div class="img-big-wrap">
-                        <img src="@Model.Item.Image" width="100%" />
-                    </div>
-                    <!-- slider-product.// -->
+                        <div> <img src="@Model.Item.Image" width="100%" style="border-radius:5px;border: 1px solid #bbb9b9;" /></div>
+                    </div> <!-- slider-product.// -->
                     <!--
-                        <div class="img-small-wrap">
-                            <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
-                            <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
-                            <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
-                            <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
-                        </div>
+                    <div class="img-small-wrap">
+                        <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
+                        <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
+                        <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
+                        <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
+                    </div>
                     -->
-                    <!-- gallery-wrap .end// -->
-                </article>
+                </article> <!-- gallery-wrap .end// -->
             </aside>
             <aside class="col-sm-7">
                 <article class="card-body p-5">
@@ -42,18 +39,18 @@
                         <dt>Description</dt>
                         <dd>
                             <p>
-                                @*@Html.Raw(Model.Item.Description)*@
-                                Model.Item.Description
+                                @Html.Raw(Model.Item.Description)
                             </p>
                         </dd>
                     </dl>
                     <dl class="param param-feature">
                         <dt>Model#</dt>
                         <dd>@Model.Item.Id</dd>
-                    </dl>   @*item-property-hor .//*@ 
+                    </dl>  <!-- item-property-hor .// -->
                     <dl class="param param-feature">
                         <dt>Color: </dt>
                         <dd>
+                            @*<select asp-for="Item.Color" readonly asp-items="Html.GetEnumSelectList<MenuItem.EColor>()" class="form-control"></select>*@
                             @Model.Item.Color
                         </dd>
                     </dl>  <!-- item-property-hor .// -->
@@ -90,14 +87,47 @@
                         </div> <!-- col.// -->
                     </div> <!-- row.// -->
                     <hr>
-                    <button type="submit" value="Add to Cart" id="btn-addingtocart" class="btn btn-primary form-control">Add to Cart</button>
+                    <button type="submit" value="Add to Cart" class="btn btn-primary form-control">Add to Cart</button>
                 </article> <!-- card-body.// -->
             </aside> <!-- col.// -->
         </div> <!-- row.// -->
     </div> <!-- card.// -->
-    <input asp-for="Item.Id" hidden />
+    <input id="itemId" asp-for="Item.Id" hidden />
     <!--container.//-->
 </form>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+    $('#myform').submit(async function (event) {
+
+        event.preventDefault(); //this will prevent the default submit
+
+        // your code here (But not asynchronous code such as Ajax because it does not wait for response and move to next line.)
+        try {
+            const itemId = $('#itemId').val()
+            const quantityRaw = await fetch('/Customer/Home/CheckQuantity/' + itemId)
+            let quantity = 0
+            //Quantity product which customer wants to buy.
+            const quantityCurrent = $('#Quantity').val()
+
+            if (quantityRaw) {
+                quantity = await quantityRaw.json()
+            }
+
+            if (quantity < 0 || quantityCurrent > quantity) {
+                alert("Product inventory is not enough to provide this quantity of products")
+            }
+            else {
+                $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+            }
+
+        }
+        catch (err) {
+            console.log(err)
+        }
+    })
+</script>
 
 @section Scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -130,6 +130,14 @@ namespace Spice.Controllers
             return View(menuItemsAndQuantity);
         }
 
+        public async Task<IActionResult> CheckQuantity(int id)
+        {
+            var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            return Ok(menuItemFromDb.Quantity);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Details(MenuItemsAndQuantity CartItemObject)

@@ -57,11 +57,11 @@
                                         </td>
                                         <td>
                                             <div class="product_count">
-                                                <input class="input-number" type="text" value="@item.Quantity" min="0" max="100">
+                                                <input id="itemId" class="input-number" type="text" value="@item.Quantity" min="0" max="100">
                                             </div>
                                         </td>
                                         <td>
-                                            <button class="genric-btn info-border circle" asp-action="plus" asp-route-cartId="@item.Item.Id"><i class="ti-plus"></i></button>
+                                            <button id="btnPlus" class="genric-btn info circle" asp-action="plus" asp-route-cartId="@item.Item.Id"><i class="ti-plus"></i></button>
                                             <button class="genric-btn info-border circle" asp-action="minus" asp-route-cartId="@item.Item.Id"><i class="ti-minus"></i></button>
                                         </td>
                                         <td>
@@ -156,8 +156,8 @@
                             </tbody>
                         </table>
                         <div class="checkout_btn_inner float-right">
-                            <a class="btn_1" asp-area="Customer" asp-controller="Home" asp-action="Index">Continue Shopping</a>
-                            <a class="btn_1 checkout_btn_1" asp-action="Summary" asp-area="Customer" asp-controller="Cart">Proceed to checkout</a>
+                            <a class="genric-btn info-border radius" asp-area="Customer" asp-controller="Home" asp-action="Index">Continue Shopping</a>
+                            <a class="genric-btn info checkout_btn_1" asp-action="Summary" asp-area="Customer" asp-controller="Cart">Proceed to checkout</a>
                         </div>
                     </div>
                 </div>
@@ -257,6 +257,19 @@
         <div class="backgroundWhiteBorder"> No items added to the shopping cart...</div>
     }
 </form>
+
+
+@if (ViewBag.Alert != null)
+{
+    if (ViewBag.Alert)
+    {
+        <script>
+            console.log("Test")
+            alert("Product inventory is not enough to provide this quantity of products")
+        </script>
+    }
+}
+
 
 @section Scripts{
     <script>

@@ -23,6 +23,9 @@ namespace Spice.Models
         public string Comments { get; set; }
         public string PickupName { get; set; }
         public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string StreetAddress { get; set; }
+        public string City { get; set; }
         public string TransactionId { get; set; }
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
     }
