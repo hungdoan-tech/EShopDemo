@@ -120,7 +120,7 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderDetailsVM.OrderBy(o => o.OrderHeader.OrderDate).ToList());
         }
 
-        [Authorize(Roles = SD.CustomerEndUser + "," + SD.ManagerUser)]
+        [Authorize(Roles = SD.CustomerEndUser + "," + SD.ManagerUser + "," +SD.Shipper)]
 
         public async Task<IActionResult> GetOrderDetails(int Id)
         {
