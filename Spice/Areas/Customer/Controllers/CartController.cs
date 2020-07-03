@@ -146,6 +146,7 @@ namespace Spice.Areas.Customer.Controllers
             foreach (var item in detailCart.listCart)
             {
                 item.Item = await _db.MenuItem.FirstOrDefaultAsync(m => m.Id == item.Item.Id);
+                _db.MenuItem.FirstOrDefault(a => a.Id == item.Item.Id).Quantity -= item.Quantity;
                 OrderDetails orderDetails = new OrderDetails
                 {
                     MenuItemId = item.Item.Id,
