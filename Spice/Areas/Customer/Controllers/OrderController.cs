@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Models;
@@ -21,6 +22,7 @@ namespace Spice.Areas.Customer.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _db;
         private int PageSize = 2;
+        private int PageAdminSize = 4;
         public OrderController(ApplicationDbContext db, IEmailSender emailSender)
         {
             _db = db;
@@ -118,6 +120,7 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderDetailsVM.OrderBy(o => o.OrderHeader.OrderDate).ToList());
         }
 
+        [Authorize(Roles = SD.CustomerEndUser + "," + SD.ManagerUser)]
 
         public async Task<IActionResult> GetOrderDetails(int Id)
         {
@@ -172,7 +175,8 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderListVM);
         }
 
-        [Authorize(Roles = SD.CustomerEndUser)]
+        [Authorize(Roles = SD.CustomerEndUser + "," + SD.ManagerUser)]
+        [Route("~/Order/DetailTracking/{id}")]
         public async Task<IActionResult> DetailTracking(int Id)
         {
             OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel()
@@ -345,25 +349,45 @@ namespace Spice.Areas.Customer.Controllers
 
             return RedirectToAction("OrderPickup", "Order");
         }
-
-        //public async Task<IActionResult> OderHistoryAdmin()
-        //{
-        //    List<OrderDetailsViewModel> orderDetailsVM = new List<OrderDetailsViewModel>();
-
-        //    List<OrderHeader> OrderHeaderList = await _db.OrderHeader.ToListAsync();
+        [Authorize(Roles =  SD.ManagerUser)]
+        [Route("~/Admin/Order/OrderHistoryAdmin")]
+        public async Task<IActionResult> OrderHistoryAdmin(int productPage = 1)
+        {
 
 
-        //    foreach (OrderHeader item in OrderHeaderList)
-        //    {
-        //        OrderDetailsViewModel individual = new OrderDetailsViewModel
-        //        {
-        //            OrderHeader = item,
-        //            OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
-        //        };
-        //        orderDetailsVM.Add(individual);
-        //    }
+            OrderListViewModel orderListVM = new OrderListViewModel()
+            {
+                Orders = new List<OrderDetailsViewModel>()
+            };
 
-        //    return View(orderDetailsVM.OrderBy(o => o.OrderHeader.OrderDate).ToList());
-        //}
+
+
+            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).ToListAsync();
+
+            foreach (OrderHeader item in OrderHeaderList)
+            {
+                OrderDetailsViewModel individual = new OrderDetailsViewModel
+                {
+                    OrderHeader = item,
+                    OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
+                };
+                orderListVM.Orders.Add(individual);
+            }
+
+            var count = orderListVM.Orders.Count;
+            orderListVM.Orders = orderListVM.Orders.OrderByDescending(p => p.OrderHeader.Id)
+                                 .Skip((productPage -1) * PageAdminSize)
+                                 .Take(PageAdminSize).ToList();
+
+            orderListVM.PagingInfo = new PagingInfo
+            {
+                CurrentPage = productPage,
+                ItemsPerPage = PageAdminSize,
+                TotalItem = count,
+                urlParam = "/Admin/Order/OrderHistoryAdmin?productPage=:"
+            };
+
+            return View(orderListVM);
+        }
     }
 }

@@ -29,7 +29,6 @@ namespace Spice.Areas.Admin.Controllers
             NewsVM = new NewsViewModel()
             {
                 MenuItems = _db.MenuItem,
-                ApplicationUsers = _db.ApplicationUser,
                 News = new Models.News()
             };
         }
