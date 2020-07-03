@@ -10,7 +10,7 @@ using Spice.Data;
 namespace Spice.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200702165906_InitDB")]
+    [Migration("20200703141427_InitDB")]
     partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -402,6 +402,9 @@ namespace Spice.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Comments")
                         .HasColumnType("nvarchar(max)");
 
@@ -410,6 +413,9 @@ namespace Spice.Migrations
 
                     b.Property<double>("CouponCodeDiscount")
                         .HasColumnType("float");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -430,6 +436,9 @@ namespace Spice.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TransactionId")

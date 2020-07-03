@@ -3,7 +3,7 @@
 
 ## Ignore Migration
 Spice/Data/Migrations
-##Spice/Migrations
+Spice/Migrations
 
 # User-specific files
 *.suo

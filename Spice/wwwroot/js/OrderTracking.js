@@ -11,20 +11,20 @@
             //}
         });
 
-    $('#btn-addingtocart').click(function () {
-        var userQuatity = $(".param param-inline dd input.form-control").val();
+    //$('#btn-addingtocart').click(function () {
+    //    var userQuatity = $(".param param-inline dd input.form-control").val();
 
-        $.ajax({
-            type: 'GET',
-            url: '/Customer/Home/Details',
-            success: function (result) {
-                if (result <= userQuatity)
-                {
-                    alert();
-                }
-            }
-        });
-    });
+    //    $.ajax({
+    //        type: 'GET',
+    //        url: '/Customer/Home/Details',
+    //        success: function (result) {
+    //            if (result <= userQuatity)
+    //            {
+    //                alert();
+    //            }
+    //        }
+    //    });
+    //});
 })
 
 
