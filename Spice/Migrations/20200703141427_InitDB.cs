@@ -219,6 +219,9 @@ namespace Spice.Migrations
                     Comments = table.Column<string>(nullable: true),
                     PickupName = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    StreetAddress = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
                     TransactionId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
