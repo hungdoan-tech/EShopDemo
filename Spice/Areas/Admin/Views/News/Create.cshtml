@@ -110,7 +110,7 @@
                     </div>
                 </div>
             </form>
-
+            <script src="//cdn.ckeditor.com/4.14.1/full/ckeditor.js"></script>
 
             @section Scripts{
 
@@ -131,13 +131,14 @@
                 <script type="text/javascript">
                     CKEDITOR.replace('editor1', { width: 1000, height: 700 });
                 </script>
+
                 <script>
                     document.querySelector("#today").valueAsDate = new Date()
-                                //document.getElementById("today").valueAsDate = new Date();
+                                                                                //document.getElementById("today").valueAsDate = new Date();
 
 
                 </script>
-                <script src="//cdn.ckeditor.com/4.14.1/full/ckeditor.js"></script>
+
 
                 @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
             }

@@ -15,7 +15,7 @@ using Spice.Utility;
 namespace Spice.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.ManagerUser)]
+    [Authorize(Roles = SD.ManagerUser + "," +SD.RepositoryManager)]
     public class MenuItemController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -35,7 +35,7 @@ namespace Spice.Areas.Admin.Controllers
                 MenuItem = new Models.MenuItem()
             };
         }
-
+        [Authorize(Roles = SD.ManagerUser + "," + SD.RepositoryManager)]
         public async  Task<IActionResult> Index()
         {
             var menuItems = await _db.MenuItem.Include(m=>m.Category).Include(m=>m.SubCategory).ToListAsync();

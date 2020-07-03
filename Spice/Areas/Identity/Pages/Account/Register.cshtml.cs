@@ -98,15 +98,15 @@ namespace Spice.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                    
-                    if(role==SD.RepositoryManager)
+                    if(role==SD.Shipper)
                     {
-                        await _userManager.AddToRoleAsync(user, SD.RepositoryManager);
+                        await _userManager.AddToRoleAsync(user, SD.Shipper);
                     }
                     else
                     {
-                        if (role == SD.Shipper)
+                        if (role == SD.RepositoryManager)
                         {
-                            await _userManager.AddToRoleAsync(user, SD.Shipper);
+                            await _userManager.AddToRoleAsync(user, SD.RepositoryManager);
                         }
                         else
                         {

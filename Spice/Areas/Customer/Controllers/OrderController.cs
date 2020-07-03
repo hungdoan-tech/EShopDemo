@@ -185,20 +185,11 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderDetailsViewModel);
         }
 
-        //[Authorize]
-        //[HttpGet]
-        //public async Task<IActionResult> TrackingOrder()
-        //{
-        //    var claimsIdentity = (ClaimsIdentity)User.Identity;
-        //    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-        //    List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
-        //    var ItemCount = OrderHeaderList.Where(o => !o.Status.Equals(SD.StatusCompleted)).Count();
-        //    return Ok(ItemCount);
-        //}
 
         [Authorize]
         [HttpGet]
+        [Authorize(Roles = SD.CustomerEndUser)]
         public JsonResult TrackingOrder()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -247,7 +238,7 @@ namespace Spice.Areas.Customer.Controllers
 
 
 
-        [Authorize]
+        [Authorize(Roles = SD.ManagerUser + "," + SD.Shipper)]
         [Route("~/Admin/Order/OrderPickup")]
         public async Task<IActionResult> OrderPickup(int productPage = 1, string searchEmail=null, string searchPhone = null, string searchName = null)
         {
@@ -260,7 +251,7 @@ namespace Spice.Areas.Customer.Controllers
             };
 
             StringBuilder param = new StringBuilder();
-            param.Append("/Customer/Order/OrderPickup?productPage=:");
+            param.Append("/Admin/Order/OrderPickup?productPage=:");
             param.Append("&searchName=");
             if(searchName!=null)
             {
@@ -342,6 +333,7 @@ namespace Spice.Areas.Customer.Controllers
         }
 
         [Authorize(Roles =SD.Shipper + ","+ SD.ManagerUser)]
+        [Route("~/Admin/Order/OrderPickup")]
         [HttpPost]
         [ActionName("OrderPickup")]
         public async Task<IActionResult> OrderPickupPost(int orderId)
@@ -353,5 +345,25 @@ namespace Spice.Areas.Customer.Controllers
 
             return RedirectToAction("OrderPickup", "Order");
         }
+
+        //public async Task<IActionResult> OderHistoryAdmin()
+        //{
+        //    List<OrderDetailsViewModel> orderDetailsVM = new List<OrderDetailsViewModel>();
+
+        //    List<OrderHeader> OrderHeaderList = await _db.OrderHeader.ToListAsync();
+
+
+        //    foreach (OrderHeader item in OrderHeaderList)
+        //    {
+        //        OrderDetailsViewModel individual = new OrderDetailsViewModel
+        //        {
+        //            OrderHeader = item,
+        //            OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
+        //        };
+        //        orderDetailsVM.Add(individual);
+        //    }
+
+        //    return View(orderDetailsVM.OrderBy(o => o.OrderHeader.OrderDate).ToList());
+        //}
     }
 }
