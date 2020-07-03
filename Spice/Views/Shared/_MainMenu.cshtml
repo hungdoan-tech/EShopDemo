@@ -1,34 +1,81 @@
-﻿<ul class="sidebar-menu" data-widget="tree">
-    <li class="header">HEADER</li>
-    <!-- Optionally, you can add icons to the links -->
-    <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Analysis</span></a></li>
-    <li><a href="#"><i class="fa fa-link"></i> <span>Statistical</span></a></li>
-    <li class="treeview">
-        <a href="#">
-            <i class="fa fa-link"></i> <span>Order</span>
-            <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
-            <li> <a asp-action="ManageOrder" asp-controller="Order" asp-area="Admin">Manage Order</a> </li>
-            <li> <a asp-action="OrderPickup" asp-controller="Order" asp-area="Admin">Order Pickup</a> </li>
-        </ul>
-    </li>
-    <li class="treeview">
-        <a href="#">
-            <i class="fa fa-link"></i> <span>Management</span>
-            <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <ul class="treeview-menu">
-            <li> <a asp-action="Index" asp-controller="Category" asp-area="Admin">Category</a> </li>
-            <li> <a asp-action="Index" asp-controller="SubCategory" asp-area="Admin">Sub Category</a> </li>
-            <li> <a asp-action="Index" asp-controller="MenuItem" asp-area="Admin">MenuItem</a> </li>
-            <li> <a asp-action="Index" asp-controller="Coupon" asp-area="Admin">Coupons</a> </li>
-            <li> <a asp-action="Index" asp-controller="User" asp-area="Admin">Users</a> </li>
-            <li> <a asp-action="Index" asp-controller="News" asp-area="Admin">News</a> </li>
-        </ul>
-    </li>
-</ul>
+﻿
+@using Spice.Utility
+    <ul class="sidebar-menu" data-widget="tree">
+        <li class="header">HEADER</li>
+        <!-- Optionally, you can add icons to the links -->
+        @if (User.IsInRole(SD.ManagerUser) == true)
+        {
+            <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Analysis</span></a></li>
+            <li><a href="#"><i class="fa fa-link"></i> <span>Statistical</span></a></li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-link"></i> <span>Order</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li> <a asp-action="ManageOrder" asp-controller="Order" asp-area="Admin">Manage Order</a> </li>
+                    <li> <a asp-action="OrderPickup" asp-controller="Order" asp-area="Admin">Order Pickup</a> </li>
+                    <li> <a asp-action="OrderHistoryAdmin" asp-controller="Order" asp-area="Admin">Order History</a> </li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-link"></i> <span>Management</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li> <a asp-action="Index" asp-controller="Category" asp-area="Admin">Category</a> </li>
+                    <li> <a asp-action="Index" asp-controller="SubCategory" asp-area="Admin">Sub Category</a> </li>
+                    <li> <a asp-action="Index" asp-controller="MenuItem" asp-area="Admin">MenuItem</a> </li>
+                    <li> <a asp-action="Index" asp-controller="Coupon" asp-area="Admin">Coupons</a> </li>
+                    <li> <a asp-action="Index" asp-controller="User" asp-area="Admin">Users</a> </li>
+                    <li> <a asp-action="Index" asp-controller="News" asp-area="Admin">News</a> </li>
+                </ul>
+            </li>
+        }
+        @if (User.IsInRole(SD.RepositoryManager) == true)
+        {
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-link"></i> <span>Order</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li> <a asp-action="ManageOrder" asp-controller="Order" asp-area="Admin">Manage Order</a> </li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-link"></i> <span>Management</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li> <a asp-action="Index" asp-controller="Category" asp-area="Admin">Category</a> </li>
+                    <li> <a asp-action="Index" asp-controller="SubCategory" asp-area="Admin">Sub Category</a> </li>
+                    <li> <a asp-action="Index" asp-controller="MenuItem" asp-area="Admin">MenuItem</a> </li>
+                </ul>
+            </li>
+        }
+        @if (User.IsInRole(SD.Shipper) == true)
+        {
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-link"></i> <span>Order</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li> <a asp-action="OrderPickup" asp-controller="Order" asp-area="Admin">Order Pickup</a> </li>
+                </ul>
+            </li>
+        }
+    </ul>

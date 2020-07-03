@@ -31,16 +31,18 @@
 
             <form method="post" asp-action="Create" enctype="multipart/form-data">
                 <div class="border backgroundWhite">
-                    <div class="container-fluid">
+                    <div class="container">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="form-group row">
                             <div class="col-2">
                                 <label asp-for="News.Header" class="col-form-label"></label>
                             </div>
                             <div class="col-5">
-                                <input asp-for="News.Header" class="form-control" />
+                                <div style="height:50px;width:400px">
+                                    <input asp-for="News.Header" class="form-control" />
+                                </div>
+                                <span asp-validation-for="News.Header" class="text-danger"></span>
                             </div>
-                            <span asp-validation-for="News.Header" class="text-danger"></span>
                         </div>
                         @*<div class="form-group row">
 
@@ -57,25 +59,31 @@
                                 <label asp-for="News.Alias" class="col-form-label"></label>
                             </div>
                             <div class="col-5">
-                                <input asp-for="News.Alias" class="form-control" />
+                                <div style="height:50px;width:400px">
+                                    <input asp-for="News.Alias" class="form-control" />
+                                </div>
+                                <span asp-validation-for="News.Alias" class="text-danger"></span>
                             </div>
-                            <span asp-validation-for="News.Alias" class="text-danger"></span>
                         </div>
                         <div class="form-group row">
                             <div class="col-2">
                                 <label asp-for="News.PublishedDate" class="col-form-label"></label>
                             </div>
                             <div class="col-5">
-                                <input id="today" type="date" asp-for="News.PublishedDate" class="form-control" readonly />
+                                <div style="height:50px;width:400px">
+                                    <input id="today" type="date" asp-for="News.PublishedDate" class="form-control" readonly />
+                                </div>
+                                <span asp-validation-for="News.PublishedDate" class="text-danger"></span>
                             </div>
-                            <span asp-validation-for="News.PublishedDate" class="text-danger"></span>
                         </div>
                         <div class="form-group row">
                             <div class="col-2">
                                 <label asp-for="News.Type" class="col-form-label"></label>
                             </div>
                             <div class="col-5">
-                                <select asp-for="News.Type" id="TypeField" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
+                                <div style="height:50px;width:400px">
+                                    <select asp-for="News.Type" id="TypeField" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row" id="MenuItemField">
@@ -83,14 +91,18 @@
                                 <label asp-for="News.MenuItem" class="col-form-label"></label>
                             </div>
                             <div class="col-5">
-                                <select id="valueOfMenuItem" asp-for="News.MenuItemId" asp-items="Model.MenuItems.ToSelectListItem(Model.News.MenuItemId)" class="form-control"></select>
+                                <div style="height:50px;width:400px">
+                                    <select id="valueOfMenuItem" asp-for="News.MenuItemId" asp-items="Model.MenuItems.ToSelectListItem(Model.News.MenuItemId)" class="form-control"></select>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row ">
                             <div class="col-2">
                                 <label asp-for="News.Content" class="col-form-label"></label>
                             </div>
-                            <textarea id="editor1" asp-for="News.Content"></textarea>
+                            <div class="col-12">
+                                <textarea id="editor1" asp-for="News.Content"></textarea>
+                            </div>
                             <span asp-validation-for="News.Content" class="text-danger"></span>
                         </div>
                         <div class="form-group row">
@@ -98,14 +110,17 @@
                                 <label asp-for="News.ImageHeader" class="col-form-label"></label>
                             </div>
                             <div class="col-5">
-                                <input type="file" name="files" multiple class="form-control" />
+                                <div style="height:50px;width:400px">
+                                    <input type="file" name="files" multiple class="form-control" />
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-5 offset-2">
-                            <partial name="_CreateAndBackToListButton" />
+                        <div class="form-group row">
+                            <div class="col-5 offset-2">
+                                <div style="height:100px;width:400px">
+                                    <partial name="_CreateAndBackToListButton" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -133,14 +148,16 @@
                 </script>
                 <script>
                     document.querySelector("#today").valueAsDate = new Date()
-                                //document.getElementById("today").valueAsDate = new Date();
+                                                //document.getElementById("today").valueAsDate = new Date();
 
 
                 </script>
-                <script src="//cdn.ckeditor.com/4.14.1/full/ckeditor.js"></script>
+
 
                 @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
             }
+            <script src="//cdn.ckeditor.com/4.14.1/full/ckeditor.js"></script>
         </div>
     </nav>
 </div>

@@ -31,17 +31,19 @@
 
             <form method="post">
                 <div class="backgroundWhiteBorder row">
-                    <div class="container-fluid">
+                    <div class="container">
                         <div class="col-8">
                             <input type="hidden" asp-for="News.Id" />
                             <fieldset disabled>
-                                <div class="container-fluid">
+                                <div class="container">
                                     <div class="form-group row">
                                         <div class="col-4">
                                             <label asp-for="News.Header" class="custom-label"></label>
                                         </div>
                                         <div class="col-8">
-                                            <input asp-for="News.Header" class="form-control" />
+                                            <div style="height:50px;width:400px">
+                                                <input asp-for="News.Header" class="form-control" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -49,7 +51,9 @@
                                             <label asp-for="News.PublishedDate" class="custom-label"></label>
                                         </div>
                                         <div class="col-8">
-                                            <input asp-for="News.PublishedDate" class="form-control" />
+                                            <div style="height:50px;width:400px">
+                                                <input asp-for="News.PublishedDate" class="form-control" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -57,7 +61,9 @@
                                             <label asp-for="News.Alias" class="custom-label"></label>
                                         </div>
                                         <div class="col-8">
-                                            <input asp-for="News.Alias" class="form-control" />
+                                            <div style="height:50px;width:400px">
+                                                <input asp-for="News.Alias" class="form-control" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -65,7 +71,9 @@
                                             <label asp-for="News.Type" class="custom-label"></label>
                                         </div>
                                         <div class="col-8">
-                                            <select id="TypeField" asp-for="News.Type" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
+                                            <div style="height:50px;width:400px">
+                                                <select id="TypeField" asp-for="News.Type" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row" id="MenuItemField">
@@ -73,8 +81,10 @@
                                             <label asp-for="News.MenuItem" class="custom-label"></label>
                                         </div>
                                         <div class="col-8">
-                                            <input asp-for="News.MenuItem.Name" class="form-control" />
+                                            <div style="height:50px;width:400px">
+                                                <input asp-for="News.MenuItem.Name" class="form-control" />
 
+                                            </div>
                                         </div>
                                     </div>
 
@@ -82,7 +92,9 @@
                             </fieldset>
                             <div class="form-group row">
                                 <div class="col-5 offset-2">
-                                    <partial name="_DeleteAndBackToListButton" model="Model.News.Id" />
+                                    <div style="height:100px;width:400px">
+                                        <partial name="_DeleteAndBackToListButton" model="Model.News.Id" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

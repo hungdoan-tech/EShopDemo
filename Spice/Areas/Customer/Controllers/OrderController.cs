@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Models;
@@ -20,7 +21,9 @@ namespace Spice.Areas.Customer.Controllers
     {
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _db;
+
         private int PageSize = 5;
+        private int PageAdminSize = 10;
         public OrderController(ApplicationDbContext db, IEmailSender emailSender)
         {
             _db = db;
@@ -118,7 +121,7 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderDetailsVM.OrderBy(o => o.OrderHeader.OrderDate).ToList());
         }
 
-
+        [Authorize(Roles = SD.CustomerEndUser + "," + SD.ManagerUser + "," +SD.Shipper)]
         public async Task<IActionResult> GetOrderDetails(int Id)
         {
             OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel()
@@ -129,6 +132,7 @@ namespace Spice.Areas.Customer.Controllers
             orderDetailsViewModel.OrderHeader.ApplicationUser = await _db.ApplicationUser.FirstOrDefaultAsync(u => u.Id == orderDetailsViewModel.OrderHeader.UserId);
             return PartialView("_IndividualOrderDetails", orderDetailsViewModel);
         }
+
 
         [Authorize(Roles = SD.CustomerEndUser)]
         public async Task<IActionResult> OrderTracking(int productPage = 1)
@@ -172,7 +176,8 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderListVM);
         }
 
-        [Authorize(Roles = SD.CustomerEndUser)]
+        [Authorize(Roles = SD.CustomerEndUser + "," + SD.ManagerUser)]
+        [Route("~/Order/DetailTracking/{id}")]
         public async Task<IActionResult> DetailTracking(int Id)
         {
             OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel()
@@ -185,20 +190,11 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderDetailsViewModel);
         }
 
-        //[Authorize]
-        //[HttpGet]
-        //public async Task<IActionResult> TrackingOrder()
-        //{
-        //    var claimsIdentity = (ClaimsIdentity)User.Identity;
-        //    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-        //    List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
-        //    var ItemCount = OrderHeaderList.Where(o => !o.Status.Equals(SD.StatusCompleted)).Count();
-        //    return Ok(ItemCount);
-        //}
 
         [Authorize]
         [HttpGet]
+        [Authorize(Roles = SD.CustomerEndUser)]
         public JsonResult TrackingOrder()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -247,7 +243,7 @@ namespace Spice.Areas.Customer.Controllers
 
 
 
-        [Authorize]
+        [Authorize(Roles = SD.ManagerUser + "," + SD.Shipper)]
         [Route("~/Admin/Order/OrderPickup")]
         public async Task<IActionResult> OrderPickup(int productPage = 1, string searchEmail=null, string searchPhone = null, string searchName = null)
         {
@@ -260,7 +256,7 @@ namespace Spice.Areas.Customer.Controllers
             };
 
             StringBuilder param = new StringBuilder();
-            param.Append("/Customer/Order/OrderPickup?productPage=:");
+            param.Append("/Admin/Order/OrderPickup?productPage=:");
             param.Append("&searchName=");
             if(searchName!=null)
             {
@@ -342,6 +338,7 @@ namespace Spice.Areas.Customer.Controllers
         }
 
         [Authorize(Roles =SD.Shipper + ","+ SD.ManagerUser)]
+        [Route("~/Admin/Order/OrderPickup")]
         [HttpPost]
         [ActionName("OrderPickup")]
         public async Task<IActionResult> OrderPickupPost(int orderId)
@@ -352,6 +349,47 @@ namespace Spice.Areas.Customer.Controllers
             await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order Completed " + orderHeader.Id.ToString(), "Order has been completed successfully.");
 
             return RedirectToAction("OrderPickup", "Order");
+        }
+
+        [Authorize(Roles =  SD.ManagerUser)]
+        [Route("~/Admin/Order/OrderHistoryAdmin")]
+        public async Task<IActionResult> OrderHistoryAdmin(int productPage = 1)
+        {
+
+
+            OrderListViewModel orderListVM = new OrderListViewModel()
+            {
+                Orders = new List<OrderDetailsViewModel>()
+            };
+
+
+
+            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).ToListAsync();
+
+            foreach (OrderHeader item in OrderHeaderList)
+            {
+                OrderDetailsViewModel individual = new OrderDetailsViewModel
+                {
+                    OrderHeader = item,
+                    OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
+                };
+                orderListVM.Orders.Add(individual);
+            }
+
+            var count = orderListVM.Orders.Count;
+            orderListVM.Orders = orderListVM.Orders.OrderByDescending(p => p.OrderHeader.Id)
+                                 .Skip((productPage -1) * PageAdminSize)
+                                 .Take(PageAdminSize).ToList();
+
+            orderListVM.PagingInfo = new PagingInfo
+            {
+                CurrentPage = productPage,
+                ItemsPerPage = PageAdminSize,
+                TotalItem = count,
+                urlParam = "/Admin/Order/OrderHistoryAdmin?productPage=:"
+            };
+
+            return View(orderListVM);
         }
     }
 }

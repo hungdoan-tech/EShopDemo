@@ -150,6 +150,10 @@ namespace Spice.Areas.Customer.Controllers
             {
                 item.Item = await _db.MenuItem.FirstOrDefaultAsync(m => m.Id == item.Item.Id);
                 _db.MenuItem.FirstOrDefault(a => a.Id == item.Item.Id).Quantity -= item.Quantity;
+                if(_db.MenuItem.FirstOrDefault(a => a.Id == item.Item.Id).Quantity == 0)
+                {
+                    _db.MenuItem.FirstOrDefault(a => a.Id == item.Item.Id).IsPublish = false;
+                }
                 OrderDetails orderDetails = new OrderDetails
                 {
                     MenuItemId = item.Item.Id,

@@ -76,10 +76,22 @@
                                     <img src="~/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                                     @if (SignInManager.IsSignedIn(User))
                                     {
-                                    <p class="hidden-xs nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                        @await Component.InvokeAsync("UserName")
-                                        <small> </small>
-                                    </p>
+                                <p class="hidden-xs nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                    @await Component.InvokeAsync("UserName")
+                                    <small>@User.Identity.Name</small>
+                                    @if (User.IsInRole(Spice.Utility.SD.ManagerUser) == true)
+                                    {
+                                        <small>Admin</small>
+                                    }
+                                    @if (User.IsInRole(Spice.Utility.SD.Shipper) == true)
+                                    {
+                                        <small>Shipper</small>
+                                    }
+                                    @if (User.IsInRole(Spice.Utility.SD.RepositoryManager) == true)
+                                    {
+                                        <small>Repository Manager</small>
+                                    }
+                                </p>
                                     }
                                 </li>
                                 <!-- Menu Body -->

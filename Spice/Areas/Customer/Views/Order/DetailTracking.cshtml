@@ -4,14 +4,17 @@
 @*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
-
+@if(User.IsInRole(SD.ManagerUser))
+{
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
+}
 <div class="container">
     <div class="container text-center mt-4 mb-4">
         <h3 class="text-muted">Order ID: <span class="text-info">@Model.OrderHeader.Id</span></h3>
         <h3 class="text-muted">Status Ordering: <span class="text-info">@Model.OrderHeader.Status</span></h3>
     </div>
 
-    <div class="mt-4 mb-4" style="width:100%">
+    <div class="mt-4 mb-4"style="width:100%">
         @if (Model.OrderHeader.Status == SD.StatusSubmitted)
         {
             <img src="~/images/OrderPlaced.png" width="100%" />
@@ -29,6 +32,25 @@
             <img src="~/images/completed.png" width="100%" />
         }
     </div>
+
+    @*<div class="mt-4 mb-4" style="width:100%">
+        @if (Model.OrderHeader.Status == SD.StatusSubmitted)
+        {
+            <img src="~/images/OrderPlaced.png" width="100%" />
+        }
+        @if (Model.OrderHeader.Status == SD.StatusInProcess)
+        {
+            <img src="~/images/InKitchen.png" width="100%" />
+        }
+        @if (Model.OrderHeader.Status == SD.StatusReady)
+        {
+            <img src="~/images/ReadyForPickup.png" width="100%" />
+        }
+        @if (Model.OrderHeader.Status == SD.StatusCompleted)
+        {
+            <img src="~/images/completed.png" width="100%" />
+        }
+    </div>*@
 
 
     <div class="container row border ml-1 backgroundWhiteBorder10Padding mt-4 mb-4" style="width:100%">
@@ -110,7 +132,7 @@
                                 <h6 class="my-0">@details.Name</h6>
                                 <small class="text-muted">Quantity : @details.Count</small>
                             </div>
-                            <span class="text-muted">@(details.Price * details.Count)</span>
+                            <span class="text-muted">@(details.Price)</span>
                         </li>
                     }
                     @if (Model.OrderHeader.CouponCode != null)
@@ -140,4 +162,5 @@
          </div>
     </div>
 </div>
+
 

@@ -83,7 +83,7 @@ namespace Spice.Controllers
 
             IndexViewModel IndexVM = new IndexViewModel()
             {
-                MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
+                MenuItem = await _db.MenuItem.Where(a=>a.IsPublish!=false).Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
                 Category = await _db.Category.ToListAsync(),
                 Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
             };
