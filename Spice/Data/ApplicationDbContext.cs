@@ -22,12 +22,10 @@ namespace Spice.Data
         public DbSet<OrderHeader> OrderHeader { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<News> News { get; set; }
-        public DbSet<NewsCategory> NewsCategories { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Config Section
             // Category model
             modelBuilder.Entity<Category>().HasKey(a => a.Id);
             modelBuilder.Entity<Category>()
@@ -38,34 +36,37 @@ namespace Spice.Data
             modelBuilder.Entity<SubCategory>()
                 .HasKey(a => a.Id);
             modelBuilder.Entity<SubCategory>()
-                .HasOne(a => a.Category)
-                .WithMany(b => b.SubCategories)
-                .HasForeignKey(a => a.CategoryId);
-            modelBuilder.Entity<SubCategory>()
                 .Property(a => a.Name)
                 .IsRequired();
-            modelBuilder.Entity<SubCategory>()
-                .Property(a => a.CategoryId)
-                .IsRequired();
 
-            //MenuItems
+            //MenuItem
             modelBuilder.Entity<MenuItem>()
                 .HasKey(a => a.Id);
             modelBuilder.Entity<MenuItem>()
                 .HasOne(a => a.SubCategory)
                 .WithMany(b => b.MenuItems)
-                .HasForeignKey(a => a.SubCategoryId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(a => a.SubCategoryId);
             modelBuilder.Entity<MenuItem>()
                 .HasOne(a => a.Category)
                 .WithMany(b => b.MenuItems)
-                .HasForeignKey(a => a.CategoryId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(a => a.CategoryId);
             modelBuilder.Entity<MenuItem>()
                 .Property(a => a.Name)
                 .IsRequired();
             modelBuilder.Entity<MenuItem>()
                .Property(a => a.Price)
+               .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.Color)
+               .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.IsPublish)
+               .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.Quantity)
+               .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.PublishedDate)
                .IsRequired();
 
             //Coupon 
@@ -124,6 +125,36 @@ namespace Spice.Data
             modelBuilder.Entity<OrderDetails>()
                .Property(a => a.MenuItemId)
                .IsRequired();
+
+
+            // News
+            modelBuilder.Entity<News>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<News>()
+                .Property(a => a.Header)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.Content)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.Alias)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.PublishedDate)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.Type)
+                .IsRequired();
+
+            modelBuilder.Entity<News>()
+                .HasOne(a => a.MenuItem)
+                .WithMany(b => b.News)
+                .HasForeignKey(a => a.MenuItemId);
+
+            //modelBuilder.Entity<News>()
+            //    .HasOne(a => a.ApplicationUser)
+            //    .WithMany(b => b.News)
+            //    .HasForeignKey(a => a.ApplicationUserId);
         }
     }
 }

@@ -2,85 +2,154 @@
 
 @{
     ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>AdminLTE 3 | Simple Tables</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+        <!-- Google Font: Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    </head>
+<div id="content">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
 
+            <br />
+            <h2 class="text-info">Details Menu Item</h2>
+            <br />
+            <div class="backgroundWhiteBorder row">
+                <div class="container">
+                    <div class="col-8">
+                        <div class="container">
+                            <fieldset disabled>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label asp-for="MenuItem.Name" class="custom-label"></label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div style="height:50px;width:400px">
+                                            <input asp-for="MenuItem.Name" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label asp-for="MenuItem.Description" class="custom-label"></label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div style="height:50px;width:400px">
+                                            @Html.TextAreaFor(m => m.MenuItem.Description)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label asp-for="MenuItem.Price" class="custom-label"></label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div style="height:50px;width:400px">
+                                            <input asp-for="MenuItem.Price" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
 
-<br />
-<h2 class="text-info">Details Menu Item</h2>
-<br />
-<div class="backgroundWhiteBorder row">
-    <div class="col-8">
-        <fieldset disabled>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.Name" class="custom-label"></label>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label asp-for="MenuItem.Category" class="custom-label"></label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div style="height:50px;width:400px">
+                                            <input asp-for="MenuItem.Category.Name" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label asp-for="MenuItem.SubCategory" class="custom-label"></label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div style="height:50px;width:400px">
+                                            <input asp-for="MenuItem.SubCategory.Name" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label asp-for="MenuItem.Color" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;width:400px">
+                                            <select asp-for="MenuItem.Color" asp-items="Html.GetEnumSelectList<MenuItem.EColor>()" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label asp-for="MenuItem.Tag" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;width:400px">
+                                            <select asp-for="MenuItem.Tag" asp-items="Html.GetEnumSelectList<MenuItem.ETag>()" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label asp-for="MenuItem.Quantity" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;width:400px">
+                                            <input asp-for="MenuItem.Quantity" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="MenuItem.Quantity" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label class="form-check-label" asp-for="MenuItem.IsPublish" ></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <input class="form-check-input mx-1" asp-for="MenuItem.IsPublish" />
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                            <div class="col-1"></div>
+                            <div class="col-3">
+                                <img src="@Model.MenuItem.Image" width="35%" style="border-radius:5px;border:1px solid #bbb9b9;" />
+                            </div>
+                            <div class="col-8">
+                                <div class="col-8 offset-4">
+                                    <div style="height:100px;width:400px">
+                                        <partial name="_DetailsAndBackToListButton" model="Model.MenuItem.Id" />
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
                 </div>
-                <div class="col-8">
-                    <input asp-for="MenuItem.Name" class="form-control" />
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.Description" class="custom-label"></label>
-                </div>
-                <div class="col-8">
-                    @Html.TextAreaFor(m => m.MenuItem.Description)
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.Price" class="custom-label"></label>
-                </div>
-                <div class="col-8">
-                    <input asp-for="MenuItem.Price" class="form-control" />
-                </div>
-            </div>
+                @section Scripts{
+                    <script>
+                        tinymce.init({
+                            selector: 'textarea',
+                            plugins: "lists",
+                            toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist",
+                            menubar: 'file edit format',
+                            readonly: 1
+                        });</script>
+                    <script>tinymce.init({ selector: 'textarea' });</script>
 
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.CategoryId" class="custom-label"></label>
-                </div>
-                <div class="col-8">
-                    <input asp-for="MenuItem.Category.Name" class="form-control" />
-                </div>
+                }
+
             </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.SubCategoryId" class="custom-label"></label>
-                </div>
-                <div class="col-8">
-                    <input asp-for="MenuItem.SubCategory.Name" class="form-control" />
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.Spicyness" class="custom-label"></label>
-                </div>
-                <div class="col-8">
-                    <select asp-for="MenuItem.Spicyness" asp-items="Html.GetEnumSelectList<MenuItem.ESpicy>()" class="form-control"></select>
-                </div>
-            </div>
-        </fieldset>
-    </div>
-    <div class="col-1"></div>
-    <div class="col-3">
-        <img src="@Model.MenuItem.Image" width="100%" style="border-radius:5px;border:1px solid #bbb9b9;" />
-    </div>
-    <div class="col-8">
-        <div class="col-8 offset-4">
-            <partial name="_DetailsAndBackToListButton" model="Model.MenuItem.Id" />
         </div>
-    </div>
+    </nav>
 </div>
-@section Scripts{
-    <script>
-            tinymce.init({
-                selector: 'textarea',
-                plugins: "lists",
-                toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist",
-                menubar: 'file edit format',
-                readonly: 1
-            });</script>
-    <script>tinymce.init({ selector: 'textarea' });</script>
-
-}

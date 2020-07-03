@@ -8,9 +8,165 @@
 <form method="post">
     @if (Model.listCart.Count > 0)
     {
+        <!-- Hero Area Start-->
+        <div class="slider-area ">
+            <div class="single-slider slider-height2 d-flex align-items-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="hero-cap text-center">
+                                <h2>Cart List</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--================Cart Area =================-->
+        <section class="cart_area section_padding">
+            <div class="container">
+                <div class="cart_inner">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th></th>
+                                    <th scope="col">Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.listCart)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="media">
+                                                <div class="d-flex">
+                                                    <img src="@item.Item.Image" class="rounded" width="120" height="80" />
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4>@item.Item.Name</h4>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <h5>$@item.Item.Price</h5>
+                                        </td>
+                                        <td>
+                                            <div class="product_count">
+                                                <input id="itemId" class="input-number" type="text" value="@item.Quantity" min="0" max="100">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button id="btnPlus" class="genric-btn info circle" asp-action="plus" asp-route-cartId="@item.Item.Id"><i class="ti-plus"></i></button>
+                                            <button class="genric-btn info-border circle" asp-action="minus" asp-route-cartId="@item.Item.Id"><i class="ti-minus"></i></button>
+                                        </td>
+                                        <td>
+                                            <h5>$ @(item.Item.Price * item.Quantity)</h5>
+                                        </td>
+                                        <td>
+                                            <a class="genric-btn danger radius" asp-action="remove" asp-route-cartId="@item.Item.Id">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                                <tr class="bottom_button">
+                                    <td>
+                                        @*<a class="btn_1" href="#">Update Cart</a>*@
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <input asp-for="@Model.OrderHeader.CouponCode" id="txtCouponCode" class="form-control" style="
+                                        width: 10rem;" placeholder="coupon code..." />
+                                    </td>
+                                    <td>
+                                        <div class="cupon_text float-right">
+                                            <button type="submit" class="genric-btn info radius" id="btnCoupon" asp-action="AddCoupon">
+                                                Apply
+                                            </button>
+                                            <button type="submit" class="genric-btn danger radius" style="display:none" id="btnRemoveCoupon" asp-action="RemoveCoupon">
+                                                Remove
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <h5>Subtotal</h5>
+                                    </td>
+                                    <td>
+                                        <h5>$ @Model.OrderHeader.OrderTotal</h5>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                @*<tr class="shipping_area">
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <h5>Shipping</h5>
+                                        </td>
+                                        <td>
+                                            <div class="shipping_box">
+                                                <ul class="list">
+                                                    <li>
+                                                        Flat Rate: $5.00
+                                                        <input type="radio" aria-label="Radio button for following text input">
+                                                    </li>
+                                                    <li>
+                                                        Free Shipping
+                                                        <input type="radio" aria-label="Radio button for following text input">
+                                                    </li>
+                                                    <li>
+                                                        Flat Rate: $10.00
+                                                        <input type="radio" aria-label="Radio button for following text input">
+                                                    </li>
+                                                    <li class="active">
+                                                        Local Delivery: $2.00
+                                                        <input type="radio" aria-label="Radio button for following text input">
+                                                    </li>
+                                                </ul>
+                                                <h6>
+                                                    Calculate Shipping
+                                                    <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                                </h6>
+                                                <select class="shipping_select">
+                                                    <option value="1">Bangladesh</option>
+                                                    <option value="2">India</option>
+                                                    <option value="4">Pakistan</option>
+                                                </select>
+                                                <select class="shipping_select section_bg">
+                                                    <option value="1">Select a State</option>
+                                                    <option value="2">Select a State</option>
+                                                    <option value="4">Select a State</option>
+                                                </select>
+                                                <input class="post_code" type="text" placeholder="Postcode/Zipcode" />
+                                                <a class="btn_1" href="#">Update Details</a>
+                                            </div>
+                                        </td>
+                                    </tr>*@
+                            </tbody>
+                        </table>
+                        <div class="checkout_btn_inner float-right">
+                            <a class="genric-btn info-border radius" asp-area="Customer" asp-controller="Home" asp-action="Index">Continue Shopping</a>
+                            <a class="genric-btn info checkout_btn_1" asp-action="Summary" asp-area="Customer" asp-controller="Cart">Proceed to checkout</a>
+                        </div>
+                    </div>
+                </div>
+        </section>
+        <!--================End Cart Area =================-->
+
         <br />
         @*<input id="userId" asp-for="@Model.listCart[0].ApplicationUserId" hidden />*@
-        <div class="backgroundWhiteBorder">
+        <div class="backgroundWhiteBorder" hidden>
             <div class="container">
                 <div class="card">
                     <div class="card-header bg-dark text-light ml-0 row container">
@@ -98,11 +254,24 @@
     }
     else
     {
-        <div class="backgroundWhiteBorder"> No items added to the shopping cart...</div>
+        <div class="container"> No items added to the shopping cart...</div>
     }
 </form>
 
-@section Scripts{ 
+
+@if (ViewBag.Alert != null)
+{
+    if (ViewBag.Alert)
+    {
+        <script>
+            console.log("Test")
+            alert("Product inventory is not enough to provide this quantity of products")
+        </script>
+    }
+}
+
+
+@section Scripts{
     <script>
         $(function () {
             var couponCode = document.getElementById("txtCouponCode").value;

@@ -71,7 +71,6 @@ namespace Spice.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
-        [Route("~/Account/Login")]
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");

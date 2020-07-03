@@ -34,14 +34,14 @@ namespace Spice.Data
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex);
             }
 
             if (_db.Roles.Any(r => r.Name == SD.ManagerUser)) return;
 
             _roleManager.CreateAsync(new IdentityRole(SD.ManagerUser)).GetAwaiter().GetResult();
-            _roleManager.CreateAsync(new IdentityRole(SD.FrontDeskUser)).GetAwaiter().GetResult();
-            _roleManager.CreateAsync(new IdentityRole(SD.KitchenUser)).GetAwaiter().GetResult();
+            _roleManager.CreateAsync(new IdentityRole(SD.RepositoryManager)).GetAwaiter().GetResult();
+            _roleManager.CreateAsync(new IdentityRole(SD.Shipper)).GetAwaiter().GetResult();
             _roleManager.CreateAsync(new IdentityRole(SD.CustomerEndUser)).GetAwaiter().GetResult();
 
             _userManager.CreateAsync(new ApplicationUser
@@ -54,10 +54,7 @@ namespace Spice.Data
             }, "Admin123*").GetAwaiter().GetResult();
 
             IdentityUser user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "admin@gmail.com");
-
             await _userManager.AddToRoleAsync(user, SD.ManagerUser);
-
         }
-
     }
 }

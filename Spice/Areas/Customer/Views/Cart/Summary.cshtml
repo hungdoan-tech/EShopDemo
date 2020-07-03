@@ -22,7 +22,7 @@
                             Order Summary
                         </div>
                         <div class="col-6 text-right">
-                            <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="btn btn-outline-info btn-sm">Back to Cart</a>
+                            <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="btn_1">Back to Cart</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -50,6 +50,34 @@
                                             <input asp-for="@Model.OrderHeader.PhoneNumber" id="txtPhone" type="text" class="form-control" />
                                         </div>
                                     </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Address</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="@Model.OrderHeader.StreetAddress" id="txtAddress" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Email</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="@Model.OrderHeader.Email" id="txtCity" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>City</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="@Model.OrderHeader.City" id="txtCity" type="text" class="form-control" />
+                                        </div>
+                                    </div>
+
                                     <div class="row my-1">
                                         <div class="col-3">
                                             <label>Additional Instructions: </label>

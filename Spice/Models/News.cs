@@ -9,30 +9,18 @@ namespace Spice.Models
 {
     public class News
     {
-        [Key]
         public int Id { get; set; }
-        [Display(Name = "Header")]
-        [Required]
         public string Header { get; set; }
-        [Display(Name = "Content")]
-        [Required]
         public string Content { get; set; }
-        [Display(Name = "Alias")]
-        [Required]
         public string Alias { get; set; }
-        [Display(Name = "Author")]
-        [Required]
-        public string Author { get; set; }
-        [Display(Name = "DatePublished")]
-        [Required]
-        public DateTime DatePublished   { get; set; }
-        [Display(Name = "Image")]
-        public string Image { get; set; }
+        public DateTime PublishedDate { get; set; }
+        public string ImageHeader { get; set; }
+        public string Type { get; set; }
+        public enum EType { IntergratedInItem = 0, Coupon = 1, News = 2 }
 
-        [Display(Name = "NewsCategory")]
-        public int NewsCategoryId { get; set; }
-
-        [ForeignKey("NewsCategoryId")]
-        public virtual NewsCategory NewsCategory { get; set; }
+        //public int ApplicationUserId { get; set; }
+        //public virtual ApplicationUser ApplicationUser { get; set; }
+        public int? MenuItemId { get; set; }
+        public virtual MenuItem MenuItem { get; set; }
     }
 }

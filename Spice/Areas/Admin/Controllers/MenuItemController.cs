@@ -15,7 +15,7 @@ using Spice.Utility;
 namespace Spice.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.ManagerUser)]
+    [Authorize(Roles = SD.ManagerUser + "," +SD.RepositoryManager)]
     public class MenuItemController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -31,10 +31,11 @@ namespace Spice.Areas.Admin.Controllers
             MenuItemVM = new MenuItemViewModel()
             {
                 Category = _db.Category,
+                SubCategory = _db.SubCategory,
                 MenuItem = new Models.MenuItem()
             };
         }
-
+        [Authorize(Roles = SD.ManagerUser + "," + SD.RepositoryManager)]
         public async  Task<IActionResult> Index()
         {
             var menuItems = await _db.MenuItem.Include(m=>m.Category).Include(m=>m.SubCategory).ToListAsync();
@@ -51,13 +52,13 @@ namespace Spice.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePOST()
         {
-            MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
+            //MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
             if(!ModelState.IsValid)
             {
                 return View(MenuItemVM);
             }
-
+            MenuItemVM.MenuItem.PublishedDate = DateTime.UtcNow;
             _db.MenuItem.Add(MenuItemVM.MenuItem);
             await _db.SaveChangesAsync();
 
@@ -103,7 +104,7 @@ namespace Spice.Areas.Admin.Controllers
             }
 
             MenuItemVM.MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).SingleOrDefaultAsync(m => m.Id == id);
-            MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
+            //MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
 
             if(MenuItemVM.MenuItem ==null)
             {
@@ -120,11 +121,11 @@ namespace Spice.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
+            //MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
             if (!ModelState.IsValid)
             {
-                MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
+                //MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
                 return View(MenuItemVM);
             }
 
@@ -160,7 +161,11 @@ namespace Spice.Areas.Admin.Controllers
             menuItemFromDb.Name = MenuItemVM.MenuItem.Name;
             menuItemFromDb.Description = MenuItemVM.MenuItem.Description;
             menuItemFromDb.Price = MenuItemVM.MenuItem.Price;
-            menuItemFromDb.Spicyness = MenuItemVM.MenuItem.Spicyness;
+            menuItemFromDb.Color = MenuItemVM.MenuItem.Color;
+            menuItemFromDb.Tag = MenuItemVM.MenuItem.Tag;
+            menuItemFromDb.PublishedDate = DateTime.UtcNow;
+            menuItemFromDb.Quantity = MenuItemVM.MenuItem.Quantity;
+            menuItemFromDb.IsPublish = MenuItemVM.MenuItem.IsPublish;
             menuItemFromDb.CategoryId = MenuItemVM.MenuItem.CategoryId;
             menuItemFromDb.SubCategoryId = MenuItemVM.MenuItem.SubCategoryId;
 
@@ -225,7 +230,6 @@ namespace Spice.Areas.Admin.Controllers
                 await _db.SaveChangesAsync();
 
             }
-
             return RedirectToAction(nameof(Index));
         }
     }

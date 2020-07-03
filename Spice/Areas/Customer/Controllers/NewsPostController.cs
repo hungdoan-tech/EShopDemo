@@ -16,36 +16,30 @@ namespace Spice.Areas.Customer.Controllers
     public class NewsPostController : Controller
     {
         private readonly ApplicationDbContext _db;
-       
-        [BindProperty]
-        public NewsViewModel NewsVM { get; set; }
 
-        public NewsPostController(ApplicationDbContext db )
+        public NewsPostController(ApplicationDbContext db)
         {
             _db = db;
-            NewsVM = new NewsViewModel()
-            {
-                NewsCategory = _db.NewsCategories,
-                News = new Models.News()
-            };
 
         }
-        [Route("NewsPost/{Alias}-{Id}")]
-        public async Task<IActionResult> SpecificNews(int ?id)
+        //[Route("NewsPost/{Alias}-{Id}")]
+        public async Task<IActionResult> NewsPost(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            NewsVM.News = await _db.News.Include(m => m.NewsCategory).Where(m => m.Id == id).SingleOrDefaultAsync();
+            var news = await _db.News.Include(m => m.MenuItem).Where(m=>m.Id == id).SingleOrDefaultAsync();
 
-            if (NewsVM.News == null)
-            {
-                return NotFound();
-            }
+            return View(news);
+        }
+        public async Task<IActionResult> Index()
+        {
 
-            return View(NewsVM);
+            var news = await _db.News.Include(m=>m.MenuItem).Where(m => m.Type == "1" || m.Type == "2").ToListAsync();
+
+            return View(news);
         }
     }
 }

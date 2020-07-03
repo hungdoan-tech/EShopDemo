@@ -1,123 +1,373 @@
-﻿@model Spice.Models.ViewModels.IndexViewModel
-
-<br />
-
-@if (Model.Coupon.ToList().Count > 0)
+﻿@model Spice.Models.ViewModels.IndexHomeVM
+@*<div class="container-fluid">*@
+@if (Model.ListBestSellerMenuItem.Count() > 0 || Model.ListNews.Count() > 0)
 {
-    <div class="border">
-        <div class="carousel" data-ride="carousel" data-interval="2500">
-            @for (int i = 0; i < Model.Coupon.Count(); i++)
+    <!--? slider Area Start -->
+    <div class="slider-area ">
+        <div class="slider-active">
+            @for (int i = 0; i < 2; i++)
             {
-                if (i == 0)
-                {
-
-
-                    <div class="carousel-item active">
-                        @{
-                            var base64 = Convert.ToBase64String(Model.Coupon.ToList()[i].Picture);
-                            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                        }
-
-                        <img src="@imgsrc" height="50px" class="d-block w-100" />
+                <!-- Single Slider -->
+                <div class="single-slider slider-height d-flex align-items-center slide-bg">
+                    <div class="container">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8">
+                                <div class="hero__caption">
+                                    <h1 data-animation="fadeInLeft" data-delay=".4s" data-duration="2000ms">Select Your New Perfect Style</h1>
+                                    <p data-animation="fadeInLeft" data-delay=".7s" data-duration="2000ms"> @Model.ListBestSellerMenuItem.ElementAt(i).Description</p>
+                                    <!-- Hero-btn -->
+                                    <div class="hero__btn" data-animation="fadeInLeft" data-delay=".8s" data-duration="2000ms">
+                                        <a class="btn hero-btn" asp-action="Details" asp-controller="Home" asp-area="Customer" asp-route-id=@Model.ListBestSellerMenuItem.ElementAt(i).Id>Click For Detail</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 d-none d-sm-block">
+                                <div class="hero__img" data-animation="bounceIn" data-delay=".4s">
+                                    <img src=@Model.ListBestSellerMenuItem.ElementAt(i).Image alt=@Model.ListBestSellerMenuItem.ElementAt(i).Name class="heartbeat">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                }
-                else
-                {
-                    <div class="carousel-item">
-                        @{
-                            var base64 = Convert.ToBase64String(Model.Coupon.ToList()[i].Picture);
-                            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                        }
-
-                        <img src="@imgsrc" height="50px" class="d-block w-100" />
+                </div>
+            }
+            @for (int i = 0; i < Model.ListNews.Count(); i++)
+            {
+                <!-- Single Slider -->
+                <div class="single-slider slider-height d-flex align-items-center slide-bg">
+                    <div class="container">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8">
+                                <div class="hero__caption">
+                                    <h1 data-animation="fadeInLeft" data-delay=".4s" data-duration="2000ms">@Model.ListNews.ElementAt(i).Header</h1>
+                                    <p data-animation="fadeInLeft" data-delay=".7s" data-duration="2000ms"> @Model.ListNews.ElementAt(i).Content.Substring(0, 25) + "..."</p>
+                                    <!-- Hero-btn -->
+                                    <div class="hero__btn" data-animation="fadeInLeft" data-delay=".8s" data-duration="2000ms">
+                                        <a class="btn hero-btn" asp-action="Details" asp-controller="News" asp-area="Admin" asp-route-id=@Model.ListNews.ElementAt(i).Id>Click For Detail</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-4 d-none d-sm-block">
+                                <div class="hero__img" data-animation="bounceIn" data-delay=".4s">
+                                    <img src=@Model.ListNews.ElementAt(i).ImageHeader alt=@Model.ListNews.ElementAt(i).Header class="heartbeat">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                }
+                </div>
             }
         </div>
     </div>
-
 }
-
-<div class="carousel slide" data-ride="carousel" id="carousel-1">
-    <div class="carousel-inner" role="listbox">
-        <div class="carousel-item"><img class="w-100 d-block" src="https://cdn.fptshop.com.vn/Uploads/Originals/2019/11/1/637081680334756036_FS1%20(1).png" alt="Slide Image"></div>
-        <div class="carousel-item active"><img class="w-100 d-block" src="https://cdn.fptshop.com.vn/Uploads/Originals/2019/11/1/637081680333546094_FS1.png" alt="Slide Image"></div>
-        <div class="carousel-item"><img class="w-100 d-block" src="https://cdn.fptshop.com.vn/Uploads/Originals/2019/11/1/637081958050654798_FS1-Thu-Cu.png" alt="Slide Image"></div>
+<!-- slider Area End-->
+<!-- ? New Product Start -->
+@if (Model.ListNewMenuItem.Count() > 1)
+{
+    <section class="new-product-area section-padding30">
+        <div class="container">
+            <!-- Section tittle -->
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="section-tittle mb-70">
+                        <h2>New Arrivals</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @for (int i = 0; i < 3; i++)
+                {
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                        <div class="single-new-pro mb-30 text-center">
+                            <div class="product-img">
+                                <img src=@Model.ListNewMenuItem.ElementAt(i).Image alt="@Model.ListNewMenuItem.ElementAt(i).Name">
+                            </div>
+                            <div class="product-caption">
+                                <h3><a asp-action="Details" asp-controller="Home" asp-area="Customer" asp-route-id=@Model.ListNewMenuItem.ElementAt(i).Id> @Model.ListNewMenuItem.ElementAt(i).Name</a></h3>
+                                <span>$ @Model.ListNewMenuItem.ElementAt(i).Price</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+<!--  New Product End -->
+<!--? Gallery Area Start -->
+<div class="gallery-area">
+    <div class="container-fluid p-0 fix">
+        <div class="row">
+            <div class="col-xl-6 col-lg-4 col-md-6 col-sm-6">
+                <div class="single-gallery mb-30">
+                    <div class="gallery-img big-img" style="background-image: url(assets/img/gallery/gallery1.png);"></div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                <div class="single-gallery mb-30">
+                    <div class="gallery-img big-img" style="background-image: url(assets/img/gallery/gallery2.png);"></div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-12">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-6 col-sm-6">
+                        <div class="single-gallery mb-30">
+                            <div class="gallery-img small-img" style="background-image: url(assets/img/gallery/gallery3.png);"></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-12 col-lg-12  col-md-6 col-sm-6">
+                        <div class="single-gallery mb-30">
+                            <div class="gallery-img small-img" style="background-image: url(assets/img/gallery/gallery4.png);"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-slide="prev"><span class="carousel-control-prev-icon"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#carousel-1" role="button" data-slide="next"><span class="carousel-control-next-icon"></span><span class="sr-only">Next</span></a></div>
-    <ol class="carousel-indicators">
-        <li data-target="#carousel-1" data-slide-to="0"></li>
-        <li data-target="#carousel-1" data-slide-to="1" class="active"></li>
-        <li data-target="#carousel-1" data-slide-to="2"></li>
-    </ol>
 </div>
+<!-- Gallery Area End -->
+<!--? Popular Items Start -->
+@if (Model.ListPopularMenuItem.Count() > 3)
+{
+    <div class="popular-items section-padding30">
+        <div class="container">
+            <!-- Section tittle -->
+            <div class="row justify-content-center">
+                <div class="col-xl-7 col-lg-8 col-md-10">
+                    <div class="section-tittle mb-70 text-center">
+                        <h2>Popular Items</h2>
+                        <p>Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @for (int i = 0; i < 3; i++)
+                {
+                    <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                        <div class="single-popular-items mb-50 text-center">
+                            <div class="popular-img">
+                                <img src=@Model.ListPopularMenuItem.ElementAt(i).Image alt="">
+                                <div class="img-cap">
+                                    <span>Add to cart</span>
+                                </div>
+                                <div class="favorit-items">
+                                    <span class="flaticon-heart"></span>
+                                </div>
+                            </div>
+                            <div class="popular-caption">
+                                <h3><a asp-action="Details" asp-controller="Home" asp-area="Customer" asp-route-id=@Model.ListPopularMenuItem.ElementAt(i).Id>@Model.ListPopularMenuItem.ElementAt(i).Name</a></h3>
+                                <span>$ @Model.ListPopularMenuItem.ElementAt(i).Price</span>
+                            </div>
+                        </div>
+                    </div>
 
-<div class="backgroundWhite container">
+                }
+            </div>
+            <!-- Button -->
+            <div class="row justify-content-center">
+                <div class="room-btn pt-70">
+                    <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer" class="btn view-btn1">View More Products</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- Popular Items End -->
+<!--? Video Area Start -->
+<div class="video-area">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-lg-12">
+                <div class="video-wrap">
+                    <div class="play-btn "><a class="popup-video" href="https://www.youtube.com/watch?v=KMc6DyEJp04"><i class="fas fa-play"></i></a></div>
+                </div>
+            </div>
+        </div>
+        <!-- Arrow -->
+        <div class="thumb-content-box">
+            <div class="thumb-content">
+                <h3>Next Video</h3>
+                <a href="#"> <i class="flaticon-arrow"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Video Area End -->
 
-    <ul id="menu-filters" class="menu-filter-list list-inline text-center">
-        <li class="active btn btn-secondary ml-1 mr-1" data-filter=".menu-restaurant">Show All</li>
+<!--? Watch Choice  Start-->
+@if (Model.ListBestSellerMenuItem.Count() > 1)
+{
+    <div class="watch-area section-padding30">
+        <div class="container">
+            <div class="row align-items-center justify-content-between padding-130">
+                <div class="col-lg-5 col-md-6">
+                    <div class="watch-details mb-40">
+                        <h2>Watch of Choice</h2>
+                        <p>Enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer" class="btn">Show Watches</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-10">
+                    <div class="choice-watch-img mb-40">
+                        <img src=@Model.ListBestSellerMenuItem.ElementAt(0).Image alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-between padding-130">
+                <div class="col-lg-6 col-md-6 col-sm-10">
+                    <div class="choice-watch-img mb-40">
+                        <img src=@Model.ListBestSellerMenuItem.ElementAt(1).Image alt="">
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6">
+                    <div class="watch-details mb-40">
+                        <h2>Watch of Choice</h2>
+                        <p>Enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
+                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer" class="btn">Show Watches</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Watch Choice  End-->
+}
+    <!--? Shop Method Start-->
+    <div class="shop-method-area">
+        <div class="container">
+            <div class="method-wrapper">
+                <div class="row d-flex justify-content-between">
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="single-method mb-40">
+                            <i class="ti-package"></i>
+                            <h6>Free Shipping Method</h6>
+                            <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="single-method mb-40">
+                            <i class="ti-unlock"></i>
+                            <h6>Secure Payment System</h6>
+                            <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <div class="single-method mb-40">
+                            <i class="ti-reload"></i>
+                            <h6>Secure Payment System</h6>
+                            <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*</div>*@
+    <!-- Shop Method End-->
+    @*<br />
 
-        @foreach (var item in Model.Category)
+        @if (Model.Coupon.ToList().Count > 0)
         {
-            <li class="ml-1 mr-1" data-filter=".@item.Name.Replace(" ",string.Empty)">@item.Name</li>
+            <div class="border">
+                <div class="carousel" data-ride="carousel" data-interval="2500">
+                    @for (int i = 0; i < Model.Coupon.Count(); i++)
+                    {
+                        if (i == 0)
+                        {
+
+
+                            <div class="carousel-item active">
+                                @{
+                                    var base64 = Convert.ToBase64String(Model.Coupon.ToList()[i].Picture);
+                                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                }
+
+                                <img src="@imgsrc" height="50px" class="d-block w-100" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="carousel-item">
+                                @{
+                                    var base64 = Convert.ToBase64String(Model.Coupon.ToList()[i].Picture);
+                                    var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                }
+
+                                <img src="@imgsrc" height="50px" class="d-block w-100" />
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
         }
-    </ul>
 
-
-    @foreach (var category in Model.Category)
-    {
-        <div class="row" id="menu-wrapper">
-            <partial name="_ThumbnailAreaPartial" model="@Model.MenuItem.Where(u=>u.Category.Name.Equals(category.Name))" />
+        <div class="carousel slide" data-ride="carousel" id="carousel-1">
+            <div class="carousel-inner" role="listbox">
+                <div class="carousel-item"><img class="w-100 d-block" src="https://cdn.fptshop.com.vn/Uploads/Originals/2019/11/1/637081680334756036_FS1%20(1).png" alt="Slide Image"></div>
+                <div class="carousel-item active"><img class="w-100 d-block" src="https://cdn.fptshop.com.vn/Uploads/Originals/2019/11/1/637081680333546094_FS1.png" alt="Slide Image"></div>
+                <div class="carousel-item"><img class="w-100 d-block" src="https://cdn.fptshop.com.vn/Uploads/Originals/2019/11/1/637081958050654798_FS1-Thu-Cu.png" alt="Slide Image"></div>
+            </div>
+            <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-slide="prev"><span class="carousel-control-prev-icon"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#carousel-1" role="button" data-slide="next"><span class="carousel-control-next-icon"></span><span class="sr-only">Next</span></a></div>
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-1" data-slide-to="0"></li>
+                <li data-target="#carousel-1" data-slide-to="1" class="active"></li>
+                <li data-target="#carousel-1" data-slide-to="2"></li>
+            </ol>
         </div>
-    }
 
-</div>
+        <div class="backgroundWhite container">
 
-<div>
-    @foreach (var category in Model.NewsCategories)
-    {
-        <div class="row" >
-            <partial name="_NewsPostPartial" model="@Model.News.Where(u=>u.NewsCategory.Name.Equals(category.Name))" />
+            <ul id="menu-filters" class="menu-filter-list list-inline text-center">
+                <li class="active btn btn-secondary ml-1 mr-1" data-filter=".menu-restaurant">Show All</li>
+
+                @foreach (var item in Model.Category)
+                {
+                    <li class="ml-1 mr-1" data-filter=".@item.Name.Replace(" ",string.Empty)">@item.Name</li>
+                }
+            </ul>
+
+
+            @foreach (var category in Model.Category)
+            {
+                <div class="row" id="menu-wrapper">
+                    <partial name="_ThumbnailAreaPartial" model="@Model.MenuItem.Where(u=>u.Category.Name.Equals(category.Name))" />
+                </div>
+            }
+
         </div>
-    }
-</div>
-
-<form method="get">
-    <div page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
-         page-class="btn border"
-         page-class-normal="btn btn-default active"
-         page-class-selected="btn btn-primary active" class="btn-group m-1">
-    </div>
-</form>
 
 
-@section Scripts{
-    <script src="https://code.jquery.com/jquery-3.3.1.js"
-            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-            crossorigin="anonymous"></script>
-
-    <script>
-
-        var posts = $('.post');
-
-        (function ($) {
-
-            $("#menu-filters li").click(function () {
-                $("#menu-filters li").removeClass('active btn btn-secondary');
-                $(this).addClass('active btn btn-secondary');
-
-                var selectedFilter = $(this).data("filter");
-
-                $(".menu-restaurant").fadeOut();
-
-                setTimeout(function () {
-                    $(selectedFilter).slideDown();
-                }, 300);
-            });
+        <form method="get">
+            <div page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
+                 page-class="btn border"
+                 page-class-normal="btn btn-default active"
+                 page-class-selected="btn btn-primary active" class="btn-group m-1">
+            </div>
+        </form>
 
 
+        @section Scripts{
+            <script src="https://code.jquery.com/jquery-3.3.1.js"
+                    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+                    crossorigin="anonymous"></script>
 
-        })(jQuery);
+            <script>
 
-    </script>
-}
+                var posts = $('.post');
+
+                (function ($) {
+
+                    $("#menu-filters li").click(function () {
+                        $("#menu-filters li").removeClass('active btn btn-secondary');
+                        $(this).addClass('active btn btn-secondary');
+
+                        var selectedFilter = $(this).data("filter");
+
+                        $(".menu-restaurant").fadeOut();
+
+                        setTimeout(function () {
+                            $(selectedFilter).slideDown();
+                        }, 300);
+                    });
+                })(jQuery);
+
+            </script>
+        }*@

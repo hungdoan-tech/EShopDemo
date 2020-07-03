@@ -2,26 +2,58 @@
 
 @{
     ViewData["Title"] = "Delete";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
-<br />
-<h2 class="text-info">Delete Category</h2>
-<br />
 
-<form method="post" asp-action="Delete">
-    <div class="border backgroundWhite">
-        <div class="form-group row">
-            <div class="col-2">
-                <label asp-for="Name" class="col-form-label"></label>
-            </div>
-            <div class="col-5">
-                <input asp-for="Name" readonly class="form-control" />
-            </div>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | Simple Tables</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+
+<div id="content">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <br />
+            <h2 class="text-info">Category Delete </h2>
+            <br />
+
+            <form method="post" asp-action="Delete">
+                <div class="border backgroundWhite">
+                    <div class="container">
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label asp-for="Name" class="col-form-label"></label>
+                            </div>
+                            <div class="col-5">
+                                <div style="height:50px;width:400px">
+                                    <input asp-for="Name" readonly class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-5 offset-2">
+                                    <div style="height:100px;width:400px">
+                                        <partial name="_DeleteAndBackToListButton" model="Model.Id" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        
+                            
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="form-group row">
-            <div class="col-5 offset-2">
-                <partial name="_DeleteAndBackToListButton" model="Model.Id" />
-            </div>
-        </div>
-    </div>
-</form>
+    </nav>
+</div>
