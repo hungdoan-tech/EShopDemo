@@ -29,24 +29,21 @@
             <br />
             <div class=" border  backgroundWhite">
                 <div class="container">
-                    <div class="form-group row">
-                        <div class="col-2">
-                            <label asp-for="Name"></label>
-                        </div>
-                        <div class="col-5">
-                            <div style="height:100px;width:400px">
-                                <input asp-for="Name" disabled class="form-control" />
+                    <fieldset disabled>
+                        <div class="form-group row">
+                            <div class="col-2">
+                                <label asp-for="Name" class="custom-label"></label>
+                            </div>
+                            <div class="col-5" style="height:100px;width:400px">
+                                <input asp-for="Name" class="form-control" />
                             </div>
                         </div>
-
+                    </fieldset>
                     <div class="form-group row">
-                        <div class="col-5 offset-2">
-                            <div style="height:100px;width:400px">
-                                <partial name="_DetailsAndBackToListButton" model="Model.Id" />
-                            </div>
-                        </div>                       
-                    </div>                       
-                    </div>                   
+                        <div class="col-5 offset-2" style="height:100px;width:400px">
+                            <partial name="_DetailsAndBackToListButton" model="Model.Id" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

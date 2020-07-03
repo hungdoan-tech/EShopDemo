@@ -185,7 +185,7 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderDetailsViewModel);
         }
 
-        [Authorize]
+        [Authorize(Roles = SD.CustomerEndUser)]
         public async Task<IActionResult> TrackingOrder()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -235,7 +235,7 @@ namespace Spice.Areas.Customer.Controllers
 
 
 
-        [Authorize]
+        [Authorize(Roles = SD.ManagerUser + "," + SD.Shipper)]
         [Route("~/Admin/Order/OrderPickup")]
         public async Task<IActionResult> OrderPickup(int productPage = 1, string searchEmail=null, string searchPhone = null, string searchName = null)
         {
@@ -248,7 +248,7 @@ namespace Spice.Areas.Customer.Controllers
             };
 
             StringBuilder param = new StringBuilder();
-            param.Append("/Customer/Order/OrderPickup?productPage=:");
+            param.Append("/Admin/Order/OrderPickup?productPage=:");
             param.Append("&searchName=");
             if(searchName!=null)
             {
@@ -330,6 +330,7 @@ namespace Spice.Areas.Customer.Controllers
         }
 
         [Authorize(Roles =SD.Shipper + ","+ SD.ManagerUser)]
+        [Route("~/Admin/Order/OrderPickup")]
         [HttpPost]
         [ActionName("OrderPickup")]
         public async Task<IActionResult> OrderPickupPost(int orderId)
