@@ -2,14 +2,16 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-
+@*<span class="flaticon-user"></span>*@
 @if (SignInManager.IsSignedIn(User))
 {
-    <li>
+    <li>        
         <a class="black-link" asp-area="Identity" asp-page="/Account/Manage/Index">@await Component.InvokeAsync("UserName") </a>
     </li>
     <li>        
-        <a class="black-link btn-logout" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">Logout</a>        
+        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>   
     </li>
 }
 else

@@ -31,8 +31,7 @@ namespace Spice.Areas.Customer.Controllers
             };
         }
 
-        public async Task<IActionResult> Index(int productPage = 1, string searchName = null, string groupProductsSelected = "Default"
-            , string orderBy = "descDate")
+        public async Task<IActionResult> Index(int productPage = 1, string searchName = null, string groupProductsSelected = "Default", string orderBy = "descDate")
         {
 
             ProductsListVM.Products = await _db.MenuItem.Include(m => m.Category).ToListAsync();

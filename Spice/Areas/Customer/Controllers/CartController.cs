@@ -47,31 +47,35 @@ namespace Spice.Areas.Customer.Controllers
             if (cart != null)
             {
                 detailCart.listCart = cart.ToList();
-            }
 
-            foreach (var eachItem in detailCart.listCart)
-            {
-                try
+                foreach (var eachItem in detailCart.listCart)
                 {
-                    eachItem.Item = await _db.MenuItem.FirstOrDefaultAsync(m => m.Id == eachItem.Item.Id);
-                    detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotal + (eachItem.Item.Price * eachItem.Quantity);
-
-                    eachItem.Item.Description = SD.ConvertToRawHtml(eachItem.Item.Description);
-
-                    if (eachItem.Item.Description.Length > 100)
+                    try
                     {
-                        eachItem.Item.Description = eachItem.Item.Description.Substring(0, 99) + "...";
-                    }
-                }
-                catch { }
-            }
-            detailCart.OrderHeader.OrderTotalOriginal = detailCart.OrderHeader.OrderTotal;
+                        eachItem.Item = await _db.MenuItem.FirstOrDefaultAsync(m => m.Id == eachItem.Item.Id);
+                        detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotal + (eachItem.Item.Price * eachItem.Quantity);
 
-            if (HttpContext.Session.GetString(SD.ssCouponCode) != null)
+                        eachItem.Item.Description = SD.ConvertToRawHtml(eachItem.Item.Description);
+
+                        if (eachItem.Item.Description.Length > 100)
+                        {
+                            eachItem.Item.Description = eachItem.Item.Description.Substring(0, 99) + "...";
+                        }
+                    }
+                    catch { }
+                }
+                detailCart.OrderHeader.OrderTotalOriginal = detailCart.OrderHeader.OrderTotal;
+
+                if (HttpContext.Session.GetString(SD.ssCouponCode) != null)
+                {
+                    detailCart.OrderHeader.CouponCode = HttpContext.Session.GetString(SD.ssCouponCode);
+                    var couponFromDb = await _db.Coupon.Where(c => c.Name.ToLower() == detailCart.OrderHeader.CouponCode.ToLower()).FirstOrDefaultAsync();
+                    detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
+                }
+            }
+            else
             {
-                detailCart.OrderHeader.CouponCode = HttpContext.Session.GetString(SD.ssCouponCode);
-                var couponFromDb = await _db.Coupon.Where(c => c.Name.ToLower() == detailCart.OrderHeader.CouponCode.ToLower()).FirstOrDefaultAsync();
-                detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
+                detailCart.listCart = new List<MenuItemsAndQuantity>();
             }
             return View(detailCart);
         }

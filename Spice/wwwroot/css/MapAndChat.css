@@ -25,6 +25,12 @@
 
 .btn-logout {
     height: 25px;
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
 }
 
 a.black-link {
@@ -39,3 +45,4 @@ button.black-link {
     color: black;
     margin-right: 10px;
 }
+

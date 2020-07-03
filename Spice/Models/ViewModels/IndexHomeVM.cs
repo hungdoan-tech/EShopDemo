@@ -8,7 +8,6 @@ namespace Spice.Models.ViewModels
     public class IndexHomeVM
     {
         public IEnumerable<MenuItem> ListPopularMenuItem { get; set; }
-        public IEnumerable<MenuItem> ListNewMenuItem { get; set; }
-        
+        public IEnumerable<MenuItem> ListNewMenuItem { get; set; }        
     }
 }

@@ -1,22 +1,30 @@
-﻿const requestTrackingOrdering = async () => {
-    try {
-        const countRaw = await fetch('/Customer/Order/TrackingOrder')
+﻿$(document).ready(function () {
+    $.ajax(
+        {
+            type: 'GET',
+            url: '/Customer/Order/TrackingOrder',
+            success: function (result) {
+                $('#trackingOrdering').html( "Tracking Order" + "("+result+")");
+            },
+            //error: function (req, status, error) {
+            //    alert(error);
+            //}
+        });
 
-        if (countRaw) {
-            const count = await countRaw.json()
-        }
+    $('#btn-addingtocart').click(function () {
+        var userQuatity = $(".param param-inline dd input.form-control").val();
 
-        if (count) {
-            if (count === 0) {
-                document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering'
+        $.ajax({
+            type: 'GET',
+            url: '/Customer/Home/Details',
+            success: function (result) {
+                if (result <= userQuatity)
+                {
+
+                }
             }
-            else {
-                document.getElementById('trackingOrdering').innerHTML = 'Tracking Ordering (' + count + ')'
-            }
-        }
-    }
-    catch (error) {
-        console.log(error)
-    }
-}
-requestTrackingOrdering()
+        });
+    });
+})
+
+

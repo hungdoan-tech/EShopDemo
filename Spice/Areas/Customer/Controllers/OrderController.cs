@@ -185,17 +185,29 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderDetailsViewModel);
         }
 
+        //[Authorize]
+        //[HttpGet]
+        //public async Task<IActionResult> TrackingOrder()
+        //{
+        //    var claimsIdentity = (ClaimsIdentity)User.Identity;
+        //    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+        //    List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
+        //    var ItemCount = OrderHeaderList.Where(o => !o.Status.Equals(SD.StatusCompleted)).Count();
+        //    return Ok(ItemCount);
+        //}
+
         [Authorize]
-        public async Task<IActionResult> TrackingOrder()
+        [HttpGet]
+        public JsonResult TrackingOrder()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
-
-            return Ok(OrderHeaderList.Where(o => !o.Status.Equals(SD.StatusCompleted)).Count());
+            List<OrderHeader> OrderHeaderList =  _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToList();
+            var ItemCount = OrderHeaderList.Where(o => !o.Status.Equals(SD.StatusCompleted)).Count();
+            return new JsonResult(ItemCount);
         }
-
 
         [Authorize(Roles =SD.RepositoryManager + ","+ SD.ManagerUser)]
         public async Task<IActionResult> OrderPrepare(int OrderId)

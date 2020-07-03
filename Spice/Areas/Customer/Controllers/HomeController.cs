@@ -33,33 +33,41 @@ namespace Spice.Controllers
 
         public async Task<IActionResult> Index(int productPage = 1)
         {
-            IndexViewModel IndexVM = new IndexViewModel()
+            //IndexViewModel IndexVM = new IndexViewModel()
+            //{
+            //    MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
+            //    Category = await _db.Category.ToListAsync(),
+            //    Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
+            //};
+
+            ////Pagination: - Url determine current pages.
+            //StringBuilder param = new StringBuilder();
+            //param.Append("?productPage=:");
+
+            ////Count a quantity in MenuItem.
+            //var count = IndexVM.MenuItem.Count();
+
+
+            //IndexVM.MenuItem = IndexVM.MenuItem.OrderBy(p => p.Price)
+            //   .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
+
+
+            //IndexVM.PagingInfo = new PagingInfo()
+            //{
+            //    CurrentPage = productPage,
+            //    ItemsPerPage = PageSize,
+            //    TotalItem = count,
+            //    urlParam = param.ToString()
+            //};
+
+            //return View(IndexVM);
+
+
+            IndexHomeVM IndexVM = new IndexHomeVM()
             {
-                MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
-                Category = await _db.Category.ToListAsync(),
-                Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
+                ListPopularMenuItem = await _db.MenuItem.Where(a => a.Tag == "2").OrderByDescending(a => a.Id).Take(4).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
+                ListNewMenuItem = await _db.MenuItem.Where(a => a.Tag == "1").OrderByDescending(a => a.Id).Take(4).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
             };
-            
-            //Pagination: - Url determine current pages.
-            StringBuilder param = new StringBuilder();
-            param.Append("?productPage=:");
-
-            //Count a quantity in MenuItem.
-            var count = IndexVM.MenuItem.Count();
-
-            
-            IndexVM.MenuItem = IndexVM.MenuItem.OrderBy(p => p.Price)
-               .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
-
-
-            IndexVM.PagingInfo = new PagingInfo()
-            {
-                CurrentPage = productPage,
-                ItemsPerPage = PageSize,
-                TotalItem = count,
-                urlParam = param.ToString()
-            };
-            
             return View(IndexVM);
         }
 
