@@ -35,51 +35,44 @@
         <div class="col-lg-8 col-12" style="border-right:1px solid #bbb9b9">
             <br />
             <input type="hidden" asp-for="OrderHeader.Id" />
-        <div class="form-group row">
-            <div class="col-3">
-                <label>Name</label>
-            </div>
-            <div class="col-9">
-                <input asp-for="OrderHeader.PickupName" disabled class="form-control" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-3">
-                <label asp-for="OrderHeader.Email"></label>
-            </div>
-            <div class="col-9">
-                <input asp-for="OrderHeader.Email" disabled class="form-control" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-3">
-                <label asp-for="OrderHeader.PhoneNumber"></label>
-            </div>
-            <div class="col-9">
-                <input asp-for="OrderHeader.PhoneNumber" disabled class="form-control" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-3">
-                <label>Address</label>
-            </div>
-            <div class="col-9">
-                <input asp-for="OrderHeader.StreetAddress" disabled class="form-control" />
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-3">
-                <label>City</label>
-            </div>
-            <div class="col-9">
-                <input asp-for="OrderHeader.City" disabled class="form-control" />
+            <div class="form-group row">
+                <div class="col-3">
+                    <label>Name</label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.PickupName" disabled class="form-control" />
+                </div>
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label asp-for="OrderHeader.ApplicationUser.PhoneNumber"></label>
+                    <label asp-for="OrderHeader.Email"></label>
                 </div>
                 <div class="col-9">
-                    <input asp-for="OrderHeader.ApplicationUser.PhoneNumber" disabled class="form-control" />
+                    <input asp-for="OrderHeader.Email" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.PhoneNumber"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.PhoneNumber" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label>Address</label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.StreetAddress" disabled class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-3">
+                    <label>City</label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.City" disabled class="form-control" />
                 </div>
             </div>
             <div class="form-group row">
@@ -90,31 +83,28 @@
                     <input asp-for="OrderHeader.OrderTotal" disabled class="form-control" />
                 </div>
             </div>
+            @*<div class="form-group row">
+                    <div class="col-3">
+                        <label asp-for="OrderHeader.PickUpTime"></label>
+                    </div>
+                    <div class="col-9">
+                        <input value="@Model.OrderHeader.PickUpTime.ToShortDateString() @Model.OrderHeader.PickUpTime.ToShortTimeString()" disabled class="form-control" />
+                    </div>
+                </div>*@
+            <div class="form-group row">
+                <div class="col-3">
+                    <label asp-for="OrderHeader.Comments"></label>
+                </div>
+                <div class="col-9">
+                    <input asp-for="OrderHeader.Comments" disabled class="form-control" />
+                </div>
+            </div>
         </div>
-        @*<div class="form-group row">
-            <div class="col-3">
-                <label asp-for="OrderHeader.PickUpTime"></label>
-            </div>
-            <div class="col-9">
-                <input value="@Model.OrderHeader.PickUpTime.ToShortDateString() @Model.OrderHeader.PickUpTime.ToShortTimeString()" disabled class="form-control" />
-            </div>
-        </div>*@
-        <div class="form-group row">
-            <div class="col-3">
-                <label asp-for="OrderHeader.Comments"></label>
-            </div>
-            <div class="col-9">
-                <input asp-for="OrderHeader.Comments" disabled class="form-control" />
-            </div>
-        </div>
-
-
-
         <div class="col-lg-4 col-12">
             @*<h4 class="d-flex justify-content-between align-content-center mb-3">
-                <span class="text-muted">Order ID: </span>
-                <span class="badge badge-secondary badge-pill">@Model.OrderHeader.Id</span>
-            </h4>*@
+                    <span class="text-muted">Order ID: </span>
+                    <span class="badge badge-secondary badge-pill">@Model.OrderHeader.Id</span>
+                </h4>*@
 
             <h4 class="d-flex justify-content-between align-content-center mb-3">
                 <span class="text-muted">Products List:</span>
@@ -157,4 +147,3 @@
             }
         </div>
     </div>
-</div>
