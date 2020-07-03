@@ -155,9 +155,8 @@ namespace Spice.Areas.Customer.Controllers
                     Price = item.Item.Price * item.Quantity,
                     Count = item.Quantity
                 };
-                detailCart.OrderHeader.OrderTotalOriginal += orderDetails.Count * orderDetails.Price;
+                detailCart.OrderHeader.OrderTotalOriginal += orderDetails.Count * item.Item.Price;
                 _db.OrderDetails.Add(orderDetails);
-
             }
 
             if (HttpContext.Session.GetString(SD.ssCouponCode) != null)

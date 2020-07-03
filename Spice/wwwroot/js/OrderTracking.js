@@ -20,7 +20,7 @@
             success: function (result) {
                 if (result <= userQuatity)
                 {
-
+                    alert();
                 }
             }
         });
