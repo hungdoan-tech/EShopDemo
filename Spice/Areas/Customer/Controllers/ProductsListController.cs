@@ -25,9 +25,9 @@ namespace Spice.Areas.Customer.Controllers
 
             ProductsListVM = new ProductsListViewModel()
             {
-                Products = _db.MenuItem.ToList(),
+                Products = _db.MenuItem.Where(a => a.IsPublish == true).ToList(),
                 Categories = _db.Category.ToList(),
-                SubCategories = db.SubCategory.ToList()
+                SubCategories = _db.SubCategory.ToList()
             };
         }
 

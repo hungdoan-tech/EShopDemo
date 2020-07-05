@@ -19,31 +19,69 @@ namespace Spice.Service
             Options = emailOptions.Value;
         }
 
-        public Task SendEmailAsync(string email, string subject, string message)
-        {
-            return Execute(Options.SendGridKey, subject, message, email);
-        }
+        //public Task SendEmailAsync(string email, string subject, string message)
+        //{
+        //    return Execute(Options.SendGridKey, subject, message, email);
+        //}
 
-        private Task Execute(string sendGridKey, string subject, string message, string email)
+        //public Task SendEmailAsync(string email, string subject, string message)
+        //{
+        //    return Execute(Options.SendGridKey, subject, message, email);
+        //}
+
+        //private Task Execute(string sendGridKey, string subject, string message, string email)
+        //{
+        //    var client = new SendGridClient(sendGridKey);
+        //    var msg = new SendGridMessage()
+        //    {
+        //        From = new EmailAddress("admin@spice.com", "Spice Restaurant"),
+        //        Subject = subject,
+        //        PlainTextContent = message,
+        //        HtmlContent = message
+        //    };
+        //    msg.AddTo(new EmailAddress(email));
+        //    try
+        //    {
+        //        return client.SendEmailAsync(msg);
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        Console.WriteLine(ex);
+        //    }
+        //    return null;
+        //}
+
+        //public Task SendEmailAsync(List<string> emails, string subject, string message)
+        //{
+
+        //    return Execute(Environment.GetEnvironmentVariable("SENDEMAILDEMO_ENVIRONMENT_SENDGRID_KEY"), subject, message, emails);
+        //}
+
+        public Task Execute(string apiKey, string subject, string message, List<string> emails)
         {
-            var client = new SendGridClient(sendGridKey);
+            var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("admin@spice.com", "Spice Restaurant"),
+                From = new EmailAddress("hungdoan426@domain.com", "Bekenty Jean Baptiste"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
             };
-            msg.AddTo(new EmailAddress(email));
-            try
+
+            foreach (var email in emails)
             {
-                return client.SendEmailAsync(msg);
+                msg.AddTo(new EmailAddress(email));
             }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-            return null;
+
+            Task response = client.SendEmailAsync(msg);
+            return response;
+        }
+
+        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        {
+            var emails = new List<string>();
+            emails.Add(email);
+            return Execute(Environment.GetEnvironmentVariable("SENDEMAILDEMO_ENVIRONMENT_SENDGRID_KEY"), subject, htmlMessage, emails);
         }
     }
 }

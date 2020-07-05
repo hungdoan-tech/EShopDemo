@@ -42,7 +42,7 @@
                                     <p data-animation="fadeInLeft" data-delay=".7s" data-duration="2000ms"> @Model.ListNews.ElementAt(i).Content.Substring(0, 25) + "..."</p>
                                     <!-- Hero-btn -->
                                     <div class="hero__btn" data-animation="fadeInLeft" data-delay=".8s" data-duration="2000ms">
-                                        <a class="btn hero-btn" asp-action="Details" asp-controller="News" asp-area="Admin" asp-route-id=@Model.ListNews.ElementAt(i).Id>Click For Detail</a>
+                                        <a class="btn hero-btn" asp-action="NewsPost" asp-controller="NewsPost" asp-area="Customer" asp-route-id=@Model.ListNews.ElementAt(i).Id>Click For Detail</a>
                                     </div>
                                 </div>
                             </div>
