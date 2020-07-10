@@ -27,10 +27,30 @@
             <div class="properties__button">
                 <!--Nav Button  -->
                 <nav>
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descDate" class="nav-item nav-link active" id="nav-descDate-tab">NewestArrivals</a>
+                    <div class="nav nav-tabs " id="nav-tab" role="tablist">
+
+                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descDate" class="nav-item nav-link active" id="nav-descDate-tab">New Arrivals</a>
                         <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descPrice" class="nav-item nav-link" id="nav-descPrice-tab"> Price high to low</a>
-                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="mostPopuler" class="nav-item nav-link" id="nav-mostPopuler-tab">Most populer </a>
+                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="mostPopuler" class="nav-item nav-link" id="nav-mostPopuler-tab">Most popular </a>
+                        <div class="dropdown">
+                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="category" asp-route-groupProductsSelected="Default" id="nav-cateall-tab">Categories</a>
+                            <div class="dropdown-content">
+                                @foreach (var item in Model.Categories)
+                                {
+                                    <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="category" asp-route-groupProductsSelected="@item.Name" id="nav-category-tab">@item.Name</a>
+
+                                }
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="brand" asp-route-groupProductsSelected="Default" id="nav-brandall-tab">Brands </a>
+                            <div class="dropdown-content">
+                                @foreach (var item in Model.SubCategories)
+                                {
+                                    <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="brand" asp-route-groupProductsSelected="@item.Name" id="nav-brand-tab">@item.Name</a>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </nav>
                 <!--End Nav Button  -->
@@ -70,7 +90,7 @@
                                         <span class="flaticon-heart"></span>
                                     </div>
                                 </div>
-                                <div class="popular-caption">
+                                <div>
                                     <h3><a asp-action="Details" asp-controller="Home" asp-route-id="@product.Id">@product.Name</a></h3>
                                     <span>$ @product.Price</span>
                                 </div>
@@ -81,13 +101,14 @@
             </div>
         </div>
         <!-- End Nav Card -->
+        <form method="get" class="tab-content">
+            <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="page-link"
+                 page-class-normal="" page-class-selected="active btn-primary"
+                 class="btn-group float-right">
+            </div>
+        </form>
     </div>
-    <form method="get">
-        <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="page-link"
-             page-class-normal="" page-class-selected="active btn-primary"
-             class="btn-group float-right">
-        </div>
-    </form>
+    
 </section>
 
 <!-- Latest Products End -->
@@ -121,6 +142,38 @@
         </div>
     </div>
 </div>
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        color:red;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .droplb {
+    }
+</style>
 <!-- Shop Method End-->
 @*<head>
         <link rel="stylesheet" href="~/css/Pretty-Product-List.css" />
