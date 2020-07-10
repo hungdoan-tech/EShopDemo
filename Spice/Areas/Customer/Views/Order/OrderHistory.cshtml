@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
+<div class="container mt-5">
     <div class="row">
         <div class="col-6">
             <h2 class="text-info"> Past Order List</h2>
@@ -69,8 +69,8 @@
                     </tr>
                 }
             </table>
-            <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border"
-                 page-class-normal="btn btn-light" page-class-selected="btn btn-info active"
+            <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="page-link"
+                 page-class-normal="" page-class-selected="active btn-primary"
                  class="btn-group float-right">
             </div>
             <br />
