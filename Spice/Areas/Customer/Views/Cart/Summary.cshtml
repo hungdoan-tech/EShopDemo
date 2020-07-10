@@ -4,7 +4,7 @@
 @inject IOptions<Spice.Utility.StripeSettings> Stripe
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Thủ tục thanh toán";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -19,10 +19,10 @@
                     <div class="card-header bg-dark text-light ml-0 row container">
                         <div class="col-6">
                             <i class="fa fa-shopping-cart"></i> &nbsp;
-                            Order Summary
+                            Thanh Toán Hóa Đơn
                         </div>
                         <div class="col-6 text-right">
-                            <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="btn_1">Back to Cart</a>
+                            <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="btn_1">Trở về giỏ hàng</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -31,12 +31,12 @@
                                 <div class="col-12 col-lg-6 pb-4">
                                     <div class="row">
                                         <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                            <span class="text-info">PickUp Details:</span>
+                                            <span class="text-info">Chi tiết giỏ hàng</span>
                                         </h4>
                                     </div>
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>Name</label>
+                                            <label>Tên</label>
                                         </div>
                                         <div class="col-9">
                                             <input asp-for="@Model.OrderHeader.PickupName" id="txtName" type="text" class="form-control" />
@@ -44,7 +44,7 @@
                                     </div>
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>Phone</label>
+                                            <label>Sôs điện thoại</label>
                                         </div>
                                         <div class="col-9">
                                             <input asp-for="@Model.OrderHeader.PhoneNumber" id="txtPhone" type="text" class="form-control" />
@@ -53,7 +53,7 @@
 
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>Address</label>
+                                            <label>Địa chỉ</label>
                                         </div>
                                         <div class="col-9">
                                             <input asp-for="@Model.OrderHeader.StreetAddress" id="txtAddress" type="text" class="form-control" />
@@ -71,7 +71,7 @@
 
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>City</label>
+                                            <label>Thành Phố</label>
                                         </div>
                                         <div class="col-9">
                                             <input asp-for="@Model.OrderHeader.City" id="txtCity" type="text" class="form-control" />
@@ -80,7 +80,7 @@
 
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>Additional Instructions: </label>
+                                            <label>Ghi Chú Thêm (Nếu có)</label>
                                         </div>
                                         <div class="col-9">
                                             <textarea asp-for="@Model.OrderHeader.Comments" style="height:100px;" class="form-control"></textarea>
@@ -89,38 +89,38 @@
                                 </div>
 
                                 <div class="col-12 col-lg-5 offset-lg-1">
-                                        <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                            <span class="text-info">Order Summary:</span>
-                                        </h4>
-                                        <ul class="list-group mb-3">
-                                            @{ var total = 0.0;}
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Thông tin đơn hàng:</span>
+                                    </h4>
+                                    <ul class="list-group mb-3">
+                                        @{ var total = 0.0;}
 
-                                            @foreach (var details in Model.listCart)
-                                            {
-                                                <li class="list-group-item d-flex justify-content-between">
-                                                    <div>
-                                                        <h6 class="my-0">@details.Item.Name</h6>
-                                                        <small class="text-muted">Quantity: @details.Quantity</small>
-                                                    </div>
-                                                    <span class="text-muted">$@(details.Item.Price * details.Quantity)</span>
-                                                    @{ total += (details.Item.Price * details.Quantity); }
-                                                </li>
-                                            }
-                                            @if (Model.OrderHeader.CouponCode != null)
-                                            {
-                                                <li class="list-group-item d-flex justify-content-between">
-                                                    <div class="text-success">
-                                                        <h6 class="my-0">Promo Code</h6>
-                                                        <small class="text-success">@Model.OrderHeader.CouponCode</small>
-                                                    </div>
-                                                    <span class="text-success">-$@(total - Model.OrderHeader.OrderTotal)</span>
-                                                </li>
-                                            }
-                                            <li class="list-group-item d-flex justify-content-between bg-light">
-                                                    <small class="text-info">Total (USD)</small>
-                                                <strong class="text-info">$@(Model.OrderHeader.OrderTotal)</strong>
+                                        @foreach (var details in Model.listCart)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <div>
+                                                    <h6 class="my-0">@details.Item.Name</h6>
+                                                    <small class="text-muted">Số Lượng: @details.Quantity</small>
+                                                </div>
+                                                <span class="text-muted">$@(details.Item.Price * details.Quantity)</span>
+                                                @{ total += (details.Item.Price * details.Quantity); }
                                             </li>
-                                        </ul>
+                                        }
+                                        @if (Model.OrderHeader.CouponCode != null)
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <div class="text-success">
+                                                    <h6 class="my-0">Mã Giảm Giá</h6>
+                                                    <small class="text-success">@Model.OrderHeader.CouponCode</small>
+                                                </div>
+                                                <span class="text-success">-$@(total - Model.OrderHeader.OrderTotal)</span>
+                                            </li>
+                                        }
+                                        <li class="list-group-item d-flex justify-content-between bg-light">
+                                            <small class="text-info">Total (VNĐ)</small>
+                                            <strong class="text-info">@(Model.OrderHeader.OrderTotal) VNĐ</strong>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -140,13 +140,12 @@
                                         data-description="Good Food, Good Mood."
                                         data-locale="auto"
                                         data-allow-remember-me="false"
-                                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                                        >
+                                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png">
                                 </script>
                                 <script>
                                     document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';
                                 </script>
-                                <button type="submit" id="btnPlaceOrder" onclick="return validateInput()" value="Place Order" class="btn btn-success form-control">Place Order</button>
+                                <button type="submit" id="btnPlaceOrder" onclick="return validateInput()" value="Place Order" class="btn btn-success form-control">Thanh Toán</button>
                             </div>
                         </div>
                     </div>
@@ -156,7 +155,7 @@
     }
     else
     {
-        <div class="backgroundWhiteBorder"> No items added to the shopping cart...</div>
+        <div class="backgroundWhiteBorder">Không có sản phẩm nào trong giỏ hàng...</div>
     }
 </form>
 
@@ -174,7 +173,7 @@
 
 
             $("#datepicker").datepicker({ minDate: minDt, maxDate: "+1W" });
-            $("#timepicker").timepicker({'minTime': '11:00 AM', 'maxTime': '9:00 PM', step: '30'})
+            $("#timepicker").timepicker({ 'minTime': '11:00 AM', 'maxTime': '9:00 PM', step: '30' })
         });
 
 

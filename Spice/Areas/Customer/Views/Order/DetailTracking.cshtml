@@ -10,8 +10,8 @@
 }
 <div class="container">
     <div class="container text-center mt-4 mb-4">
-        <h3 class="text-muted">Order ID: <span class="text-info">@Model.OrderHeader.Id</span></h3>
-        <h3 class="text-muted">Status Ordering: <span class="text-info">@Model.OrderHeader.Status</span></h3>
+        <h3 class="text-muted">Mã Hóa Đơn: <span class="text-info">@Model.OrderHeader.Id</span></h3>
+        <h3 class="text-muted">Tính Trạng Đơn Hàng: <span class="text-info">@Model.OrderHeader.Status</span></h3>
     </div>
 
     <div class="mt-4 mb-4"style="width:100%">
@@ -59,7 +59,7 @@
             <input type="hidden" asp-for="OrderHeader.Id" />
             <div class="form-group row">
                 <div class="col-3">
-                    <label asp-for="OrderHeader.PickupName"></label>
+                    <label>Khách Hàng: </label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.PickupName" disabled class="form-control" />
@@ -75,7 +75,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label asp-for="OrderHeader.PhoneNumber"></label>
+                    <label>Số Điện Thoại</label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.PhoneNumber" disabled class="form-control" />
@@ -83,7 +83,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label asp-for="OrderHeader.StreetAddress"></label>
+                    <label>Địa Chỉ Giao Hàng</label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.StreetAddress" disabled class="form-control" />
@@ -91,7 +91,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label asp-for="OrderHeader.City"></label>
+                    <label>Thành Phố</label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.City" disabled class="form-control" />
@@ -99,7 +99,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label asp-for="OrderHeader.OrderTotal"></label>
+                    <label>Tổng Giá:</label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.OrderTotal" disabled class="form-control" />
@@ -107,7 +107,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label asp-for="OrderHeader.Comments"></label>
+                    <label>Ghi Chú Thêm</label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.Comments" disabled class="form-control" />
@@ -121,7 +121,7 @@
                 </h4>*@
 
                 <h4 class="d-flex justify-content-between align-content-center mb-3">
-                    <span class="text-muted">Products List:</span>
+                    <span class="text-muted">Danh sách đã mua:</span>
                 </h4>
 
                 <ul class="list-group mb-3">
@@ -130,7 +130,7 @@
                         <li class="list-group-item d-flex justify-content-between">
                             <div>
                                 <h6 class="my-0">@details.Name</h6>
-                                <small class="text-muted">Quantity : @details.Count</small>
+                                <small class="text-muted">Số Lượng: @details.Count</small>
                             </div>
                             <span class="text-muted">@(details.Price)</span>
                         </li>
@@ -139,21 +139,21 @@
                     {
                         <li class="list-group-item d-flex justify-content-between">
                             <div class="text-success">
-                                <h6 class="my-0">Promo Code</h6>
+                                <h6 class="my-0">Mã Giảm Giá:</h6>
                                 <small>@Model.OrderHeader.CouponCode</small>
                             </div>
                             <span class="text-success">@(Model.OrderHeader.OrderTotalOriginal - Model.OrderHeader.OrderTotal)</span>
                         </li>
                     }
                     <li class="list-group-item d-flex justify-content-between bg-light">
-                        <span class="text-info"> Total (USD)</span>
+                        <span class="text-info"> Total (VNĐ)</span>
                         <strong class="text-info">$@Model.OrderHeader.OrderTotal</strong>
                     </li>
 
                 </ul>
                 @if (Model.OrderHeader.Status.Equals(SD.StatusReady) && (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.Shipper)))
                 {
-                    <button type="submit" class="btn btn-success form-control"><i class="genric-btn info large  anchorDetail"></i> Confirm Pickup</button>
+                    <button type="submit" class="btn btn-success form-control"><i class="genric-btn info large  anchorDetail"></i>Xác Nhận</button>
                 }
                 else
                 {
