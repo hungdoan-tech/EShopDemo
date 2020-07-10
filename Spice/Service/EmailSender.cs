@@ -20,7 +20,7 @@ namespace Spice.Service
             {
                 UseDefaultCredentials = true,
                 EnableSsl = true,
-                Credentials = new NetworkCredential("truongminhkhoa1999vn@gmail.com", "pokemon456")
+                Credentials = new NetworkCredential("nguyentruc11099@gmail.com", "g1g2g3g4g5")
             };
             var mailMessage = new MailMessage
             {
