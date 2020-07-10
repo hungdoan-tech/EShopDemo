@@ -38,7 +38,7 @@ namespace Spice.Areas.Customer.Controllers
                 this.PageSize = pageSize;
             }
 
-            ProductsListVM.Products = await _db.MenuItem.Include(m => m.Category).ToListAsync();
+            ProductsListVM.Products = await _db.MenuItem.Include(m => m.Category).Where(m => m.IsPublish == true).ToListAsync();
 
             StringBuilder param = new StringBuilder();
             param.Append("/Customer/ProductsList?productPage=:");
@@ -51,7 +51,7 @@ namespace Spice.Areas.Customer.Controllers
 
             if (searchName != null)
             {
-                ProductsListVM.Products = ProductsListVM.Products.Where(p => p.Name.ToLower().Trim().Contains(searchName.ToLower().Trim())).ToList();
+                ProductsListVM.Products = ProductsListVM.Products.Where(p => p.Name.ToLower().Trim().Contains(searchName.ToLower().Trim())).Where(m => m.IsPublish == true).ToList();
             }
 
             var count = ProductsListVM.Products.Count();
@@ -91,6 +91,14 @@ namespace Spice.Areas.Customer.Controllers
                         ProductsListVM.Products = ProductsListVM.Products.OrderByDescending(p => p.PublishedDate)
                         .Skip((productPage - 1) * PageSize).Take(PageSize).Where(m => m.Tag == MenuItem.ETag.Popular.ToString()).ToList();
                         break;
+                    case "category":
+                        ProductsListVM.Products = ProductsListVM.Products.OrderBy(p => p.Name)
+                        .Skip((productPage - 1) * PageSize).Take(PageSize).Where(m => m.Category.Name.Equals(groupProductsSelected)).ToList();
+                        break;
+                    case "brand":
+                        ProductsListVM.Products = ProductsListVM.Products.OrderBy(p => p.Name)
+                        .Skip((productPage - 1) * PageSize).Take(PageSize).Where(m => m.SubCategory.Name.Equals(groupProductsSelected)).ToList();
+                        break;
                 }
             }
             else
@@ -125,6 +133,7 @@ namespace Spice.Areas.Customer.Controllers
                         ProductsListVM.Products = ProductsListVM.Products.OrderByDescending(p => p.PublishedDate)
                         .Skip((productPage - 1) * PageSize).Take(PageSize).Where(m => m.Tag == MenuItem.ETag.Popular.ToString()).ToList();
                         break;
+                    
                 }
             }
 

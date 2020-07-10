@@ -129,13 +129,23 @@ namespace Spice.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            //generation of the email token
+            //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            ////var link = Url.Page(nameof(VerifyEmail), "Register", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+            //var callbackUrl = Url.Page(
+            //          "/Account/ConfirmEmail",
+            //          pageHandler: null,
+            //          values: new { userId = user.Id, code = code },
+            //          protocol: Request.Scheme);
+            //await _emailSender.SendEmailAsync(email, "Confirm your email",
+            //    $"Please confirm your account by clicking here {callbackUrl}.");
+            //StatusMessage = "Verification email sent. Please check your email.";
+
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
-
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             ApplicationUser applicationUser = await _db.ApplicationUser.Where(c => c.Id == claim.Value).FirstOrDefaultAsync();
-
             applicationUser.Name = Input.Name;
             applicationUser.Email = Input.Email;
             applicationUser.PhoneNumber = Input.PhoneNumber;
@@ -143,9 +153,7 @@ namespace Spice.Areas.Identity.Pages.Account.Manage
             applicationUser.PostalCode = Input.PostalCode;
             applicationUser.State = Input.State;
             applicationUser.StreetAddress = Input.StreetAddress;
-
             await _db.SaveChangesAsync();
-
             return RedirectToPage();
         }
 
@@ -161,7 +169,6 @@ namespace Spice.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
 
             var userId = await _userManager.GetUserIdAsync(user);
             var email = await _userManager.GetEmailAsync(user);

@@ -35,8 +35,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-
-
 <body>
     <!--? Preloader Start -->
     <div id="preloader-active">
@@ -71,18 +69,18 @@
                                         <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Loại Sản Phẩm</a>
                                         <ul class="submenu">
                                             <li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Sporty </a></li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Smartwatch </a></li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Analog </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=category&groupProductsSelected=Analog"> Analog </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=category&groupProductsSelected=Smartwatch"> Smartwatch </a></li>                                        
                                         </ul>
                                     </li>
                                     <li>
                                         <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Hãng</a>
                                         <ul class="submenu">
                                             <li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Apple </a></li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Samsung </a></li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Rolex </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=brand&groupProductsSelected=Rolex"> Rolex </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=brand&groupProductsSelected=Casio"> Casio </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=brand&groupProductsSelected=Samsung"> Samsung </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=brand&groupProductsSelected=Apple"> Apple </a></li>
                                         </ul>
                                     </li>
                                     <li>
