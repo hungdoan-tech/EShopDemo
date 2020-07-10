@@ -15,7 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spice.Utility;
 using Stripe;
-using Spice.Service;
+//using Spice.Service;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Routing.Template;
@@ -61,7 +61,12 @@ namespace Spice
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
             //services.AddSingleton<IEmailSender, EmailSender>();
+<<<<<<< HEAD
             services.AddTransient<IEmailSender, EmailSender>();
+=======
+            //services.AddTransient<IEmailSender, EmailSender>();
+            //services.Configure<EmailOptions>(Configuration);
+>>>>>>> Feature/AddingImportHistory
 
             //services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("Email").Get<MailKitOptions>()));
             services.AddControllersWithViews();
@@ -116,9 +121,6 @@ namespace Spice
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllerRoute(name: "Login",
-                //    pattern: "Account/Login",
-                //    defaults: new { area="Identity", pagemodel = "LogoutModel", action = "Article" });
                 endpoints.MapControllerRoute(
                     name: "areas",
                     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
@@ -126,12 +128,6 @@ namespace Spice
                 endpoints.MapControllers();
 
             });
-                //app.UseMvc(routes =>
-                //{
-                //    routes.MapRoute(
-                //        name: "areas",
-                //        template: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
-                //});
             }
         }
 } 

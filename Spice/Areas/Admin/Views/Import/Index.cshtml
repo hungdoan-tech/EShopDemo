@@ -1,0 +1,93 @@
+﻿@model List<ImportHistory>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
+}
+    <div class="container">
+        <h1> Choose a excel file to import product to our repository </h1>
+        <form method="post" enctype="multipart/form-data" asp-controller="Import" asp-action="ImportProduct">
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="file" name="files" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="submit" value="Upload" />
+                </div>
+            </div>
+        </form>
+        @if (ViewBag.Result != null)
+        {
+            <h2>
+                @ViewBag.Result;
+            </h2>
+        }
+        <br />
+        <br />
+        <br />
+        <br />
+        <div id="content">
+            <nav class="navbar navbar-default">
+                <div class="border backgroundWhite">
+                    <div class="container-fluid">
+                        @if (Model.Count() > 0)
+                        {
+                            <table class="table table-striped border">
+                                <tr class="table-secondary">
+                                    <th>
+                                        @Html.DisplayNameFor(m => m.ElementAt(0).Id)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => m.ElementAt(0).SubCategoryId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => m.ElementAt(0).MenuItemID)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => m.ElementAt(0).Quantity)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => m.ElementAt(0).UserId)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(m => m.ElementAt(0).ImportDate)
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(m => item.Id)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.SubCategoryId)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.MenuItemID)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.Quantity)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.UserId)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.ImportDate)
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        }
+                        else
+                        {
+                            <p>No import history exists...</p>
+                        }
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+    </div>
