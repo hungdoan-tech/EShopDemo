@@ -48,27 +48,22 @@ namespace Spice.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
-
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
-
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-
             [Required]
             public string Name { get; set; }
-
             public string StreetAddress { get; set; }
             public string PhoneNumber { get; set; }
-            public  string City { get; set; }
+            public string City { get; set; }
             public string State { get; set; }
             public string PostalCode { get; set; }
-
         }
 
         public void OnGet(string returnUrl = null)
@@ -76,36 +71,70 @@ namespace Spice.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
+        //public async Task<IActionResult> VerifyEmail(string returnUrl = null)
+        //{
+        //    returnUrl = returnUrl ?? Url.Content("~/");
+        //    //generation of the email token
+        //    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        //    //var link = Url.Page(nameof(VerifyEmail), "Register", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+        //    var callbackUrl = Url.Page(
+        //              "/Account/ConfirmEmail",
+        //              pageHandler: null,
+        //              values: new { userId = user.Id, code = code },
+        //              protocol: Request.Scheme);
+        //    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+        //        $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
+        //    return LocalRedirect(returnUrl);
+        //}
+
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             string role = Request.Form["rdUserRole"].ToString();
-
-
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {
+                var user = new ApplicationUser
+                {
                     UserName = Input.Email,
                     Email = Input.Email,
                     Name = Input.Name,
-                    City=Input.City,
-                    StreetAddress=Input.StreetAddress,
-                    State=Input.State,
-                    PostalCode=Input.PostalCode,
-                    PhoneNumber=Input.PhoneNumber
+                    City = Input.City,
+                    StreetAddress = Input.StreetAddress,
+                    State = Input.State,
+                    PostalCode = Input.PostalCode,
+                    PhoneNumber = Input.PhoneNumber
                 };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                   
-                    if(role==SD.Shipper)
+                    if (role == SD.Shipper)
                     {
+                        //generation of the email token
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        //var link = Url.Page(nameof(VerifyEmail), "Register", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+                        var callbackUrl = Url.Page(
+                                  "/Account/ConfirmEmail",
+                                  pageHandler: null,
+                                  values: new { userId = user.Id, code = code },
+                                  protocol: Request.Scheme);
+                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                            $"Please confirm your account by clicking here {callbackUrl}.");
                         await _userManager.AddToRoleAsync(user, SD.Shipper);
                     }
                     else
                     {
                         if (role == SD.RepositoryManager)
                         {
+                            //generation of the email token
+                            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            //var link = Url.Page(nameof(VerifyEmail), "Register", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+                            var callbackUrl = Url.Page(
+                                      "/Account/ConfirmEmail",
+                                      pageHandler: null,
+                                      values: new { userId = user.Id, code = code },
+                                      protocol: Request.Scheme);
+                            await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                                $"Please confirm your account by clicking here {callbackUrl}.");
                             await _userManager.AddToRoleAsync(user, SD.RepositoryManager);
                         }
                         else
@@ -113,36 +142,98 @@ namespace Spice.Areas.Identity.Pages.Account
                             if (role == SD.ManagerUser)
                             {
                                 await _userManager.AddToRoleAsync(user, SD.ManagerUser);
+                                await _signInManager.SignInAsync(user, isPersistent: false);
                             }
                             else
                             {
+                                //generation of the email token
+                                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                                //var link = Url.Page(nameof(VerifyEmail), "Register", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+                                var callbackUrl = Url.Page(
+                                          "/Account/ConfirmEmail",
+                                          pageHandler: null,
+                                          values: new { userId = user.Id, code = code },
+                                          protocol: Request.Scheme);
+                                await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                                    $"Please confirm your account by clicking here {callbackUrl}.");
+                                //return RedirectToAction("EmailVerification");
+                                // return Page();
                                 await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
-                                await _signInManager.SignInAsync(user, isPersistent: false);
+                                //await _signInManager.SignInAsync(user, isPersistent: false);
                                 return LocalRedirect(returnUrl);
                             }
                         }
                     }
                     _logger.LogInformation("User created a new account with password.");
-                    //Confirm Email Config
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { userId = user.Id, code = code },
-                        protocol: Request.Scheme);
-
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-                    return RedirectToAction("Index", "User", new { area = "Admin" });
+                    ////Confirm Email Config
+                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.Page(
+                    //    "/Account/ConfirmEmail",
+                    //    pageHandler: null,
+                    //    values: new { userId = user.Id, code = code },
+                    //    protocol: Request.Scheme);
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //return RedirectToAction("Index", "User", new { area = "Admin" });
                 }
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
+            //register functionality
+            //    string role = Request.Form["rdUserRole"].ToString();
+            //returnUrl = returnUrl ?? Url.Content("~/");
+            //var user = new ApplicationUser
+            //{
+            //    UserName = Input.Email,
+            //    Email = Input.Email,
+            //    Name = Input.Name,
+            //    City = Input.City,
+            //    StreetAddress = Input.StreetAddress,
+            //    State = Input.State,
+            //    PostalCode = Input.PostalCode,
+            //    PhoneNumber = Input.PhoneNumber
+            //};
+            //var result = await _userManager.CreateAsync(user, Input.Password);
+            //if (result.Succeeded)
+            //{
+            //    //generation of the email token
+            //    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            //    //var link = Url.Page(nameof(VerifyEmail), "Register", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+            //    var callbackUrl = Url.Page(
+            //              "/Account/ConfirmEmail",
+            //              pageHandler: null,
+            //              values: new { userId = user.Id, code = code },
+            //              protocol: Request.Scheme);
+            //    await _emailService.SendAsync(Input.Email, "email verify", $"<a href=\"{callbackUrl}\">Verify Email</a>", true);
+            //    //return RedirectToAction("EmailVerification");
+            //    return Page();
+            //}
+            //return RedirectToPage("/Index");
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
+        /*
+        public async Task<IActionResult> VerifyEmail(string userId, string code)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return BadRequest();
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (result.Succeeded)
+            {
+                return Page();
+            }
+            return BadRequest();
+        }
+        */
+
+        //public IActionResult EmailVerification() => Page();
+        //public async Task<IActionResult> LogOut()
+        //{
+        //    await _signInManager.SignOutAsync();
+        //    return RedirectToAction("Index");
+        //}
     }
 }

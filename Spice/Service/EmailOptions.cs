@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Spice.Service
 {
-    public class EmailOptions
-    {
-        public string SendGridUser { get; set; }
-        public string SendGridKey { get; set; }
-    }
+    //public class EmailOptions
+    //{
+    //    public string SendGridUser { get; set; }
+    //    public string SendGridKey { get; set; }
+    //}
 }

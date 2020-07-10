@@ -1,14 +1,14 @@
 ﻿@model Spice.Models.ViewModels.OrderListViewModel
 @using Spice.Utility
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Danh Sách Hóa Đơn Đã Mua";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container">
+<div class="container mt-5">
     <div class="row">
         <div class="col-6">
-            <h2 class="text-info"> Past Order List</h2>
+            <h2 class="text-info">Danh Sách Hóa Đơn Đã Mua</h2>
         </div>
         <div class="col-6 text-right">
         </div>
@@ -20,19 +20,22 @@
             <table class="table table-striped border">
                 <tr class="table-secondary">
                     <th>
-                        @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.Id)
+                        @*@Html.DisplayNameFor(m => m.Orders[0].OrderHeader.Id)*@
+                        Mã Hóa Đơn
                     </th>
                     <th>
-                        @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.PickupName)
+                        @*@Html.DisplayNameFor(m => m.Orders[0].OrderHeader.PickupName)*@
+                        Khách Hàng
                     </th>
                     <th>
                         @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.ApplicationUser.Email)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.OrderTotal)
+                        @*@Html.DisplayNameFor(m => m.Orders[0].OrderHeader.OrderTotal)*@
+                        Tổng Cộng
                     </th>
                     <th>
-                        Total Items
+                        Tổng Số Lượng Sản Phẩm
                     </th>
                     <th></th>
 
@@ -57,27 +60,27 @@
                         </td>
                         <td>
                             <button type="submit" class="genric-btn info large  anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
-                                <i class="far fa-list-alt"></i> Details
+                                <i class="far fa-list-alt"></i> Chi Tiết
                             </button>
                             @if (item.OrderHeader.Status == SD.StatusSubmitted || item.OrderHeader.Status == SD.StatusInProcess || item.OrderHeader.Status == SD.StatusCompleted || item.OrderHeader.Status == SD.StatusReady)
                             {
                                 <button type="button" class="genric-btn info-border large btnOrderStatus" data-id="@item.OrderHeader.Id" data-toggle="modal">
-                                    <i class="far fa-clock"></i> Status
+                                    <i class="far fa-clock"></i> Tình Trạng
                                 </button>
                             }
                         </td>
                     </tr>
                 }
             </table>
-            <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border"
-                 page-class-normal="btn btn-light" page-class-selected="btn btn-info active"
+            <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="page-link"
+                 page-class-normal="" page-class-selected="active btn-primary"
                  class="btn-group float-right">
             </div>
             <br />
         }
         else
         {
-            <p>No order exists...</p>
+            <p>Không có hóa đơn đã mua trước đó</p>
         }
     </div>
 </div>
@@ -86,13 +89,13 @@
     <div class="modal-dialog-centered modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-success text-light justify-content-center">
-                <h5 class="modal-title">Order Details</h5>
+                <h5 class="modal-title">Chi Tiết Hóa Đơn</h5>
             </div>
             <div class="modal-body justify-content-center" id="myModalContent">
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" style="width:20%" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" style="width:20%" data-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
@@ -101,12 +104,12 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info text-light justify-content-center">
-                <h5 class="modal-title">Order Status </h5>
+                <h5 class="modal-title">Tình Trạng Đơn Hàng </h5>
             </div>
             <div class="modal-body justify-content-center" id='myOrderStatusContent'>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" style="width:20%" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" style="width:20%" data-dismiss="modal">Đóng</button>
             </div>
         </div>
     </div>
