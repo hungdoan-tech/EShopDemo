@@ -122,6 +122,10 @@ namespace Spice.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            //Convert Enum Color -> String
+            ViewBag.itemColor = Enum.GetName(typeof(MenuItem.EColor), Convert.ToInt32(menuItemFromDb.Color));
+
             MenuItemsAndQuantity menuItemsAndQuantity = new MenuItemsAndQuantity()
             {
                 Item = menuItemFromDb,

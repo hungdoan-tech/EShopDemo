@@ -15,7 +15,7 @@ namespace Spice.Areas.Customer.Controllers
     public class ProductsListController : Controller
     {
         private readonly ApplicationDbContext _db;
-        private int PageSize = 9;
+        private int PageSize = 10;
 
         public ProductsListViewModel ProductsListVM { get; set; }
 
@@ -31,8 +31,12 @@ namespace Spice.Areas.Customer.Controllers
             };
         }
 
-        public async Task<IActionResult> Index(int productPage = 1, string searchName = null, string groupProductsSelected = "Default", string orderBy = "descDate")
+        public async Task<IActionResult> Index(int pageSize = 10, int productPage = 1, string searchName = null, string groupProductsSelected = "Default", string orderBy = "descDate")
         {
+            if (pageSize >= 10 || pageSize <= 100)
+            {
+                this.PageSize = pageSize;
+            }
 
             ProductsListVM.Products = await _db.MenuItem.Include(m => m.Category).Where(m => m.IsPublish == true).ToListAsync();
 
@@ -143,6 +147,7 @@ namespace Spice.Areas.Customer.Controllers
                 urlParam = param.ToString()
             };
 
+            ViewBag.pageSize = this.PageSize;
             ViewBag.orderBy = orderBy;
             //ViewBag.groupProductsSelected = groupProductsSelected;
 

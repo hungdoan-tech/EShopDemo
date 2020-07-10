@@ -64,9 +64,9 @@
                         <div class="main-menu d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a asp-action="Index" asp-controller="Home" asp-area="Customer">Home</a></li>
+                                    <li><a asp-action="Index" asp-controller="Home" asp-area="Customer">Trang Chủ</a></li>
                                     <li>
-                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Categories</a>
+                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Loại Sản Phẩm</a>
                                         <ul class="submenu">
                                             <li>
                                             <li><a href="~/Customer/ProductsList?orderBy=category&groupProductsSelected=Analog"> Analog </a></li>
@@ -74,7 +74,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Brands</a>
+                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Hãng</a>
                                         <ul class="submenu">
                                             <li>
                                             <li><a href="~/Customer/ProductsList?orderBy=brand&groupProductsSelected=Rolex"> Rolex </a></li>
@@ -84,16 +84,16 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a asp-action="Index" asp-controller="NewsPost" asp-area="Customer">News</a>
+                                        <a asp-action="Index" asp-controller="NewsPost" asp-area="Customer">Tin Tức</a>
                                     </li>
-                                    <li><a asp-action="Privacy" asp-controller="Home" asp-area="Customer">Contact</a></li>
+                                    <li><a asp-action="Privacy" asp-controller="Home" asp-area="Customer">Liên Hệ</a></li>
                                     @if(User.IsInRole(SD.CustomerEndUser))
                                     {
                                         <li>
-                                            <a asp-action="OrderTracking" asp-controller="Order" asp-area="Customer" id="trackingOrdering"> Order Tracking </a>
+                                            <a asp-action="OrderTracking" asp-controller="Order" asp-area="Customer" id="trackingOrdering">Theo Dõi Đơn Hàng</a>
                                             <ul class="submenu">
                                                 <li>
-                                                    <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory">Order History</a>
+                                                    <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory">Lịch Sử Hóa Đơn</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -235,7 +235,7 @@
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-btn">+</div>
             <form class="search-model-form" asp-area="Customer" asp-controller="ProductsList" asp-action="Index">
-                <input type="text" id="search-input" name="searchName" placeholder="Searching key.....">
+                <input type="text" id="search-input" name="searchName" placeholder="Sản phẩm mà bạn muốn tìm...">
             </form>
         </div>
     </div>
