@@ -14,7 +14,7 @@
                             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8">
                                 <div class="hero__caption">
                                     <h1 data-animation="fadeInLeft" data-delay=".4s" data-duration="2000ms">Select Your New Perfect Style</h1>
-                                    <p data-animation="fadeInLeft" data-delay=".7s" data-duration="2000ms"> @Model.ListBestSellerMenuItem.ElementAt(i).Description</p>
+                                    @*<p data-animation="fadeInLeft" data-delay=".7s" data-duration="2000ms"> @Model.ListBestSellerMenuItem.ElementAt(i).Description</p>*@
                                     <!-- Hero-btn -->
                                     <div class="hero__btn" data-animation="fadeInLeft" data-delay=".8s" data-duration="2000ms">
                                         <a class="btn hero-btn" asp-action="Details" asp-controller="Home" asp-area="Customer" asp-route-id=@Model.ListBestSellerMenuItem.ElementAt(i).Id>Click For Detail</a>
@@ -39,7 +39,7 @@
                             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8">
                                 <div class="hero__caption">
                                     <h1 data-animation="fadeInLeft" data-delay=".4s" data-duration="2000ms">@Model.ListNews.ElementAt(i).Header</h1>
-                                    <p data-animation="fadeInLeft" data-delay=".7s" data-duration="2000ms"> @Model.ListNews.ElementAt(i).Content.Substring(0, 25) + "..."</p>
+                                    @*<p data-animation="fadeInLeft" data-delay=".7s" data-duration="2000ms"> @Model.ListNews.ElementAt(i).Content.Substring(0, 25) + "..."</p>*@
                                     <!-- Hero-btn -->
                                     <div class="hero__btn" data-animation="fadeInLeft" data-delay=".8s" data-duration="2000ms">
                                         <a class="btn hero-btn" asp-action="NewsPost" asp-controller="NewsPost" asp-area="Customer" asp-route-id=@Model.ListNews.ElementAt(i).Id>Click For Detail</a>
@@ -177,7 +177,7 @@
         <div class="row align-items-center">
             <div class="col-lg-12">
                 <div class="video-wrap">
-                    <div class="play-btn "><a class="popup-video" href="https://www.youtube.com/watch?v=KMc6DyEJp04"><i class="fas fa-play"></i></a></div>
+                    <div class="play-btn "><a class="popup-video" href="https://www.youtube.com/watch?v=8lzXAu_O6iI"><i class="fas fa-play"></i></a></div>
                 </div>
             </div>
         </div>

@@ -19,6 +19,8 @@ using Spice.Service;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Routing.Template;
+using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
 
 namespace Spice
 {
@@ -45,7 +47,14 @@ namespace Spice
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>(config =>
+            {
+                config.Password.RequiredLength = 4;
+                config.Password.RequireDigit = false;
+                config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequireUppercase = false;
+                config.SignIn.RequireConfirmedEmail = true;
+            })
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -53,10 +62,12 @@ namespace Spice
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
             //services.AddSingleton<IEmailSender, EmailSender>();
             services.AddTransient<IEmailSender, EmailSender>();
-            services.Configure<EmailOptions>(Configuration);
 
+            //services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("Email").Get<MailKitOptions>()));
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             //services.AddAuthentication().AddFacebook(facebookOptions =>
             //{
@@ -121,8 +132,6 @@ namespace Spice
                 //        name: "areas",
                 //        template: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
                 //});
-
             }
         }
-    
 } 

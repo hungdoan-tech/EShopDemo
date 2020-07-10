@@ -203,6 +203,7 @@ namespace Spice.Areas.Customer.Controllers
 
             if (charge.Status.ToLower() == "succeeded")
             {
+                await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == claim.Value).FirstOrDefault().Email, "Hell khoa" + detailCart.OrderHeader.Id.ToString(), "order has been created");
                 detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusApproved;
                 detailCart.OrderHeader.Status = SD.StatusSubmitted;
             }
