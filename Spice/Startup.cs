@@ -15,7 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spice.Utility;
 using Stripe;
-using Spice.Service;
+//using Spice.Service;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Routing.Template;
@@ -52,8 +52,8 @@ namespace Spice
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
             //services.AddSingleton<IEmailSender, EmailSender>();
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.Configure<EmailOptions>(Configuration);
+            //services.AddTransient<IEmailSender, EmailSender>();
+            //services.Configure<EmailOptions>(Configuration);
 
             services.AddControllersWithViews();
             services.AddRazorPages();

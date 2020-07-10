@@ -5,7 +5,7 @@
     <!--? slider Area Start -->
     <div class="slider-area ">
         <div class="slider-active">
-            @for (int i = 0; i < 2; i++)
+            @for (int i = 0; i < Model.ListBestSellerMenuItem.Count(); i++)
             {
                 <!-- Single Slider -->
                 <div class="single-slider slider-height d-flex align-items-center slide-bg">
@@ -60,7 +60,7 @@
 }
 <!-- slider Area End-->
 <!-- ? New Product Start -->
-@if (Model.ListNewMenuItem.Count() > 1)
+@if (Model.ListNewMenuItem.Count() > 2)
 {
     <section class="new-product-area section-padding30">
         <div class="container">
@@ -125,7 +125,7 @@
 </div>
 <!-- Gallery Area End -->
 <!--? Popular Items Start -->
-@if (Model.ListPopularMenuItem.Count() > 3)
+@if (Model.ListPopularMenuItem.Count() > 2)
 {
     <div class="popular-items section-padding30">
         <div class="container">

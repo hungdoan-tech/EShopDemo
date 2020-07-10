@@ -9,6 +9,7 @@ namespace Spice.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -30,6 +31,9 @@ namespace Spice.Data
             // Category model
             modelBuilder.Entity<Category>().HasKey(a => a.Id);
             modelBuilder.Entity<Category>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Category>()
               .Property(a => a.Name)
               .IsRequired();
 
@@ -37,12 +41,18 @@ namespace Spice.Data
             modelBuilder.Entity<SubCategory>()
                 .HasKey(a => a.Id);
             modelBuilder.Entity<SubCategory>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
+            modelBuilder.Entity<SubCategory>()
                 .Property(a => a.Name)
                 .IsRequired();
 
             //MenuItem
             modelBuilder.Entity<MenuItem>()
                 .HasKey(a => a.Id);
+            modelBuilder.Entity<MenuItem>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
             modelBuilder.Entity<MenuItem>()
                 .HasOne(a => a.SubCategory)
                 .WithMany(b => b.MenuItems)
@@ -64,15 +74,15 @@ namespace Spice.Data
                .Property(a => a.IsPublish)
                .IsRequired();
             modelBuilder.Entity<MenuItem>()
-               .Property(a => a.Quantity)
-               .IsRequired();
-            modelBuilder.Entity<MenuItem>()
                .Property(a => a.PublishedDate)
                .IsRequired();
 
             //Coupon 
             modelBuilder.Entity<Coupon>()
                 .HasKey(a => a.Id);
+            modelBuilder.Entity<Coupon>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
             modelBuilder.Entity<Coupon>()
                 .Property(a => a.Name)
                 .IsRequired();
@@ -89,6 +99,9 @@ namespace Spice.Data
             //OrderHeader
             modelBuilder.Entity<OrderHeader>()
                 .HasKey(a => a.Id);
+            modelBuilder.Entity<OrderHeader>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
             modelBuilder.Entity<OrderHeader>()
                 .HasOne(a => a.ApplicationUser)
                 .WithMany(b => b.OrderHeaders)
@@ -109,6 +122,9 @@ namespace Spice.Data
             //OrderDetails
             modelBuilder.Entity<OrderDetails>()
                .HasKey(a => a.Id);
+            modelBuilder.Entity<OrderDetails>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
             modelBuilder.Entity<OrderDetails>()
                .HasOne(a => a.OrderHeader)
                .WithMany(b => b.OrderDetails)
@@ -131,6 +147,9 @@ namespace Spice.Data
             // News
             modelBuilder.Entity<News>()
                 .HasKey(a => a.Id);
+            modelBuilder.Entity<News>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
             modelBuilder.Entity<News>()
                 .Property(a => a.Header)
                 .IsRequired();
@@ -162,6 +181,9 @@ namespace Spice.Data
             modelBuilder.Entity<ImportHistory>()
                 .HasKey(a => a.Id);
             modelBuilder.Entity<ImportHistory>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
+            modelBuilder.Entity<ImportHistory>()
                .HasOne(a => a.ApplicationUser)
                .WithMany(b => b.ImportHistories)
                .HasForeignKey(a => a.UserId);
@@ -181,45 +203,51 @@ namespace Spice.Data
 
 
 
-            //modelBuilder.Entity<Category>().HasData
-            //            (
-            //                new Category{Name="SmartWatch"},
-            //                new Category{Name="Analog"}
-            //            );
+            modelBuilder.Entity<Category>().HasData
+                        (
+                            new Category { Id = 1, Name = "SmartWatch" },
+                            new Category { Id = 2, Name = "Analog" }
+                        );
 
-            //modelBuilder.Entity<SubCategory>().HasData
-            //            (
-            //                new SubCategory{Name="Apple"},
-            //                new SubCategory{Name="Casio"},
-            //                new SubCategory{Name="Rolex"},
-            //                new SubCategory{Name="Samsung"}
-            //            );            
+            modelBuilder.Entity<SubCategory>().HasData
+                        (
+                            new SubCategory { Id = 1, Name = "Apple" },
+                            new SubCategory { Id = 2, Name = "Casio" },
+                            new SubCategory { Id = 3, Name = "Rolex" },
+                            new SubCategory { Id = 4, Name = "Samsung"}
+                        );
 
-            //modelBuilder.Entity<Coupon>().HasData
-            //            (
-            //                new Coupon{Name="15OFF",CouponType="0",Discount=15,MinimumAmount=75,IsActive=true}
-            //            );           
+            modelBuilder.Entity<Coupon>().HasData
+                        (
+                            new Coupon { Id = 1, Name = "15OFF", CouponType = "0", Discount = 15, MinimumAmount = 75, IsActive = true }
+                        );
 
-            //modelBuilder.Entity<News>().HasData
-            //            (
-            //                new News{
-            //                    Header="Sale on for everything 15OFF",Content = "<p>In this summer, we have a coupon for everything for 15 % each deal which is larger than 50 $&nbsp;</p><p><img alt="+"15 Off Images, Stock Photos &amp; Vectors | Shutterstock"+"src="+"https://image.shutterstock.com/image-vector/special-offer-15-off-label-260nw-1109101598.jpg" +"/></p>"
-            //+"<div class="+"eJOY__extension_root_class" +"id="+"eJOY__extension_root"+ "style="+"all:unset"+">&nbsp;</div>", Alias="Sale-Off-15OFF", PublishedDate=DateTime.Now, Type="1", ImageHeader="\\images\\News1.png"
-            //                }
-            //            );
+            modelBuilder.Entity<News>().HasData
+                        (
+                            new News
+                            {
+                                Id = 1,
+                                Header = "Sale on for everything 15OFF",
+                                Content = "<p>In this summer, we have a coupon for everything for 15 % each deal which is larger than 50 $&nbsp;</p><p><img alt=" + "15 Off Images, Stock Photos &amp; Vectors | Shutterstock" + "src=" + "https://image.shutterstock.com/image-vector/special-offer-15-off-label-260nw-1109101598.jpg" + "/></p>"
+            + "<div class=" + "eJOY__extension_root_class" + "id=" + "eJOY__extension_root" + "style=" + "all:unset" + ">&nbsp;</div>",
+                                Alias = "Sale-Off-15OFF",
+                                PublishedDate = DateTime.Now,
+                                Type = "1",
+                                ImageHeader = "\\images\\News1.png"
+                            }
+                        );
 
-
-            //modelBuilder.Entity<MenuItem>().HasData
-            //    (
-            //            new MenuItem { Name = "Rolex 1", Description = "Awesome", Image = "\\images\\13.png", Price = 100, IsPublish = true, Quantity = 6, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
-            //            new MenuItem { Name = "Rolex 2", Description = "Awesome", Image = "\\images\\14.png", Price = 156, IsPublish = true, Quantity = 20, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
-            //            new MenuItem { Name = "Rolex 3", Description = "Awesome", Image = "\\images\\15.png", Price = 25, IsPublish = true, Quantity = 23, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
-            //            new MenuItem { Name = "Casio 1", Description = "Awesome", Image = "\\images\\16.png", Price = 245, IsPublish = true, Quantity = 20, Color = "1", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 2 },
-            //            new MenuItem { Name = "Casio 2", Description = "Awesome", Image = "\\images\\17.png", Price = 154, IsPublish = true, Quantity = 25, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
-            //            new MenuItem { Name = "Casio 3", Description = "Awesome", Image = "\\images\\18.png", Price = 157, IsPublish = true, Quantity = 15, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
-            //            new MenuItem { Name = "Samsung 1", Description = "Awesome", Image = "\\images\\20.png", Price = 198, IsPublish = true, Quantity = 23, Color = "3", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 3 },
-            //            new MenuItem { Name = "Apple 1", Description = "Awesome", Image = "\\images\\21.png", Price = 998, IsPublish = true, Quantity = 18, Color = "1", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 1 }
-            //    );
+            modelBuilder.Entity<MenuItem>().HasData
+                (
+                        new MenuItem { Id = 1, Name = "Rolex 1", Description = "Awesome", Image = "\\images\\1.png", Price = 100, IsPublish = true, Quantity = 6, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+                        new MenuItem { Id = 2, Name = "Rolex 2", Description = "Awesome", Image = "\\images\\2.png", Price = 156, IsPublish = true, Quantity = 20, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+                        new MenuItem { Id = 3, Name = "Rolex 3", Description = "Awesome", Image = "\\images\\3.png", Price = 25, IsPublish = true, Quantity = 23, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+                        new MenuItem { Id = 4, Name = "Casio 1", Description = "Awesome", Image = "\\images\\4.png", Price = 245, IsPublish = true, Quantity = 20, Color = "1", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 2 },
+                        new MenuItem { Id = 5, Name = "Casio 2", Description = "Awesome", Image = "\\images\\5.png", Price = 154, IsPublish = true, Quantity = 25, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
+                        new MenuItem { Id = 6, Name = "Casio 3", Description = "Awesome", Image = "\\images\\6.png", Price = 157, IsPublish = true, Quantity = 15, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
+                        new MenuItem { Id = 7, Name = "Samsung 1", Description = "Awesome", Image = "\\images\\7.png", Price = 198, IsPublish = true, Quantity = 23, Color = "3", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 3 },
+                        new MenuItem { Id = 8, Name = "Apple 1", Description = "Awesome", Image = "\\images\\8.png", Price = 998, IsPublish = true, Quantity = 18, Color = "1", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 1 }
+                );
         }
     }
 }
