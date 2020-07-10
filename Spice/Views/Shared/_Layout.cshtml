@@ -70,7 +70,7 @@
                                         <ul class="submenu">
                                             <li>
                                             <li><a href="~/Customer/ProductsList?orderBy=category&groupProductsSelected=Analog"> Analog </a></li>
-                                            <li><a href="~/Customer/ProductsList?orderBy=category&groupProductsSelected=Smartwatch"> Smartwatch </a></li>                                        
+                                            <li><a href="~/Customer/ProductsList?orderBy=category&groupProductsSelected=Smartwatch"> Smartwatch </a></li>
                                         </ul>
                                     </li>
                                     <li>
@@ -87,7 +87,7 @@
                                         <a asp-action="Index" asp-controller="NewsPost" asp-area="Customer">Tin Tức</a>
                                     </li>
                                     <li><a asp-action="Privacy" asp-controller="Home" asp-area="Customer">Liên Hệ</a></li>
-                                    @if(User.IsInRole(SD.CustomerEndUser))
+                                    @if (User.IsInRole(SD.CustomerEndUser))
                                     {
                                         <li>
                                             <a asp-action="OrderTracking" asp-controller="Order" asp-area="Customer" id="trackingOrdering">Theo Dõi Đơn Hàng</a>
@@ -141,6 +141,113 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+    </div>
+    <div class="container-fluid mt-5 m-auto" style="font-size: 1rem; width: 80%;">
+        <div class="row p-lg-4 border-bottom">
+            <div class="col-12 col-md-6 col-lg-3 p-3">
+                <!-- Item -->
+                <div class="d-flex mb-6 mb-lg-0">
+
+                    <!-- Icon -->
+                    <i class="fa fa-truck fa-2x text-primary pr-4"></i>
+
+                    <!-- Body -->
+                    <div class="ml-6">
+
+                        <!-- Heading -->
+                        <h6 class="heading-xxs mb-1">
+                            Miễn Phí Giao Hàng
+                        </h6>
+
+                        <!-- Text -->
+                        <p class="mb-0 font-size-sm text-muted">
+                            Với đơn hàng trên 500 nghìn đồng
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 p-3">
+
+                <!-- Item -->
+                <div class="d-flex mb-6 mb-lg-0">
+
+                    <!-- Icon -->
+                    <i class="fa fa-repeat fa-2x text-primary pr-4"></i>
+
+                    <!-- Body -->
+                    <div class="ml-6">
+
+                        <!-- Heading -->
+                        <h6 class="mb-1 heading-xxs">
+                            Đối Trả Miễn Phí
+                        </h6>
+
+                        <!-- Text -->
+                        <p class="mb-0 font-size-sm text-muted">
+                            Hoàn tiền sản phẩm trong vòng 7 ngày.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 p-3">
+
+                <!-- Item -->
+                <div class="d-flex mb-6 mb-md-0">
+
+                    <!-- Icon -->
+                    <i class="fa fa-lock fa-2x text-primary pr-4"></i>
+
+                    <!-- Body -->
+                    <div class="ml-6">
+
+                        <!-- Heading -->
+                        <h6 class="mb-1 heading-xxs">
+                            Thanh Toán Bảo Mật
+                        </h6>
+
+                        <!-- Text -->
+                        <p class="mb-0 font-size-sm text-muted">
+                            An Toàn và Nhanh Chóng
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 p-3">
+
+                <!-- Item -->
+                <div class="d-flex">
+
+                    <!-- Icon -->
+                    <i class="fa fa-tag fa-2x text-primary pr-4"></i>
+
+                    <!-- Body -->
+                    <div class="ml-6">
+
+                        <!-- Heading -->
+                        <h6 class="mb-1 heading-xxs">
+                            Sản Phẩm Đa Dạng
+                        </h6>
+
+                        <!-- Text -->
+                        <p class="mb-0 font-size-sm text-muted">
+                            Cửa hàng sẵn sàng những mặt hàng bạn muốn.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
     </div>
     <footer>
         <!-- Footer Start-->
@@ -209,7 +316,7 @@
                             <p>
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                                 Copyright &copy;
-                                <script>document.write(new Date().getFullYear());</script> All rights reserved 
+                                <script>document.write(new Date().getFullYear());</script> All rights reserved
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             </p>
                         </div>
@@ -230,7 +337,7 @@
         </div>
         <!-- Footer End-->
     </footer>
-    <!--? Search model Begin --> 
+    <!--? Search model Begin -->
     <div class="search-model-box">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-btn">+</div>

@@ -33,7 +33,7 @@
                         <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descPrice" class="nav-item nav-link" id="nav-descPrice-tab">Giá Từ Cao Tới Thấp</a>
                         <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="mostPopuler" class="nav-item nav-link" id="nav-mostPopuler-tab">Phổ biến </a>
                         <div class="dropdown">
-                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="category" asp-route-groupProductsSelected="Default" id="nav-cateall-tab">Categories</a>
+                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="category" asp-route-groupProductsSelected="Default" id="nav-cateall-tab">Loại Sản Phẩm</a>
                             <div class="dropdown-content">
                                 @foreach (var item in Model.Categories)
                                 {
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                         <div class="dropdown">
-                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="brand" asp-route-groupProductsSelected="Default" id="nav-brandall-tab">Brands </a>
+                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="brand" asp-route-groupProductsSelected="Default" id="nav-brandall-tab">Hãng</a>
                             <div class="dropdown-content">
                                 @foreach (var item in Model.SubCategories)
                                 {
@@ -113,35 +113,6 @@
 
 <!-- Latest Products End -->
 <!--? Shop Method Start-->
-<div class="shop-method-area">
-    <div class="container">
-        <div class="method-wrapper">
-            <div class="row d-flex justify-content-between">
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="single-method mb-40">
-                        <i class="ti-package"></i>
-                        <h6>Miễn Phí Giao Hàng</h6>
-                        <p>Với đơn hàng trên 500 nghìn đồng.</p>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="single-method mb-40">
-                        <i class="ti-unlock"></i>
-                        <h6>Hệ Thống Thanh Toán Bảo Mật</h6>
-                        <p>Chúng tôi không lưu thông tin thẻ thanh toán khách hàng.</p>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <div class="single-method mb-40">
-                        <i class="ti-reload"></i>
-                        <h6>Đối Trả Miễn Phí</h6>
-                        <p>Hoàn tiền sản phẩm trong vòng 7 ngày.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <style>
     .dropdown {
         position: relative;
