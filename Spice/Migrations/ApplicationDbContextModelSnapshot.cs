@@ -269,6 +269,39 @@ namespace Spice.Migrations
                     b.ToTable("Coupon");
                 });
 
+            modelBuilder.Entity("Spice.Models.ImportHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ImportDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MenuItemID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubCategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MenuItemID");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ImportHistories");
+                });
+
             modelBuilder.Entity("Spice.Models.MenuItem", b =>
                 {
                     b.Property<int>("Id")
@@ -540,6 +573,25 @@ namespace Spice.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Spice.Models.ImportHistory", b =>
+                {
+                    b.HasOne("Spice.Models.MenuItem", "MenuItem")
+                        .WithMany("ImportHistories")
+                        .HasForeignKey("MenuItemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Spice.Models.SubCategory", "SubCategory")
+                        .WithMany("ImportHistories")
+                        .HasForeignKey("SubCategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Spice.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("ImportHistories")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Spice.Models.MenuItem", b =>

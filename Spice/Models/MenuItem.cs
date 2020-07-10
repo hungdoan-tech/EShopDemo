@@ -32,5 +32,6 @@ namespace Spice.Models
         public virtual SubCategory SubCategory { get; set; }
         public ICollection<OrderDetails> OrderDetails { get; set; }
         public virtual ICollection<News> News { get; set; }
+        public virtual ICollection<ImportHistory> ImportHistories { get; set; }
     }
 }

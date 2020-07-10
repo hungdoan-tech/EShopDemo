@@ -22,6 +22,7 @@ namespace Spice.Data
         public DbSet<OrderHeader> OrderHeader { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<News> News { get; set; }
+        public DbSet<ImportHistory> ImportHistories { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -155,6 +156,70 @@ namespace Spice.Data
             //    .HasOne(a => a.ApplicationUser)
             //    .WithMany(b => b.News)
             //    .HasForeignKey(a => a.ApplicationUserId);
+
+
+            //Import History
+            modelBuilder.Entity<ImportHistory>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<ImportHistory>()
+               .HasOne(a => a.ApplicationUser)
+               .WithMany(b => b.ImportHistories)
+               .HasForeignKey(a => a.UserId);
+            modelBuilder.Entity<ImportHistory>()
+               .HasOne(a => a.SubCategory)
+               .WithMany(b => b.ImportHistories)
+               .HasForeignKey(a => a.SubCategoryId)
+               .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<ImportHistory>()
+               .HasOne(a => a.MenuItem)
+               .WithMany(b => b.ImportHistories)
+               .HasForeignKey(a => a.MenuItemID);
+            modelBuilder.Entity<ImportHistory>()
+               .Property(a => a.Quantity)
+               .IsRequired();
+
+
+
+
+            //modelBuilder.Entity<Category>().HasData
+            //            (
+            //                new Category{Name="SmartWatch"},
+            //                new Category{Name="Analog"}
+            //            );
+
+            //modelBuilder.Entity<SubCategory>().HasData
+            //            (
+            //                new SubCategory{Name="Apple"},
+            //                new SubCategory{Name="Casio"},
+            //                new SubCategory{Name="Rolex"},
+            //                new SubCategory{Name="Samsung"}
+            //            );            
+
+            //modelBuilder.Entity<Coupon>().HasData
+            //            (
+            //                new Coupon{Name="15OFF",CouponType="0",Discount=15,MinimumAmount=75,IsActive=true}
+            //            );           
+
+            //modelBuilder.Entity<News>().HasData
+            //            (
+            //                new News{
+            //                    Header="Sale on for everything 15OFF",Content = "<p>In this summer, we have a coupon for everything for 15 % each deal which is larger than 50 $&nbsp;</p><p><img alt="+"15 Off Images, Stock Photos &amp; Vectors | Shutterstock"+"src="+"https://image.shutterstock.com/image-vector/special-offer-15-off-label-260nw-1109101598.jpg" +"/></p>"
+            //+"<div class="+"eJOY__extension_root_class" +"id="+"eJOY__extension_root"+ "style="+"all:unset"+">&nbsp;</div>", Alias="Sale-Off-15OFF", PublishedDate=DateTime.Now, Type="1", ImageHeader="\\images\\News1.png"
+            //                }
+            //            );
+
+
+            //modelBuilder.Entity<MenuItem>().HasData
+            //    (
+            //            new MenuItem { Name = "Rolex 1", Description = "Awesome", Image = "\\images\\13.png", Price = 100, IsPublish = true, Quantity = 6, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+            //            new MenuItem { Name = "Rolex 2", Description = "Awesome", Image = "\\images\\14.png", Price = 156, IsPublish = true, Quantity = 20, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+            //            new MenuItem { Name = "Rolex 3", Description = "Awesome", Image = "\\images\\15.png", Price = 25, IsPublish = true, Quantity = 23, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+            //            new MenuItem { Name = "Casio 1", Description = "Awesome", Image = "\\images\\16.png", Price = 245, IsPublish = true, Quantity = 20, Color = "1", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 2 },
+            //            new MenuItem { Name = "Casio 2", Description = "Awesome", Image = "\\images\\17.png", Price = 154, IsPublish = true, Quantity = 25, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
+            //            new MenuItem { Name = "Casio 3", Description = "Awesome", Image = "\\images\\18.png", Price = 157, IsPublish = true, Quantity = 15, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
+            //            new MenuItem { Name = "Samsung 1", Description = "Awesome", Image = "\\images\\20.png", Price = 198, IsPublish = true, Quantity = 23, Color = "3", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 3 },
+            //            new MenuItem { Name = "Apple 1", Description = "Awesome", Image = "\\images\\21.png", Price = 998, IsPublish = true, Quantity = 18, Color = "1", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 1 }
+            //    );
         }
     }
 }

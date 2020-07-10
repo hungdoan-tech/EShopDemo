@@ -74,7 +74,6 @@ namespace Spice.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
-
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -84,6 +83,8 @@ namespace Spice.Areas.Identity.Pages.Account
                 {
                     var user = await _db.Users.Where(u => u.Email == Input.Email).FirstOrDefaultAsync();
                     _logger.LogInformation("User logged in.");
+
+
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
