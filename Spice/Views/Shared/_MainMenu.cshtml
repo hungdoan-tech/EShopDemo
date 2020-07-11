@@ -1,12 +1,10 @@
 ﻿
 @using Spice.Utility
     <ul class="sidebar-menu" data-widget="tree">
-        <li class="header">HEADER</li>
+        <li class="header"><a href="~/">HOME</a></li>
         <!-- Optionally, you can add icons to the links -->
         @if (User.IsInRole(SD.ManagerUser) == true)
         {
-            <li class="active"><a href="#"><i class="fa fa-link"></i> <span>Analysis</span></a></li>
-            <li><a href="#"><i class="fa fa-link"></i> <span>Statistical</span></a></li>
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-link"></i> <span>Order</span>
