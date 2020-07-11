@@ -53,7 +53,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <h5>@item.Item.Price VNĐ</h5>
+                                            <h5>$@item.Item.Price</h5>
                                         </td>
                                         <td>
                                             <div class="product_count">
@@ -65,7 +65,7 @@
                                             <button class="genric-btn info-border circle" asp-action="minus" asp-route-cartId="@item.Item.Id"><i class="ti-minus"></i></button>
                                         </td>
                                         <td>
-                                            <h5>@(item.Item.Price * item.Quantity) VNĐ</h5>
+                                            <h5>$@(item.Item.Price * item.Quantity)</h5>
                                         </td>
                                         <td>
                                             <a class="genric-btn danger radius" asp-action="remove" asp-route-cartId="@item.Item.Id">
@@ -104,7 +104,7 @@
                                         <h5>Tổng Cộng</h5>
                                     </td>
                                     <td>
-                                        <h5>@Model.OrderHeader.OrderTotal VNĐ</h5>
+                                        <h5>$@Model.OrderHeader.OrderTotal</h5>
                                     </td>
                                     <td></td>
                                 </tr>
