@@ -54,10 +54,11 @@ namespace Spice.Areas.Admin.Controllers
         {
             //MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
-            if(!ModelState.IsValid)
-            {
-                return View(MenuItemVM);
-            }
+            //if(!ModelState.IsValid)
+            //{
+            //    return View(MenuItemVM);
+            //}
+
             MenuItemVM.MenuItem.PublishedDate = DateTime.UtcNow;
             _db.MenuItem.Add(MenuItemVM.MenuItem);
             await _db.SaveChangesAsync();
