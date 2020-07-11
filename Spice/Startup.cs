@@ -15,9 +15,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spice.Utility;
 using Stripe;
-using Spice.Service;
+//using Spice.Service;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Routing.Template;
+using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
 
 namespace Spice
 {
@@ -44,29 +47,44 @@ namespace Spice
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>(config =>
+            {
+                config.Password.RequiredLength = 4;
+                config.Password.RequireDigit = false;
+                config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequireUppercase = false;
+                config.SignIn.RequireConfirmedEmail = true;
+            })
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
-            services.AddSingleton<IEmailSender, EmailSender>();
-            services.Configure<EmailOptions>(Configuration);
+            //services.AddSingleton<IEmailSender, EmailSender>();
+<<<<<<< HEAD
+            services.AddTransient<IEmailSender, EmailSender>();
+=======
+            //services.AddTransient<IEmailSender, EmailSender>();
+            //services.Configure<EmailOptions>(Configuration);
+>>>>>>> Feature/AddingImportHistory
 
+            //services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("Email").Get<MailKitOptions>()));
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddAuthentication().AddFacebook(facebookOptions =>
-            {
-                facebookOptions.AppId = "581243149004490";
-                facebookOptions.AppSecret = "a72e3bebaa552f73d3d52af4de3883d7";
-            });
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddAuthentication().AddGoogle(googleOptions =>
-            {
-                googleOptions.ClientId = "943287545908-23cg1r49vf777q6lj9ndvl72cfro6vac.apps.googleusercontent.com";
-                googleOptions.ClientSecret = "9ppq7O-KTSbX4GNl8hWJscnG";
-            });
+            //services.AddAuthentication().AddFacebook(facebookOptions =>
+            //{
+            //    facebookOptions.AppId = "581243149004490";
+            //    facebookOptions.AppSecret = "a72e3bebaa552f73d3d52af4de3883d7";
+            //});
+
+            //services.AddAuthentication().AddGoogle(googleOptions =>
+            //{
+            //    googleOptions.ClientId = "943287545908-23cg1r49vf777q6lj9ndvl72cfro6vac.apps.googleusercontent.com";
+            //    googleOptions.ClientSecret = "9ppq7O-KTSbX4GNl8hWJscnG";
+            //});
 
             services.AddSession(options =>
             {
@@ -74,6 +92,8 @@ namespace Spice
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
             });
+            services.AddControllers(options => options.EnableEndpointRouting = false);
+            services.AddMvc(options => options.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -101,20 +121,13 @@ namespace Spice
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllerRoute(name: "Login",
-                //    pattern: "Account/Login",
-                //    defaults: new { area="Identity", pagemodel = "LogoutModel", action = "Article" });
                 endpoints.MapControllerRoute(
                     name: "areas",
                     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
+
             });
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "areas",
-            //        template: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
-            //});
+            }
         }
-    }
-}
+} 

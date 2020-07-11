@@ -1,0 +1,173 @@
+﻿@model Spice.Models.ViewModels.NewsViewModel
+@using Spice.Extensions
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | Simple Tables</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+
+<div id="content">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <br />
+            <h2 class="text-info">Edit News</h2>
+            <br />
+
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <div class="container-fluid">
+                    <div class=" row backgroundWhiteBorder">
+
+                        <br />
+                        <div class="container">
+                            <div class="col-12 pt-4">
+                                <input hidden asp-for="News.Id" />
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label asp-for="News.Header" class="custom-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;;width:400px">
+                                            <input asp-for="News.Header" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="News.Header" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label asp-for="News.Alias" class="custom-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;;width:400px">
+                                            <input asp-for="News.Alias" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="News.Alias" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label asp-for="News.PublishedDate" class="custom-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;;width:400px">
+                                            <input id="today" type="date" asp-for="News.PublishedDate" class="form-control" readonly />
+                                        </div>
+                                        <span asp-validation-for="News.PublishedDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label asp-for="News.Type" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;;width:400px">
+                                            <select id="TypeField" asp-for="News.Type" asp-items="Html.GetEnumSelectList<News.EType>()" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="MenuItemField">
+                                    <div class="col-2">
+                                        <label asp-for="News.MenuItem" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;;width:400px">
+                                            <select id="valueOfMenuItem" asp-for="@Model.News.MenuItemId" asp-items="Model.MenuItems.ToSelectListItem(Model.News.MenuItemId)" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label asp-for="News.ImageHeader" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;;width:400px">
+                                            <input type="file" name="files" multiple class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-3 offset-1">
+                                    <img src="@Model.News.ImageHeader" width="30%" style="border-radius:5px;border: 1px solid #bbb9b9;" />
+                                </div>
+                                <div class="form-group row ">
+                                    <div class="col-2">
+                                        <label asp-for="News.Content" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-12">
+                                        <textarea id="editor1" asp-for="News.Content"></textarea>
+                                    </div>
+                                    <span asp-validation-for="News.Content" class="text-danger"></span>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-5 offset-2">
+                                        <div style="height:100px;;width:400px">
+                                            <partial name="_EditAndBackToListButton" model="Model.News.Id" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <script src="//cdn.ckeditor.com/4.14.1/full/ckeditor.js"></script>
+            @section Scripts{
+
+                <script>
+                    //document.getElementById("TypeField").click();
+                </script>
+                <script>
+                    $(document).ready(function () {
+
+                        $("#TypeField").html(function () {
+                            if ($(this).val() == 0) {
+                                //$("#valueOfMenuItem").val($("#valueOfMenuItem option:first").val());
+                                $("#MenuItemField").show();
+                            } else {
+                                $("#valueOfMenuItem").val(null);
+                                $("#MenuItemField").hide();
+                            }
+                        });
+                    });
+                    $(document).ready(function () {
+
+                        $("#TypeField").click(function () {
+                            if ($(this).val() == 0) {
+                                $("#valueOfMenuItem").val($("#valueOfMenuItem option:first").val());
+                                $("#MenuItemField").show();
+                            } else {
+                                $("#valueOfMenuItem").val(null);
+                                $("#MenuItemField").hide();
+                            }
+                        });
+                    });
+                </script>
+                <script type="text/javascript">
+                    CKEDITOR.replace('editor1', { width: 1000, height: 700 });
+                </script>
+                <script>
+                    document.querySelector("#today").valueAsDate = new Date();
+                </script>
+
+                @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+            }
+        </div>
+    </nav>
+</div>

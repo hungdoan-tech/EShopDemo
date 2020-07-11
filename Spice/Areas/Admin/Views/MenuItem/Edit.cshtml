@@ -3,130 +3,172 @@
 
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>AdminLTE 3 | Simple Tables</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+        <!-- Google Font: Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    </head>
+<div id="content">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <br />
+            <h2 class="text-info">Edit MenuItem</h2>
+            <br />
 
-<br />
-<h2 class="text-info">Edit MenuItem</h2>
-<br />
+            <form method="post" asp-action="Create" enctype="multipart/form-data">
+                <div class="container">
+                    <div class="border backgroundWhite row">
+                        <input type="hidden" asp-for="MenuItem.Id" />
 
-<form method="post" asp-action="Create" enctype="multipart/form-data">
-    <div class="border backgroundWhite row">
-        <input type="hidden" asp-for="MenuItem.Id" />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="col-8">
+                            <div class="container">
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label asp-for="MenuItem.Name" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div style="height:50px;width:400px">
+                                            <input asp-for="MenuItem.Name" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="MenuItem.Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label asp-for="MenuItem.Description" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div style="height:50px;width:400px">
+                                            @Html.TextAreaFor(m => m.MenuItem.Description)
+                                        </div>
+                                        <span asp-validation-for="MenuItem.Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label asp-for="MenuItem.Price" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div style="height:50px;width:400px">
+                                            <input asp-for="MenuItem.Price" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="MenuItem.Price" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label asp-for="MenuItem.Image" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div style="height:50px;width:400px">
+                                            <input type="file" name="files" multiple class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
 
-        <div class="col-8">
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.Name" class="col-form-label"></label>
-                </div>
-                <div class="col-8">
-                    <input asp-for="MenuItem.Name" class="form-control" />
-                </div>
-                <span asp-validation-for="MenuItem.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.Description" class="col-form-label"></label>
-                </div>
-                <div class="col-8">
-                    @Html.TextAreaFor(m => m.MenuItem.Description)
-                </div>
-                <span asp-validation-for="MenuItem.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.Price" class="col-form-label"></label>
-                </div>
-                <div class="col-8">
-                    <input asp-for="MenuItem.Price" class="form-control" />
-                </div>
-                <span asp-validation-for="MenuItem.Price" class="text-danger"></span>
-            </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.Image" class="col-form-label"></label>
-                </div>
-                <div class="col-8">
-                    <input type="file" name="files" multiple class="form-control" />
-                </div>
-            </div>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label asp-for="MenuItem.Category" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div style="height:50px;width:400px">
+                                            <select asp-for="@Model.MenuItem.CategoryId" id="CategoryId" asp-items="Model.Category.ToSelectListItem(Model.MenuItem.CategoryId)" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-4">
+                                        <label asp-for="MenuItem.SubCategory" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-8">
+                                        <div style="height:50px;width:400px">
+                                            <select asp-for="@Model.MenuItem.SubCategoryId" id="SubCategoryId" asp-items="Model.SubCategory.ToSelectListItem(Model.MenuItem.SubCategoryId)" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label asp-for="MenuItem.Color" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;width:400px">
+                                            <select asp-for="MenuItem.Color" asp-items="Html.GetEnumSelectList<MenuItem.EColor>()" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
 
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.CategoryId" class="col-form-label"></label>
-                </div>
-                <div class="col-8">
-                    <select asp-for="@Model.MenuItem.CategoryId" id="CategoryId" asp-items="Model.Category.ToSelectListItem(Model.MenuItem.CategoryId)" class="form-control"></select>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.SubCategoryId" class="col-form-label"></label>
-                </div>
-                <div class="col-8">
-                    <select asp-for="@Model.MenuItem.SubCategoryId" name="SubCategoryId" id="SubCategoryId" asp-items="@(new SelectList(string.Empty,"Id","Name"))" class="form-control"></select>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-4">
-                    <label asp-for="MenuItem.Spicyness" class="col-form-label"></label>
-                </div>
-                <div class="col-8">
-                    <select asp-for="MenuItem.Spicyness" asp-items="Html.GetEnumSelectList<MenuItem.ESpicy>()" class="form-control"></select>
-                </div>
-            </div>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label asp-for="MenuItem.Tag" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;width:400px">
+                                            <select asp-for="MenuItem.Tag" asp-items="Html.GetEnumSelectList<MenuItem.ETag>()" class="form-control"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="form-group row">
+                                    <div class="col-2">
+                                        <label asp-for="MenuItem.Quantity" class="col-form-label"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <div style="height:50px;width:400px">
+                                            <input asp-for="MenuItem.Quantity" class="form-control" />
+                                        </div>
+                                        <span asp-validation-for="MenuItem.Quantity" class="text-danger"></span>
+                                    </div>
+                                </div>*@
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label class="form-check-label" asp-for="MenuItem.IsPublish"></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <input class="form-check-input mx-1" asp-for="MenuItem.IsPublish" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3 offset-1">
+                                <img src="@Model.MenuItem.Image" width="35%" style="border-radius:5px;border: 1px solid #bbb9b9;" />
+                            </div>
 
+                            <div class="col-8">
+                                <div class="col-8 offset-4">
+                                    <div style="height:100px;width:400px">
+                                        <partial name="_EditAndBackToListButton" model="Model.MenuItem.Id" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            @section Scripts{
+                <script>
+                    tinymce.init({
+                        selector: 'textarea',
+                        plugins: "lists",
+                        menubar: 'file edit format'
+                    });
+                </script>
+
+                @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+            }
         </div>
-        <div class="col-3 offset-1">
-            <img src="@Model.MenuItem.Image" width="100%" style="border-radius:5px;border: 1px solid #bbb9b9;" />
-        </div>
-
-        <div class="col-8">
-            <div class="col-8 offset-4">
-                <partial name="_EditAndBackToListButton" model="Model.MenuItem.Id"/>
-            </div>
-        </div>
-
-       
-    </div>
-</form>
-
-@section Scripts{
-    <script>
-        tinymce.init({
-            selector: 'textarea',
-            plugins: "lists",
-            menubar: 'file edit format'
-        });
-    </script>
-
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            getSubCategory();
-            $('#CategoryId').change(function () {
-                getSubCategory();
-            });
-        });
-
-
-        function getSubCategory() {
-            var url = '@Url.Content("~/")' + "Admin/SubCategory/GetSubCategory";
-            var ddlsoruce = '#CategoryId';
-            $.getJSON(url, { id: $(ddlsoruce).val() }, function (data) {
-                var items = '';
-                $('#SubCategoryId').empty();
-                $.each(data, function (i, subcategory) {
-                    items += "<option value='" + subcategory.value + "'>" + subcategory.text + "</option>";
-                });
-
-                $('#SubCategoryId').html(items);
-            })
-        }
-    </script>
-
-
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    </nav>
+</div>

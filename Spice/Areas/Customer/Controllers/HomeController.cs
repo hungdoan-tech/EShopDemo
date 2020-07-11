@@ -33,33 +33,43 @@ namespace Spice.Controllers
 
         public async Task<IActionResult> Index(int productPage = 1)
         {
-            IndexViewModel IndexVM = new IndexViewModel()
+            //IndexViewModel IndexVM = new IndexViewModel()
+            //{
+            //    MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
+            //    Category = await _db.Category.ToListAsync(),
+            //    Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
+            //};
+
+            ////Pagination: - Url determine current pages.
+            //StringBuilder param = new StringBuilder();
+            //param.Append("?productPage=:");
+
+            ////Count a quantity in MenuItem.
+            //var count = IndexVM.MenuItem.Count();
+
+
+            //IndexVM.MenuItem = IndexVM.MenuItem.OrderBy(p => p.Price)
+            //   .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
+
+
+            //IndexVM.PagingInfo = new PagingInfo()
+            //{
+            //    CurrentPage = productPage,
+            //    ItemsPerPage = PageSize,
+            //    TotalItem = count,
+            //    urlParam = param.ToString()
+            //};
+
+            //return View(IndexVM);
+
+
+            IndexHomeVM IndexVM = new IndexHomeVM()
             {
-                MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
-                Category = await _db.Category.ToListAsync(),
-                Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
+                ListPopularMenuItem = await _db.MenuItem.Where(a => a.Tag == "2" && a.IsPublish == true).OrderByDescending(a => a.Id).Take(6).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
+                ListNewMenuItem = await _db.MenuItem.Where(a => a.Tag == "1" && a.IsPublish == true).OrderByDescending(a => a.Id).Take(6).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
+                ListBestSellerMenuItem = await _db.MenuItem.Where(a => a.Tag == "0" && a.IsPublish == true).OrderByDescending(a => a.Id).Take(2).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
+                ListNews = await _db.News.Where(a => a.Type != "0").OrderByDescending(a => a.PublishedDate).Take(2).ToListAsync()
             };
-            
-            //Pagination: - Url determine current pages.
-            StringBuilder param = new StringBuilder();
-            param.Append("?productPage=:");
-
-            //Count a quantity in MenuItem.
-            var count = IndexVM.MenuItem.Count();
-
-            
-            IndexVM.MenuItem = IndexVM.MenuItem.OrderBy(p => p.Price)
-               .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
-
-
-            IndexVM.PagingInfo = new PagingInfo()
-            {
-                CurrentPage = productPage,
-                ItemsPerPage = PageSize,
-                TotalItem = count,
-                urlParam = param.ToString()
-            };
-            
             return View(IndexVM);
         }
 
@@ -73,7 +83,7 @@ namespace Spice.Controllers
 
             IndexViewModel IndexVM = new IndexViewModel()
             {
-                MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
+                MenuItem = await _db.MenuItem.Where(a=>a.IsPublish!=false).Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
                 Category = await _db.Category.ToListAsync(),
                 Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
             };
@@ -108,9 +118,14 @@ namespace Spice.Controllers
             return View(IndexVM);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            //Convert Enum Color -> String
+            ViewBag.itemColor = Enum.GetName(typeof(MenuItem.EColor), Convert.ToInt32(menuItemFromDb.Color));
+
             MenuItemsAndQuantity menuItemsAndQuantity = new MenuItemsAndQuantity()
             {
                 Item = menuItemFromDb,
@@ -119,12 +134,19 @@ namespace Spice.Controllers
             return View(menuItemsAndQuantity);
         }
 
+        public async Task<IActionResult> CheckQuantity(int id)
+        {
+            var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == id).FirstOrDefaultAsync();
+
+            return Ok(menuItemFromDb.Quantity);
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Details(MenuItemsAndQuantity CartItemObject)
         {
-            if(ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
                 List<MenuItemsAndQuantity> lstShoppingCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart");
                 if (lstShoppingCart == null)

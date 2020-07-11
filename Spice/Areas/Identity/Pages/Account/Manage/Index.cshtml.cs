@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Spice.Data;
+using Spice.Models;
 
 namespace Spice.Areas.Identity.Pages.Account.Manage
 {
@@ -16,15 +20,18 @@ namespace Spice.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _db;
 
         public IndexModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _db = db;
         }
 
         public string Username { get; set; }
@@ -46,6 +53,11 @@ namespace Spice.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+            public string Name { get; set; }
+            public string StreetAddress { get; set; }
+            public string City { get; set; }
+            public string State { get; set; }
+            public string PostalCode { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -60,12 +72,21 @@ namespace Spice.Areas.Identity.Pages.Account.Manage
             var email = await _userManager.GetEmailAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            ApplicationUser applicationUser = await _db.ApplicationUser.Where(c => c.Id == claim.Value).FirstOrDefaultAsync();
+
             Username = userName;
 
             Input = new InputModel
             {
                 Email = email,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                City = applicationUser.City,
+                Name = applicationUser.Name,
+                PostalCode = applicationUser.PostalCode,
+                State = applicationUser.State,
+                StreetAddress = applicationUser.StreetAddress
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
@@ -108,8 +129,31 @@ namespace Spice.Areas.Identity.Pages.Account.Manage
                 }
             }
 
+            //generation of the email token
+            //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            ////var link = Url.Page(nameof(VerifyEmail), "Register", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+            //var callbackUrl = Url.Page(
+            //          "/Account/ConfirmEmail",
+            //          pageHandler: null,
+            //          values: new { userId = user.Id, code = code },
+            //          protocol: Request.Scheme);
+            //await _emailSender.SendEmailAsync(email, "Confirm your email",
+            //    $"Please confirm your account by clicking here {callbackUrl}.");
+            //StatusMessage = "Verification email sent. Please check your email.";
+
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            ApplicationUser applicationUser = await _db.ApplicationUser.Where(c => c.Id == claim.Value).FirstOrDefaultAsync();
+            applicationUser.Name = Input.Name;
+            applicationUser.Email = Input.Email;
+            applicationUser.PhoneNumber = Input.PhoneNumber;
+            applicationUser.City = Input.City;
+            applicationUser.PostalCode = Input.PostalCode;
+            applicationUser.State = Input.State;
+            applicationUser.StreetAddress = Input.StreetAddress;
+            await _db.SaveChangesAsync();
             return RedirectToPage();
         }
 
@@ -125,7 +169,6 @@ namespace Spice.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
-
 
             var userId = await _userManager.GetUserIdAsync(user);
             var email = await _userManager.GetEmailAsync(user);

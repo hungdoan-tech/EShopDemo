@@ -9,6 +9,7 @@ namespace Spice.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -21,14 +22,17 @@ namespace Spice.Data
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
         public DbSet<OrderHeader> OrderHeader { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
-
+        public DbSet<News> News { get; set; }
+        public DbSet<ImportHistory> ImportHistories { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Config Section
             // Category model
             modelBuilder.Entity<Category>().HasKey(a => a.Id);
+            modelBuilder.Entity<Category>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
             modelBuilder.Entity<Category>()
               .Property(a => a.Name)
               .IsRequired();
@@ -37,39 +41,48 @@ namespace Spice.Data
             modelBuilder.Entity<SubCategory>()
                 .HasKey(a => a.Id);
             modelBuilder.Entity<SubCategory>()
-                .HasOne(a => a.Category)
-                .WithMany(b => b.SubCategories)
-                .HasForeignKey(a => a.CategoryId);
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
             modelBuilder.Entity<SubCategory>()
                 .Property(a => a.Name)
                 .IsRequired();
-            modelBuilder.Entity<SubCategory>()
-                .Property(a => a.CategoryId)
-                .IsRequired();
 
-            //MenuItems
+            //MenuItem
             modelBuilder.Entity<MenuItem>()
                 .HasKey(a => a.Id);
             modelBuilder.Entity<MenuItem>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
+            modelBuilder.Entity<MenuItem>()
                 .HasOne(a => a.SubCategory)
                 .WithMany(b => b.MenuItems)
-                .HasForeignKey(a => a.SubCategoryId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(a => a.SubCategoryId);
             modelBuilder.Entity<MenuItem>()
                 .HasOne(a => a.Category)
                 .WithMany(b => b.MenuItems)
-                .HasForeignKey(a => a.CategoryId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(a => a.CategoryId);
             modelBuilder.Entity<MenuItem>()
                 .Property(a => a.Name)
                 .IsRequired();
             modelBuilder.Entity<MenuItem>()
                .Property(a => a.Price)
                .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.Color)
+               .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.IsPublish)
+               .IsRequired();
+            modelBuilder.Entity<MenuItem>()
+               .Property(a => a.PublishedDate)
+               .IsRequired();
 
             //Coupon 
             modelBuilder.Entity<Coupon>()
                 .HasKey(a => a.Id);
+            modelBuilder.Entity<Coupon>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
             modelBuilder.Entity<Coupon>()
                 .Property(a => a.Name)
                 .IsRequired();
@@ -86,6 +99,9 @@ namespace Spice.Data
             //OrderHeader
             modelBuilder.Entity<OrderHeader>()
                 .HasKey(a => a.Id);
+            modelBuilder.Entity<OrderHeader>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
             modelBuilder.Entity<OrderHeader>()
                 .HasOne(a => a.ApplicationUser)
                 .WithMany(b => b.OrderHeaders)
@@ -107,6 +123,9 @@ namespace Spice.Data
             modelBuilder.Entity<OrderDetails>()
                .HasKey(a => a.Id);
             modelBuilder.Entity<OrderDetails>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
+            modelBuilder.Entity<OrderDetails>()
                .HasOne(a => a.OrderHeader)
                .WithMany(b => b.OrderDetails)
                .HasForeignKey(a => a.OrderId);
@@ -123,6 +142,112 @@ namespace Spice.Data
             modelBuilder.Entity<OrderDetails>()
                .Property(a => a.MenuItemId)
                .IsRequired();
+
+
+            // News
+            modelBuilder.Entity<News>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<News>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
+            modelBuilder.Entity<News>()
+                .Property(a => a.Header)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.Content)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.Alias)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.PublishedDate)
+                .IsRequired();
+            modelBuilder.Entity<News>()
+                .Property(a => a.Type)
+                .IsRequired();
+
+            modelBuilder.Entity<News>()
+                .HasOne(a => a.MenuItem)
+                .WithMany(b => b.News)
+                .HasForeignKey(a => a.MenuItemId);
+
+            //modelBuilder.Entity<News>()
+            //    .HasOne(a => a.ApplicationUser)
+            //    .WithMany(b => b.News)
+            //    .HasForeignKey(a => a.ApplicationUserId);
+
+
+            //Import History
+            modelBuilder.Entity<ImportHistory>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<ImportHistory>()
+              .Property(a => a.Id)
+              .ValueGeneratedOnAdd();
+            modelBuilder.Entity<ImportHistory>()
+               .HasOne(a => a.ApplicationUser)
+               .WithMany(b => b.ImportHistories)
+               .HasForeignKey(a => a.UserId);
+            modelBuilder.Entity<ImportHistory>()
+               .HasOne(a => a.SubCategory)
+               .WithMany(b => b.ImportHistories)
+               .HasForeignKey(a => a.SubCategoryId)
+               .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<ImportHistory>()
+               .HasOne(a => a.MenuItem)
+               .WithMany(b => b.ImportHistories)
+               .HasForeignKey(a => a.MenuItemID);
+            modelBuilder.Entity<ImportHistory>()
+               .Property(a => a.Quantity)
+               .IsRequired();
+
+
+
+
+            modelBuilder.Entity<Category>().HasData
+                        (
+                            new Category { Id = 1, Name = "SmartWatch" },
+                            new Category { Id = 2, Name = "Analog" }
+                        );
+
+            modelBuilder.Entity<SubCategory>().HasData
+                        (
+                            new SubCategory { Id = 1, Name = "Apple" },
+                            new SubCategory { Id = 2, Name = "Casio" },
+                            new SubCategory { Id = 3, Name = "Rolex" },
+                            new SubCategory { Id = 4, Name = "Samsung"}
+                        );
+
+            modelBuilder.Entity<Coupon>().HasData
+                        (
+                            new Coupon { Id = 1, Name = "15OFF", CouponType = "0", Discount = 15, MinimumAmount = 75, IsActive = true }
+                        );
+
+            modelBuilder.Entity<News>().HasData
+                        (
+                            new News
+                            {
+                                Id = 1,
+                                Header = "Sale on for everything 15OFF",
+                                Content = "<p>In this summer, we have a coupon for everything for 15 % each deal which is larger than 50 $&nbsp;</p><p><img alt=" + "15 Off Images, Stock Photos &amp; Vectors | Shutterstock" + "src=" + "https://image.shutterstock.com/image-vector/special-offer-15-off-label-260nw-1109101598.jpg" + "/></p>"
+            + "<div class=" + "eJOY__extension_root_class" + "id=" + "eJOY__extension_root" + "style=" + "all:unset" + ">&nbsp;</div>",
+                                Alias = "Sale-Off-15OFF",
+                                PublishedDate = DateTime.Now,
+                                Type = "1",
+                                ImageHeader = "\\images\\News1.png"
+                            }
+                        );
+
+            modelBuilder.Entity<MenuItem>().HasData
+                (
+                        new MenuItem { Id = 1, Name = "Rolex 1", Description = "Awesome", Image = "\\images\\1.png", Price = 100, IsPublish = true, Quantity = 6, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+                        new MenuItem { Id = 2, Name = "Rolex 2", Description = "Awesome", Image = "\\images\\2.png", Price = 156, IsPublish = true, Quantity = 20, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+                        new MenuItem { Id = 3, Name = "Rolex 3", Description = "Awesome", Image = "\\images\\3.png", Price = 25, IsPublish = true, Quantity = 23, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+                        new MenuItem { Id = 4, Name = "Casio 1", Description = "Awesome", Image = "\\images\\4.png", Price = 245, IsPublish = true, Quantity = 20, Color = "1", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 2 },
+                        new MenuItem { Id = 5, Name = "Casio 2", Description = "Awesome", Image = "\\images\\5.png", Price = 154, IsPublish = true, Quantity = 25, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
+                        new MenuItem { Id = 6, Name = "Casio 3", Description = "Awesome", Image = "\\images\\6.png", Price = 157, IsPublish = true, Quantity = 15, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
+                        new MenuItem { Id = 7, Name = "Samsung 1", Description = "Awesome", Image = "\\images\\7.png", Price = 198, IsPublish = true, Quantity = 23, Color = "3", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 3 },
+                        new MenuItem { Id = 8, Name = "Apple 1", Description = "Awesome", Image = "\\images\\8.png", Price = 998, IsPublish = true, Quantity = 18, Color = "1", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 1 }
+                );
         }
     }
 }

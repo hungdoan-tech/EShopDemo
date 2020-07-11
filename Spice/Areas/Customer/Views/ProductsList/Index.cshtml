@@ -1,0 +1,312 @@
+﻿@model Spice.Models.ViewModels.ProductsListViewModel
+@using Spice.Extensions
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- Hero Area Start-->
+<div class="slider-area ">
+    <div class="single-slider slider-height2 d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap text-center">
+                        <h2>Cửa hàng Đồng Hồ</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero Area End-->
+<!-- Latest Products Start -->
+<section class="popular-items latest-padding">
+    <div class="container">
+        <div class="row product-btn justify-content-between mb-40">
+            <div class="properties__button">
+                <!--Nav Button  -->
+                <nav>
+                    <div class="nav nav-tabs " id="nav-tab" role="tablist">
+
+                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descDate" class="nav-item nav-link active" id="nav-descDate-tab">Mới Nhất</a>
+                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descPrice" class="nav-item nav-link" id="nav-descPrice-tab">Giá Từ Cao Tới Thấp</a>
+                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="mostPopuler" class="nav-item nav-link" id="nav-mostPopuler-tab">Phổ biến </a>
+                        <div class="dropdown">
+                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="category" asp-route-groupProductsSelected="Default" id="nav-cateall-tab">Loại Sản Phẩm</a>
+                            <div class="dropdown-content">
+                                @foreach (var item in Model.Categories)
+                                {
+                                    <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="category" asp-route-groupProductsSelected="@item.Name" id="nav-category-tab">@item.Name</a>
+
+                                }
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="brand" asp-route-groupProductsSelected="Default" id="nav-brandall-tab">Hãng</a>
+                            <div class="dropdown-content">
+                                @foreach (var item in Model.SubCategories)
+                                {
+                                    <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="brand" asp-route-groupProductsSelected="@item.Name" id="nav-brand-tab">@item.Name</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                <!--End Nav Button  -->
+            </div>
+            <!-- Grid and List view -->
+            <div class="grid-list-view">
+            </div>
+            <!-- Select items -->
+            <div class="select-this">
+                <form id="formPageSize" method="get" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descDate">
+                    <div class="select-itms">
+                        <select name="pageSize" onchange="requestSelect()" id="select1">
+                            <option value="10">10SP Mỗi Trang</option>
+                            <option value="20">20SP Mỗi Trang</option>
+                            <option value="30">30SP Mỗi Trang</option>
+                            <option value="40">40SP Mỗi Trang</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Nav Card -->
+        <div class="tab-content" id="nav-tabContent">
+            <!-- card one -->
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div class="row">
+                    @foreach (var product in Model.Products)
+                    {
+                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+                            <div class="single-popular-items mb-50 text-center">
+                                <div class="popular-img">
+                                    <a class="product-image" asp-action="Details" asp-controller="Home" asp-route-id="@product.Id"><img src="@product.Image"></a>
+                                    <div class="img-cap">
+                                        <span><a asp-action="Details" asp-controller="Home" asp-route-id="@product.Id">Thêm vào giỏ hàng</a></span>
+                                    </div>
+                                    <div class="favorit-items">
+                                        <span class="flaticon-heart"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3><a asp-action="Details" asp-controller="Home" asp-route-id="@product.Id">@product.Name</a></h3>
+                                    <span>@product.Price VNĐ</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- End Nav Card -->
+        <form method="get" class="tab-content">
+            <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="page-link"
+                 page-class-normal="" page-class-selected="active btn-primary"
+                 class="btn-group float-right">
+            </div>
+        </form>
+    </div>
+    
+</section>
+
+<!-- Latest Products End -->
+<!--? Shop Method Start-->
+<style>
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        color:red;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .dropdown:hover .droplb {
+    }
+</style>
+<!-- Shop Method End-->
+@*<head>
+        <link rel="stylesheet" href="~/css/Pretty-Product-List.css" />
+    </head>*@
+
+@*<br />
+    <br />
+    <form id="formSelection" method="get">
+        <div class="container">
+            <div class="p-4">
+                <div class="form-group pa-3 pb-2">
+                    <h3 class="text-center text-secondary">Find the products you’re looking for.</h3>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-8">
+                        @Html.Editor("searchName", new { htmlAttributes = new { @class = "form-control", @placeholder = "e.x. iPhone 11 Pro Max" } })
+                    </div>
+
+                    <div class="col-4">
+                        <button class="btn btn-success form-control" type="submit" name="submit" value="Search">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2 pa-1">
+                    <label>Filter:</label>
+                </div>
+
+                <div class="col-3">
+                    <select id="selectProductType" class="custom-select" name="groupProductsSelected">
+                        <option value="Default" selected>Default</option>
+                        @foreach (var category in Model.Categories)
+                        {
+                            <option value="@category.Name">@category.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-3">
+                    <select id="selectOrder" class="custom-select" name="orderBy">
+                        <option value="ascName" selected>Name: A -> Z</option>
+                        <option value="descName">Name: Z -> A</option>
+                        <option value="ascPrice">Price lowest</option>
+                        <option value="descPrice">Price highest</option>
+                    </select>
+                </div>
+
+                <div class="col-3">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row product-list">
+        @foreach (var product in Model.Products)
+        {
+            <div class="col-sm-6 col-md-4 product-item">
+                <div class="product-container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a class="product-image" asp-action="Details" asp-controller="Home" asp-route-id="@product.Id"><img src="@product.Image"></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <h2><a asp-action="Details" asp-controller="Home" asp-route-id="@product.Id">@product.Name</a></h2>
+                        </div>
+                    </div>
+                    <div class="product-rating">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star-half"></i>
+                        @{
+                            var random = new Random();
+                            var countReviewers = random.Next(20, 500);
+                        }
+                        <a class="small-text" href="#">@countReviewers reviews</a>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <p class="product-description">@product.Description</p>
+                            <div class="row">
+                                <div class="col-6">
+                                    <a class="btn btn-primary" asp-action="Details" asp-controller="Home" asp-route-id="@product.Id">Buy Now!</a>
+                                </div>
+                                <div class="col-6">
+                                    <p class="product-price">$@product.Price</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>*@
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+    let orderBy = "@ViewBag.orderBy";
+
+    $('#nav-descDate-tab').removeClass('active')
+    $('#nav-descPrice-tab').removeClass('active')
+    $('#nav-mostPopuler-tab').removeClass('active')
+
+    switch (orderBy) {
+        case "descDate":
+            $('#nav-descDate-tab').addClass('active')
+            break
+        case "descPrice":
+            $('#nav-descPrice-tab').addClass('active')
+            break
+        case "mostPopuler":
+            $('#nav-mostPopuler-tab').addClass('active')
+            break
+        default:
+            $('#nav-descDate-tab').addClass('active')
+            break
+    }
+
+    const requestSelect = function () {
+         document.getElementById("formPageSize").submit()
+    }
+
+    let listbox = document.getElementById("select1")
+    let pageSize = "@ViewBag.pageSize"
+
+    for (var i = 0; i < listbox.options.length; ++i) {
+        if (listbox.options[i].value === pageSize) listbox.options[i].selected = true;
+    }
+
+
+    @*var listbox = document.getElementById("selectProductType")
+
+
+
+    var productTypeSelectedUrl = "@ViewBag.groupProductsSelected";
+
+    var orderBySelectedUrl = "@ViewBag.orderBy";
+
+    for (var i = 0; i < listbox.options.length; ++i) {
+        if (listbox.options[i].text === productTypeSelectedUrl) listbox.options[i].selected = true;
+    }
+
+    for (var i = 0; i < orderBySelect.options.length; ++i) {
+        if (orderBySelect.options[i].value === orderBySelectedUrl) orderBySelect.options[i].selected = true;
+    }
+
+    listbox.addEventListener("change", function () {
+        document.getElementById("formSelection").submit.click()
+    })
+
+     orderBySelect.addEventListener("change", function () {
+        document.getElementById("formSelection").submit.click()
+    })*@
+</script>
