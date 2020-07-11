@@ -35,8 +35,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-
-
 <body>
     <!--? Preloader Start -->
     <div id="preloader-active">
@@ -66,36 +64,36 @@
                         <div class="main-menu d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a asp-action="Index" asp-controller="Home" asp-area="Customer">Home</a></li>
+                                    <li><a asp-action="Index" asp-controller="Home" asp-area="Customer">Trang Chủ</a></li>
                                     <li>
-                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Categories</a>
+                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Loại Sản Phẩm</a>
                                         <ul class="submenu">
                                             <li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Sporty </a></li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Smartwatch </a></li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Analog </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=category&groupProductsSelected=Analog"> Analog </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=category&groupProductsSelected=Smartwatch"> Smartwatch </a></li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Brands</a>
+                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Hãng</a>
                                         <ul class="submenu">
                                             <li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Apple </a></li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Samsung </a></li>
-                                            <li><a asp-action="Index" asp-controller="ProductsList" asp-area="Customer"> Rolex </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=brand&groupProductsSelected=Rolex"> Rolex </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=brand&groupProductsSelected=Casio"> Casio </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=brand&groupProductsSelected=Samsung"> Samsung </a></li>
+                                            <li><a href="~/Customer/ProductsList?orderBy=brand&groupProductsSelected=Apple"> Apple </a></li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a asp-action="Index" asp-controller="NewsPost" asp-area="Customer">News</a>
+                                        <a asp-action="Index" asp-controller="NewsPost" asp-area="Customer">Tin Tức</a>
                                     </li>
-                                    <li><a asp-action="Privacy" asp-controller="Home" asp-area="Customer">Contact</a></li>
-                                    @if(User.IsInRole(SD.CustomerEndUser))
+                                    <li><a asp-action="Privacy" asp-controller="Home" asp-area="Customer">Liên Hệ</a></li>
+                                    @if (User.IsInRole(SD.CustomerEndUser))
                                     {
                                         <li>
-                                            <a asp-action="OrderTracking" asp-controller="Order" asp-area="Customer" id="trackingOrdering"> Order Tracking </a>
+                                            <a asp-action="OrderTracking" asp-controller="Order" asp-area="Customer" id="trackingOrdering">Theo Dõi Đơn Hàng</a>
                                             <ul class="submenu">
                                                 <li>
-                                                    <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory">Order History</a>
+                                                    <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory">Lịch Sử Hóa Đơn</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -143,6 +141,113 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
+    </div>
+    <div class="container-fluid mt-5 m-auto" style="font-size: 1rem; width: 80%;">
+        <div class="row p-lg-4 border-bottom">
+            <div class="col-12 col-md-6 col-lg-3 p-3">
+                <!-- Item -->
+                <div class="d-flex mb-6 mb-lg-0">
+
+                    <!-- Icon -->
+                    <i class="fa fa-truck fa-2x text-primary pr-4"></i>
+
+                    <!-- Body -->
+                    <div class="ml-6">
+
+                        <!-- Heading -->
+                        <h6 class="heading-xxs mb-1">
+                            Miễn Phí Giao Hàng
+                        </h6>
+
+                        <!-- Text -->
+                        <p class="mb-0 font-size-sm text-muted">
+                            Với đơn hàng trên 500 nghìn đồng
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 p-3">
+
+                <!-- Item -->
+                <div class="d-flex mb-6 mb-lg-0">
+
+                    <!-- Icon -->
+                    <i class="fa fa-repeat fa-2x text-primary pr-4"></i>
+
+                    <!-- Body -->
+                    <div class="ml-6">
+
+                        <!-- Heading -->
+                        <h6 class="mb-1 heading-xxs">
+                            Đối Trả Miễn Phí
+                        </h6>
+
+                        <!-- Text -->
+                        <p class="mb-0 font-size-sm text-muted">
+                            Hoàn tiền sản phẩm trong vòng 7 ngày.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 p-3">
+
+                <!-- Item -->
+                <div class="d-flex mb-6 mb-md-0">
+
+                    <!-- Icon -->
+                    <i class="fa fa-lock fa-2x text-primary pr-4"></i>
+
+                    <!-- Body -->
+                    <div class="ml-6">
+
+                        <!-- Heading -->
+                        <h6 class="mb-1 heading-xxs">
+                            Thanh Toán Bảo Mật
+                        </h6>
+
+                        <!-- Text -->
+                        <p class="mb-0 font-size-sm text-muted">
+                            An Toàn và Nhanh Chóng
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 p-3">
+
+                <!-- Item -->
+                <div class="d-flex">
+
+                    <!-- Icon -->
+                    <i class="fa fa-tag fa-2x text-primary pr-4"></i>
+
+                    <!-- Body -->
+                    <div class="ml-6">
+
+                        <!-- Heading -->
+                        <h6 class="mb-1 heading-xxs">
+                            Sản Phẩm Đa Dạng
+                        </h6>
+
+                        <!-- Text -->
+                        <p class="mb-0 font-size-sm text-muted">
+                            Cửa hàng sẵn sàng những mặt hàng bạn muốn.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
     </div>
     <footer>
         <!-- Footer Start-->
@@ -211,7 +316,7 @@
                             <p>
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                                 Copyright &copy;
-                                <script>document.write(new Date().getFullYear());</script> All rights reserved 
+                                <script>document.write(new Date().getFullYear());</script> All rights reserved
                                 <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                             </p>
                         </div>
@@ -232,12 +337,12 @@
         </div>
         <!-- Footer End-->
     </footer>
-    <!--? Search model Begin --> 
+    <!--? Search model Begin -->
     <div class="search-model-box">
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-btn">+</div>
             <form class="search-model-form" asp-area="Customer" asp-controller="ProductsList" asp-action="Index">
-                <input type="text" id="search-input" name="searchName" placeholder="Searching key.....">
+                <input type="text" id="search-input" name="searchName" placeholder="Sản phẩm mà bạn muốn tìm...">
             </form>
         </div>
     </div>

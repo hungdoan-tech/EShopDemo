@@ -11,5 +11,7 @@ namespace Spice.Models.ViewModels
         public IEnumerable<MenuItem> ListNewMenuItem { get; set; }
         public IEnumerable<MenuItem> ListBestSellerMenuItem { get; set; }
         public IEnumerable<News> ListNews { get; set; }
+        public IEnumerable<Category> Categories { get; set; }
+        public IEnumerable<SubCategory> SubCategories { get; set; }
     }
 }

@@ -8,7 +8,7 @@ using Spice.Utility;
 
 namespace Spice.Areas.Admin
 {
-    [Authorize(Roles = SD.ManagerUser)]
+    [Authorize(Roles = SD.ManagerUser+","+SD.RepositoryManager+","+SD.Shipper)]
     [Area("Admin")]
     public class DashboardController : Controller
     {

@@ -190,8 +190,6 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderDetailsViewModel);
         }
 
-
-
         [Authorize]
         [HttpGet]
         [Authorize(Roles = SD.CustomerEndUser)]
@@ -211,6 +209,8 @@ namespace Spice.Areas.Customer.Controllers
             OrderHeader orderHeader = await _db.OrderHeader.FindAsync(OrderId);
             orderHeader.Status = SD.StatusInProcess;
             await _db.SaveChangesAsync();
+            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order is in prepare " + orderHeader.Id.ToString(), "Order is ready for pickup.");
+
             return RedirectToAction("ManageOrder", "Order");
         }
 
@@ -241,6 +241,16 @@ namespace Spice.Areas.Customer.Controllers
             return RedirectToAction("ManageOrder", "Order");
         }
 
+        [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
+        public async Task<IActionResult> OrderSubmit(int OrderId)
+        {
+            OrderHeader orderHeader = await _db.OrderHeader.FindAsync(OrderId);
+            orderHeader.Status = SD.StatusSubmitted;
+            await _db.SaveChangesAsync();
+            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order Submit " + orderHeader.Id.ToString(), "Order is Submited.");
+
+            return RedirectToAction("ManageOrder", "Order");
+        }
 
 
         [Authorize(Roles = SD.ManagerUser + "," + SD.Shipper)]
