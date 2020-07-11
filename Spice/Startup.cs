@@ -21,6 +21,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Routing.Template;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
+using Spice.Service;
 
 namespace Spice
 {
@@ -61,12 +62,10 @@ namespace Spice
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
             //services.AddSingleton<IEmailSender, EmailSender>();
-<<<<<<< HEAD
             services.AddTransient<IEmailSender, EmailSender>();
-=======
+
             //services.AddTransient<IEmailSender, EmailSender>();
             //services.Configure<EmailOptions>(Configuration);
->>>>>>> Feature/AddingImportHistory
 
             //services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("Email").Get<MailKitOptions>()));
             services.AddControllersWithViews();
