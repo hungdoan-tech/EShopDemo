@@ -39,32 +39,5 @@ namespace Spice.Service
             }
             return null;
         }
-
-        //public Task SendEmailAsync(string email, string subject, string message)
-        //{
-        //    return Execute(Options.SendGridKey, subject, message, email);
-        //}
-
-        //private Task Execute(string sendGridKey, string subject, string message, string email)
-        //{
-        //    var client = new SendGridClient(sendGridKey);
-        //    var msg = new SendGridMessage()
-        //    {
-        //        From = new EmailAddress("admin@spice.com", "Spice Restaurant"),
-        //        Subject = subject,
-        //        PlainTextContent = message,
-        //        HtmlContent = message
-        //    };
-        //    msg.AddTo(new EmailAddress(email));
-        //    try
-        //    {
-        //        return client.SendEmailAsync(msg);
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        Console.WriteLine(ex);
-        //    }
-        //    return null;
-        //}
     }
 }

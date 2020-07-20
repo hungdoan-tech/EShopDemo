@@ -365,14 +365,10 @@ namespace Spice.Areas.Customer.Controllers
         [Route("~/Admin/Order/OrderHistoryAdmin")]
         public async Task<IActionResult> OrderHistoryAdmin(int productPage = 1)
         {
-
-
             OrderListViewModel orderListVM = new OrderListViewModel()
             {
                 Orders = new List<OrderDetailsViewModel>()
             };
-
-
 
             List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).ToListAsync();
 

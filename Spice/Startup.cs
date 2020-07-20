@@ -61,29 +61,9 @@ namespace Spice
 
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
-            //services.AddSingleton<IEmailSender, EmailSender>();
             services.AddTransient<IEmailSender, EmailSender>();
-
-            //services.AddTransient<IEmailSender, EmailSender>();
-            //services.Configure<EmailOptions>(Configuration);
-
-            //services.AddMailKit(config => config.UseMailKit(Configuration.GetSection("Email").Get<MailKitOptions>()));
             services.AddControllersWithViews();
             services.AddRazorPages();
-
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            //services.AddAuthentication().AddFacebook(facebookOptions =>
-            //{
-            //    facebookOptions.AppId = "581243149004490";
-            //    facebookOptions.AppSecret = "a72e3bebaa552f73d3d52af4de3883d7";
-            //});
-
-            //services.AddAuthentication().AddGoogle(googleOptions =>
-            //{
-            //    googleOptions.ClientId = "943287545908-23cg1r49vf777q6lj9ndvl72cfro6vac.apps.googleusercontent.com";
-            //    googleOptions.ClientSecret = "9ppq7O-KTSbX4GNl8hWJscnG";
-            //});
 
             services.AddSession(options =>
             {
