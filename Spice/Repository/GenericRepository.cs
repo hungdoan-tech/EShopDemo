@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
+using Spice.RepositoryInterface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Spice.Repository
             this.dbSet = context.Set<TEntity>();
         }
 
-        public IQueryable<TEntity> ReadAll()
+        public virtual IQueryable<TEntity> ReadAll()
         {
             try
             {
@@ -32,7 +33,7 @@ namespace Spice.Repository
                 throw new Exception("Couldn't retrieve entities");
             }
         }
-        public TEntity ReadOne(int? id)
+        public virtual TEntity ReadOne(int? id)
         {
             if (id == null)
             {
@@ -48,7 +49,23 @@ namespace Spice.Repository
             }
         }
 
-        public void Create(TEntity entity)
+        public virtual async Task<TEntity> ReadOneAsync(int? id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentNullException($"Key value must not be null");
+            }
+            try
+            {
+                return await this.dbSet.FindAsync(id);
+            }
+            catch (Exception)
+            {
+                throw new Exception("Couldn't retrieve entities");
+            }
+        }
+
+        public virtual void Create(TEntity entity)
         {
             if (entity == null)
             {
@@ -57,7 +74,24 @@ namespace Spice.Repository
 
             try
             {
-                this._context.AddAsync(entity);
+                this._context.Add(entity);
+            }
+            catch (Exception)
+            {
+                throw new Exception($"{nameof(entity)} could not be saved");
+            }
+        }
+        public virtual async Task<TEntity> CreateAsync(TEntity entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException($"{nameof(TEntity)} entity must not be null");
+            }
+
+            try
+            {
+                await this._context.AddAsync(entity);
+                return entity;
             }
             catch (Exception)
             {
@@ -65,7 +99,7 @@ namespace Spice.Repository
             }
         }
 
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             if (entity == null)
             {
@@ -82,7 +116,7 @@ namespace Spice.Repository
             }
         }
 
-        public void Delete(int? id)
+        public virtual void Delete(int? id)
         {
             try
             {
@@ -95,7 +129,7 @@ namespace Spice.Repository
             }
         }
 
-        public void Delete(TEntity entity)
+        public virtual void Delete(TEntity entity)
         {
             if (entity == null)
             {
@@ -146,9 +180,13 @@ namespace Spice.Repository
         //        return query.ToList();
         //    }
         //}
-        public async void SaveChangeAsyn()
+        public virtual void SaveChanges()
         {
-           _ = await this._context.SaveChangesAsync();
+           this._context.SaveChanges();
+        }
+        public async Task<int> SaveChangesAsync()
+        {
+            return await this._context.SaveChangesAsync();
         }
     }
 }

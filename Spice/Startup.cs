@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Routing.Template;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
 using Spice.Service;
+using Spice.Repository;
 
 namespace Spice
 {
@@ -62,6 +63,8 @@ namespace Spice
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
             services.AddTransient<IEmailSender, EmailSender>();
+            //services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddControllersWithViews();
             services.AddRazorPages();
 
