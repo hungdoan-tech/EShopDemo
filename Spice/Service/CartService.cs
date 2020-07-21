@@ -82,5 +82,49 @@ namespace Spice.Service
             _unitOfWork.SaveChanges();
             return detailCart;
         }
+
+        public OrderDetailsCart CheckCouponBeforeSumary(OrderDetailsCart detailCart)
+        {
+            if (_httpContextAccessor.HttpContext.Session.GetString(SD.ssCouponCode) != null)
+            {
+                detailCart.OrderHeader.CouponCode = _httpContextAccessor.HttpContext.Session.GetString(SD.ssCouponCode);
+                var couponFromDb = _unitOfWork.CouponRepository.FirstMatchName(detailCart.OrderHeader.CouponCode.ToLower());
+                detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
+            }
+            return detailCart;
+        }
+
+        public OrderDetailsCart CreateOrderHeaderBeforeSumary(OrderDetailsCart detailCart, Claim claim)
+        {
+            ApplicationUser applicationUser = _unitOfWork.ApplicationUserRepository.ReadOneByStringID(claim.Value);
+
+            var cart = _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
+
+            if (cart != null)
+            {
+                detailCart.listCart = cart.ToList();
+            }
+
+            double CalTotal = 0;
+            foreach (var eachItem in detailCart.listCart)
+            {
+                eachItem.Item = _unitOfWork.MenuItemRepository.ReadOne(eachItem.Item.Id);
+                CalTotal += (eachItem.Item.Price * eachItem.Quantity);
+            }
+
+            detailCart.OrderHeader = new OrderHeaderBuilder()
+                                            .LinkUserID(claim.Value)
+                                            .OrderTotalOriginal(CalTotal)
+                                            .OderTotal(CalTotal)
+                                            .AddPickupName(applicationUser.Name)
+                                            .AddPhoneNumber(applicationUser.PhoneNumber)
+                                            .AddStreet(applicationUser.StreetAddress)
+                                            .AddEmail(applicationUser.Email)
+                                            .AddCity(applicationUser.City)
+                                            .Build();
+            return detailCart;
+        }
+
+       
     }
 }

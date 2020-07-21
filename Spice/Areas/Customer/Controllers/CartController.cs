@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Extensions;
 using Spice.Models;
+using Spice.Models.Builder;
 using Spice.Models.ViewModels;
 using Spice.Repository;
 using Spice.Service;
@@ -88,46 +89,15 @@ namespace Spice.Areas.Customer.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Summary()
+        public IActionResult Summary()
         {
-            detailCart = new OrderDetailsCart()
-            {
-                OrderHeader = new Models.OrderHeader()
-            };
-
-            detailCart.OrderHeader.OrderTotal = 0;
-
+            detailCart = new OrderDetailsCart();
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            ApplicationUser applicationUser = await _db.ApplicationUser.Where(c => c.Id == claim.Value).FirstOrDefaultAsync();
 
-            var cart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
-
-            if (cart != null)
-            {
-                detailCart.listCart = cart.ToList();
-            }
-
-
-            foreach (var eachItem in detailCart.listCart)
-            {
-                eachItem.Item = await _db.MenuItem.FirstOrDefaultAsync(m => m.Id == eachItem.Item.Id);
-                detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotal + (eachItem.Item.Price * eachItem.Quantity);
-            }
-            detailCart.OrderHeader.OrderTotalOriginal = detailCart.OrderHeader.OrderTotal;
-            detailCart.OrderHeader.PickupName = applicationUser.Name;
-            detailCart.OrderHeader.PhoneNumber = applicationUser.PhoneNumber;
-            detailCart.OrderHeader.UserId = claim.Value;
-            detailCart.OrderHeader.StreetAddress = applicationUser.StreetAddress;
-            detailCart.OrderHeader.Email = applicationUser.Email;
-            detailCart.OrderHeader.City = applicationUser.City;
-
-            if (HttpContext.Session.GetString(SD.ssCouponCode) != null)
-            {
-                detailCart.OrderHeader.CouponCode = HttpContext.Session.GetString(SD.ssCouponCode);
-                var couponFromDb = await _db.Coupon.Where(c => c.Name.ToLower() == detailCart.OrderHeader.CouponCode.ToLower()).FirstOrDefaultAsync();
-                detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
-            }
+            CartFacadeService facadeService = new CartFacadeService(_unitOfWork, _httpContextAccessor, _emailSender);
+            facadeService.CreateOrderHeaderBeforeSumary(detailCart, claim);
+            facadeService.CheckCouponBeforeSumary(detailCart);
 
             return View(detailCart);
         }

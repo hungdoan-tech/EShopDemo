@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Spice.Service
 {
-    public class CartFacadeService
+    public class CartFacadeService: IFacadeService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -53,11 +53,18 @@ namespace Spice.Service
             this.emailService.SendMailSummitted(detailCart, claim);
         }
 
+        public void CreateOrderHeaderBeforeSumary(OrderDetailsCart detailCart, Claim claim)
+        {
+            this.cartService.CreateOrderHeaderBeforeSumary(detailCart, claim);
+        }
+        public void CheckCouponBeforeSumary(OrderDetailsCart detailCart)
+        {
+            this.cartService.CheckCouponBeforeSumary(detailCart);
+        }
+
         public void ClearSession()
         {
             this.sessionService.Clear();
         }
-
-
     }
 }

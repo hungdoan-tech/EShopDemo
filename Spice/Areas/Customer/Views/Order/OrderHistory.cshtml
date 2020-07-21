@@ -59,13 +59,13 @@
                             @Html.DisplayFor(m => item.OrderDetails.Count)
                         </td>
                         <td>
-                            <button type="submit" class="genric-btn info large  anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
-                                <i class="far fa-list-alt"></i> Chi Tiết
+                            <button type="submit" class="genric-btn info large anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
+                                <i class="far fa-list-alt"></i>Detail
                             </button>
                             @if (item.OrderHeader.Status == SD.StatusSubmitted || item.OrderHeader.Status == SD.StatusInProcess || item.OrderHeader.Status == SD.StatusCompleted || item.OrderHeader.Status == SD.StatusReady)
                             {
                                 <button type="button" class="genric-btn info-border large btnOrderStatus" data-id="@item.OrderHeader.Id" data-toggle="modal">
-                                    <i class="far fa-clock"></i> Tình Trạng
+                                    <i class="far fa-clock"></i>Status 
                                 </button>
                             }
                         </td>
@@ -80,7 +80,7 @@
         }
         else
         {
-            <p>Không có hóa đơn đã mua trước đó</p>
+            <p>Have no invoice has been existed</p>
         }
     </div>
 </div>
