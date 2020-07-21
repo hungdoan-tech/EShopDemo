@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Models;
 using Spice.Models.ViewModels;
+using Spice.Repository;
 using Spice.Utility;
 
 namespace Spice.Areas.Admin.Controllers
@@ -18,27 +19,27 @@ namespace Spice.Areas.Admin.Controllers
     [Area("Admin")]
     public class NewsController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _hostingEnvironment;
         [BindProperty]
         public NewsViewModel  NewsVM { get; set; }
-        public NewsController(ApplicationDbContext db, IWebHostEnvironment hostingEnvironment)
+        public NewsController(IUnitOfWork UnitOfWork, IWebHostEnvironment hostingEnvironment)
         {
-            _db = db;
+            _unitOfWork = UnitOfWork;
             _hostingEnvironment = hostingEnvironment;
             NewsVM = new NewsViewModel()
             {
-                MenuItems = _db.MenuItem,
-                News = new Models.News()
+                MenuItems = _unitOfWork.MenuItemRepository.ReadAll().ToList(),
+                News = new News()
             };
         }
 
 
         //GET 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             //var news = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).ToListAsync();
-            var news = await _db.News.Include(m => m.MenuItem).ToListAsync();
+            var news = _unitOfWork.NewsRepository.ReadAllNewsIncludeMenuItem();
             return View(news);
         }
 
@@ -57,7 +58,7 @@ namespace Spice.Areas.Admin.Controllers
         //POST - CREATE
         [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePOST(News news)
+        public IActionResult CreatePOST(News news)
         {
 
             if(!ModelState.IsValid)
@@ -65,15 +66,15 @@ namespace Spice.Areas.Admin.Controllers
                 return View(NewsVM);
             }
 
-            _db.News.Add(NewsVM.News);
-            await _db.SaveChangesAsync();
+            _unitOfWork.NewsRepository.Create(NewsVM.News);
+            _unitOfWork.SaveChanges();
 
             //Work on the image saving section
 
             string webRootPath = _hostingEnvironment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
 
-            var NewsFromDb = await _db.News.FindAsync(NewsVM.News.Id);
+            var NewsFromDb = _unitOfWork.NewsRepository.ReadOne(NewsVM.News.Id);
 
             if(files.Count>0)
             {
@@ -95,14 +96,14 @@ namespace Spice.Areas.Admin.Controllers
                 NewsFromDb.ImageHeader = @"\images\" + "DefaultNewsImage" + ".png";
             }
             //_db.News.Add(NewsVM.News);
-            await _db.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
 
 
         //GET - EDIT
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -110,7 +111,7 @@ namespace Spice.Areas.Admin.Controllers
             }
 
             //NewsVM.News = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).SingleOrDefaultAsync(m => m.Id == id);
-            NewsVM.News = await _db.News.Include(m => m.MenuItem).SingleOrDefaultAsync(m => m.Id == id);
+            NewsVM.News = _unitOfWork.NewsRepository.ReadOneNewsIncludeMenuItem(id);
 
             if (NewsVM.News == null)
             {
@@ -121,7 +122,7 @@ namespace Spice.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPOST(int? id)
+        public IActionResult EditPOST(int? id)
         {
             if (id == null)
             {
@@ -140,7 +141,7 @@ namespace Spice.Areas.Admin.Controllers
             string webRootPath = _hostingEnvironment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
 
-            var NewsFromDb = await _db.News.FindAsync(NewsVM.News.Id);
+            var NewsFromDb = _unitOfWork.NewsRepository.ReadOne(NewsVM.News.Id);
 
             if (files.Count > 0)
             {
@@ -172,14 +173,14 @@ namespace Spice.Areas.Admin.Controllers
             NewsFromDb.MenuItemId = NewsVM.News.MenuItemId;
             NewsFromDb.Type = NewsVM.News.Type;
 
-            await _db.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
 
 
         //GET - DELETE
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -187,7 +188,7 @@ namespace Spice.Areas.Admin.Controllers
             }
 
             //NewsVM.News = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).SingleOrDefaultAsync(m => m.Id == id);
-            NewsVM.News = await _db.News.Include(m => m.MenuItem).SingleOrDefaultAsync(m => m.Id == id);
+            NewsVM.News = _unitOfWork.NewsRepository.ReadOneNewsIncludeMenuItem(id);
 
             if (NewsVM.News == null)
             {
@@ -199,10 +200,10 @@ namespace Spice.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public  IActionResult DeleteConfirmed(int id)
         {
             string webRootPath = _hostingEnvironment.WebRootPath;
-            News news = await _db.News.FindAsync(id);
+            News news = _unitOfWork.NewsRepository.ReadOne(id);
 
             if (news != null)
             {
@@ -212,8 +213,8 @@ namespace Spice.Areas.Admin.Controllers
                 {
                     System.IO.File.Delete(imagePath);
                 }
-                _db.News.Remove(news);
-                await _db.SaveChangesAsync();
+                _unitOfWork.NewsRepository.Delete(news);
+                _unitOfWork.SaveChanges();
 
             }
 
@@ -221,7 +222,7 @@ namespace Spice.Areas.Admin.Controllers
         }
 
         //GET - DETAILS
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -229,7 +230,7 @@ namespace Spice.Areas.Admin.Controllers
             }
 
             //NewsVM.News = await _db.News.Include(m => m.MenuItem).Include(n=>n.ApplicationUser).SingleOrDefaultAsync(m => m.Id == id);
-            NewsVM.News = await _db.News.Include(m => m.MenuItem).SingleOrDefaultAsync(m => m.Id == id);
+            NewsVM.News =  _unitOfWork.NewsRepository.ReadOneNewsIncludeMenuItem(id);
 
             if (NewsVM.News == null)
             {

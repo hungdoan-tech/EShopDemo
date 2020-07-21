@@ -13,7 +13,11 @@ namespace Spice.Repository
         private ApplicationDbContext _context;
         private ICategoryRepository categoryRepository;
         private ISubCategoryRepository subCategoryRepository;
-
+        private ICouponRepository couponRepository;
+        private IImportHistoryRepository importHistoryRepository;
+        private IApplicationUserRepository applicationUserRepository;
+        private INewsRepository newsRepository;
+        private IMenuItemRepository menuItemRepository;
         private bool disposed = false;
 
         public UnitOfWork(ApplicationDbContext context)
@@ -42,6 +46,64 @@ namespace Spice.Repository
                     this.subCategoryRepository = new SubCategoryRepository(_context);
                 }
                 return this.subCategoryRepository;
+            }
+        }
+        public ICouponRepository CouponRepository
+        {
+            get
+            {
+                if (this.couponRepository == null)
+                {
+                    this.couponRepository = new CouponRepository(_context);
+                }
+                return this.couponRepository;
+            }
+        }
+
+        public IImportHistoryRepository ImportHistoryRepository 
+        {
+            get
+            {
+                if (this.importHistoryRepository == null)
+                {
+                    this.importHistoryRepository = new ImportHistoryRepository(_context);
+                }
+                return this.importHistoryRepository;
+            }
+        }
+
+        public IApplicationUserRepository ApplicationUserRepository
+        {
+            get
+            {
+                if (this.applicationUserRepository == null)
+                {
+                    this.applicationUserRepository = new ApplicationUserRepository(_context);
+                }
+                return this.applicationUserRepository;
+            }
+        }
+        public INewsRepository NewsRepository
+        {
+            get
+            {
+                if (this.newsRepository == null)
+                {
+                    this.newsRepository = new NewsRepository(_context);
+                }
+                return this.newsRepository;
+            }
+        }
+
+        public IMenuItemRepository MenuItemRepository
+        {
+            get
+            {
+                if (this.menuItemRepository == null)
+                {
+                    this.menuItemRepository = new MenuItemRepository(_context);
+                }
+                return this.menuItemRepository;
             }
         }
 

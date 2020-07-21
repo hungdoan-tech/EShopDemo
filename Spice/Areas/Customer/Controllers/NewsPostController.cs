@@ -9,36 +9,35 @@ using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Models;
 using Spice.Models.ViewModels;
+using Spice.Repository;
 
 namespace Spice.Areas.Customer.Controllers
 {
     [Area("Customer")]
     public class NewsPostController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public NewsPostController(ApplicationDbContext db)
+        public NewsPostController(IUnitOfWork UnitOfWork)
         {
-            _db = db;
-
+            _unitOfWork = UnitOfWork;
         }
         //[Route("NewsPost/{Alias}-{Id}")]
-        public async Task<IActionResult> NewsPost(int? id)
+        public IActionResult NewsPost(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var news = await _db.News.Include(m => m.MenuItem).Where(m=>m.Id == id).SingleOrDefaultAsync();
+            var news = _unitOfWork.NewsRepository.ReadOneNewsIncludeMenuItem(id);
 
             return View(news);
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
 
-            var news = await _db.News.Include(m=>m.MenuItem).Where(m => m.Type == "1" || m.Type == "2").ToListAsync();
-
+            var news = _unitOfWork.NewsRepository.ReadAllCouponOrNews().ToList();
             return View(news);
         }
     }

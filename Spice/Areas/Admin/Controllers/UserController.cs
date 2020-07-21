@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
+using Spice.Repository;
 using Spice.Utility;
 
 namespace Spice.Areas.Admin.Controllers
@@ -15,30 +16,30 @@ namespace Spice.Areas.Admin.Controllers
     [Authorize(Roles = SD.ManagerUser)]
     public class UserController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserController(ApplicationDbContext db)
+        public UserController(IUnitOfWork UnitOfWork)
         {
-            _db = db;
+            _unitOfWork = UnitOfWork;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var claimsIdentity = (ClaimsIdentity)this.User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            return View(await _db.ApplicationUser.Where(u=>u.Id != claim.Value).ToListAsync());
+            return View( _unitOfWork.ApplicationUserRepository.Get(filter: u => u.Id != claim.Value));
         }
 
 
-        public async Task<IActionResult> Lock(string id)
+        public IActionResult Lock(string id)
         {
             if(id==null)
             {
                 return NotFound();
             }
 
-            var applicationUser = await _db.ApplicationUser.FirstOrDefaultAsync(m => m.Id == id);
+            var applicationUser = _unitOfWork.ApplicationUserRepository.ReadByID(id);
 
             if(applicationUser==null)
             {
@@ -47,19 +48,19 @@ namespace Spice.Areas.Admin.Controllers
 
             applicationUser.LockoutEnd = DateTime.Now.AddYears(1000);
 
-            await _db.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> UnLock(string id)
+        public IActionResult UnLock(string id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var applicationUser = await _db.ApplicationUser.FirstOrDefaultAsync(m => m.Id == id);
+            var applicationUser =  _unitOfWork.ApplicationUserRepository.ReadByID(id);
 
             if (applicationUser == null)
             {
@@ -68,7 +69,7 @@ namespace Spice.Areas.Admin.Controllers
 
             applicationUser.LockoutEnd = DateTime.Now;
 
-            await _db.SaveChangesAsync();
+            _unitOfWork.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

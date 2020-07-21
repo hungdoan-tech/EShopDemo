@@ -150,36 +150,36 @@ namespace Spice.Repository
                 throw new Exception($"{nameof(TEntity)} could not be deleted");
             }
         }
-        //public virtual IEnumerable<TEntity> Get(
-        //   Expression<Func<TEntity, bool>> filter = null,
-        //   Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-        //   string includeProperties = "")
-        //{
-        //    IQueryable<TEntity> query = dbSet;
+        public virtual IEnumerable<TEntity> Get(
+           Expression<Func<TEntity, bool>> filter = null,
+           Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+           string includeProperties = "")
+        {
+            IQueryable<TEntity> query = dbSet;
 
-        //    // Query là 1 dạng IQueryable, chỉ được thực thi khi cần giá trị list
-        //    if (filter != null)
-        //    {
-        //        query = query.Where(filter);
-        //    }
+            // Query là 1 dạng IQueryable, chỉ được thực thi khi cần giá trị list
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
 
-        //    // Tiếp theo, nó sẽ kèm theo các property cần thiết khi người dùng chỉ định
-        //    foreach (var includeProperty in includeProperties.Split
-        //        (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-        //    {
-        //        query = query.Include(includeProperty);
-        //    }
+            // Tiếp theo, nó sẽ kèm theo các property cần thiết khi người dùng chỉ định
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query = query.Include(includeProperty);
+            }
 
-        //    // Sau cùng, nó thực thi bằng cách translate thành câu lệnh SQL và gọi xuống database
-        //    if (orderBy != null)
-        //    {
-        //        return orderBy(query).ToList();
-        //    }
-        //    else
-        //    {
-        //        return query.ToList();
-        //    }
-        //}
+            // Sau cùng, nó thực thi bằng cách translate thành câu lệnh SQL và gọi xuống database
+            if (orderBy != null)
+            {
+                return orderBy(query).ToList();
+            }
+            else
+            {
+                return query.ToList();
+            }
+        }
         public virtual void SaveChanges()
         {
            this._context.SaveChanges();

@@ -11,6 +11,11 @@ namespace Spice.Repository
     {
         ICategoryRepository CategoryRepository { get; }
         ISubCategoryRepository SubCategoryRepository { get; }
+        ICouponRepository CouponRepository { get; }
+        IImportHistoryRepository ImportHistoryRepository { get; }
+        IApplicationUserRepository ApplicationUserRepository { get; }
+        INewsRepository NewsRepository { get; }
+        IMenuItemRepository MenuItemRepository { get; }
         Task<int> SaveChangesAsync();
         void SaveChanges();
     }

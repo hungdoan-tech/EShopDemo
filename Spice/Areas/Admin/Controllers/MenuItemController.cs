@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Models;
 using Spice.Models.ViewModels;
+using Spice.Repository;
 using Spice.Utility;
 
 namespace Spice.Areas.Admin.Controllers
@@ -18,27 +19,26 @@ namespace Spice.Areas.Admin.Controllers
     [Authorize(Roles = SD.ManagerUser + "," +SD.RepositoryManager)]
     public class MenuItemController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
         [BindProperty]
         public MenuItemViewModel MenuItemVM { get; set; }
   
-        public MenuItemController(ApplicationDbContext db, IWebHostEnvironment hostingEnvironment)
+        public MenuItemController(IUnitOfWork unitOfWork, IWebHostEnvironment hostingEnvironment)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
             _hostingEnvironment = hostingEnvironment;
             MenuItemVM = new MenuItemViewModel()
             {
-                Category = _db.Category,
-                SubCategory = _db.SubCategory,
-                MenuItem = new Models.MenuItem()
+                Category = _unitOfWork.CategoryRepository.ReadAll(),
+                SubCategory = _unitOfWork.SubCategoryRepository.ReadAll(),
+                MenuItem = new MenuItem()
             };
         }
-        [Authorize(Roles = SD.ManagerUser + "," + SD.RepositoryManager)]
-        public async  Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var menuItems = await _db.MenuItem.Include(m=>m.Category).Include(m=>m.SubCategory).ToListAsync();
+            var menuItems = _unitOfWork.MenuItemRepository.ReadAllIncludeCategoryAndSubCategory();
             return View(menuItems);
         }
 
@@ -60,15 +60,15 @@ namespace Spice.Areas.Admin.Controllers
             //}
 
             MenuItemVM.MenuItem.PublishedDate = DateTime.UtcNow;
-            _db.MenuItem.Add(MenuItemVM.MenuItem);
-            await _db.SaveChangesAsync();
+            _unitOfWork.MenuItemRepository.Create(MenuItemVM.MenuItem);
+            _unitOfWork.SaveChanges();
 
             //Work on the image saving section
 
             string webRootPath = _hostingEnvironment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
 
-            var menuItemFromDb = await _db.MenuItem.FindAsync(MenuItemVM.MenuItem.Id);
+            var menuItemFromDb = _unitOfWork.MenuItemRepository.ReadOne(MenuItemVM.MenuItem.Id);
 
             if(files.Count>0)
             {
@@ -90,24 +90,24 @@ namespace Spice.Areas.Admin.Controllers
                 menuItemFromDb.Image = @"\images\" + MenuItemVM.MenuItem.Id + ".png";
             }
 
-            await _db.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
 
 
         //GET - EDIT
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if(id==null)
             {
                 return NotFound();
             }
 
-            MenuItemVM.MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).SingleOrDefaultAsync(m => m.Id == id);
+            MenuItemVM.MenuItem = _unitOfWork.MenuItemRepository.ReadOneIncludeCategoryAndSubCategory(id);
             //MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
 
-            if(MenuItemVM.MenuItem ==null)
+            if (MenuItemVM.MenuItem ==null)
             {
                 return NotFound();
             }
@@ -116,7 +116,7 @@ namespace Spice.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPOST(int? id)
+        public IActionResult EditPOST(int? id)
         {
             if(id==null)
             {
@@ -135,7 +135,7 @@ namespace Spice.Areas.Admin.Controllers
             string webRootPath = _hostingEnvironment.WebRootPath;
             var files = HttpContext.Request.Form.Files;
 
-            var menuItemFromDb = await _db.MenuItem.FindAsync(MenuItemVM.MenuItem.Id);
+            var menuItemFromDb = _unitOfWork.MenuItemRepository.ReadOne(MenuItemVM.MenuItem.Id);
 
             if (files.Count > 0)
             {
@@ -170,20 +170,20 @@ namespace Spice.Areas.Admin.Controllers
             menuItemFromDb.CategoryId = MenuItemVM.MenuItem.CategoryId;
             menuItemFromDb.SubCategoryId = MenuItemVM.MenuItem.SubCategoryId;
 
-            await _db.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
 
         //GET : Details MenuItem
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            MenuItemVM.MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).SingleOrDefaultAsync(m => m.Id == id);
+            MenuItemVM.MenuItem = _unitOfWork.MenuItemRepository.ReadOneIncludeCategoryAndSubCategory(id);
 
             if (MenuItemVM.MenuItem == null)
             {
@@ -194,14 +194,14 @@ namespace Spice.Areas.Admin.Controllers
         }
 
         //GET : Delete MenuItem
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            MenuItemVM.MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).SingleOrDefaultAsync(m => m.Id == id);
+            MenuItemVM.MenuItem = _unitOfWork.MenuItemRepository.ReadOneIncludeCategoryAndSubCategory(id);
 
             if (MenuItemVM.MenuItem == null)
             {
@@ -214,10 +214,10 @@ namespace Spice.Areas.Admin.Controllers
         //POST Delete MenuItem
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             string webRootPath = _hostingEnvironment.WebRootPath;
-            MenuItem menuItem = await _db.MenuItem.FindAsync(id);
+            MenuItem menuItem = _unitOfWork.MenuItemRepository.ReadOne(id);
 
             if (menuItem != null)
             {
@@ -227,8 +227,8 @@ namespace Spice.Areas.Admin.Controllers
                 {
                     System.IO.File.Delete(imagePath);
                 }
-                _db.MenuItem.Remove(menuItem);
-                await _db.SaveChangesAsync();
+                _unitOfWork.MenuItemRepository.Delete(menuItem);
+                _unitOfWork.SaveChanges();
 
             }
             return RedirectToAction(nameof(Index));
