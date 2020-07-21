@@ -18,5 +18,14 @@ namespace Spice.Models
         public virtual OrderHeader OrderHeader { get; set; }
         public int MenuItemId { get; set; }
         public virtual MenuItem MenuItem { get; set; }
+        public OrderDetails(int count, string name, string description, double price, int orderId, int menuItemId)
+        {
+            Count = count;
+            Name = name;
+            Description = description;
+            Price = price;
+            OrderId = orderId;
+            MenuItemId = menuItemId;
+        }
     }
 }

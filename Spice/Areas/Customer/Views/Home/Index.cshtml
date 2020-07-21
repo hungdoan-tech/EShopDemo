@@ -146,7 +146,7 @@
                             <div class="popular-img">
                                 <img src=@Model.ListPopularMenuItem.ElementAt(i).Image alt="">
                                 <div class="img-cap">
-                                    <span>Add to cart</span>
+                                    <a asp-action="Details" asp-controller="Home" asp-area="Customer" asp-route-id=@Model.ListPopularMenuItem.ElementAt(i).Id><span>Click for detail</span></a>
                                 </div>
                                 <div class="favorit-items">
                                     <span class="flaticon-heart"></span>

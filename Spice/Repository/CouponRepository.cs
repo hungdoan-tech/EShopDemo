@@ -13,5 +13,10 @@ namespace Spice.Repository
         public CouponRepository(ApplicationDbContext context) : base(context)
         {
         }
+
+        public Coupon FirstMatchName(string code)
+        {
+            return this.dbSet.Where(c => c.Name.ToLower() == code).FirstOrDefault();
+        }
     }
 }

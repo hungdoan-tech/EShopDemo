@@ -15,7 +15,10 @@ namespace Spice.Repository
         IImportHistoryRepository ImportHistoryRepository { get; }
         IApplicationUserRepository ApplicationUserRepository { get; }
         INewsRepository NewsRepository { get; }
+        IOrderHeaderRepository OrderHeaderRepository { get; }
         IMenuItemRepository MenuItemRepository { get; }
+        IOrderDetailRepository OrderDetailRepository { get; }
+
         Task<int> SaveChangesAsync();
         void SaveChanges();
     }

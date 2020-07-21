@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using MailKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -12,6 +13,8 @@ using Spice.Data;
 using Spice.Extensions;
 using Spice.Models;
 using Spice.Models.ViewModels;
+using Spice.Repository;
+using Spice.Service;
 using Spice.Utility;
 using Stripe;
 
@@ -21,15 +24,19 @@ namespace Spice.Areas.Customer.Controllers
     public class CartController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IEmailSender _emailSender;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         [BindProperty]
         public OrderDetailsCart detailCart { get; set; }
 
-        public CartController(ApplicationDbContext db,IEmailSender emailSender)
+        public CartController(ApplicationDbContext db,IEmailSender emailSender, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork)
         {
             _db = db;
             _emailSender = emailSender;
+            _httpContextAccessor = httpContextAccessor;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> Index()
@@ -121,6 +128,7 @@ namespace Spice.Areas.Customer.Controllers
                 var couponFromDb = await _db.Coupon.Where(c => c.Name.ToLower() == detailCart.OrderHeader.CouponCode.ToLower()).FirstOrDefaultAsync();
                 detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
             }
+
             return View(detailCart);
         }
 
@@ -128,93 +136,18 @@ namespace Spice.Areas.Customer.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Summary")]
-        public async Task<IActionResult> SummaryPost(string stripeToken)
+        public IActionResult SummaryPost(string stripeToken)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            detailCart.listCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart).ToList();
+            CartFacadeService facadeService = new CartFacadeService(_unitOfWork, _httpContextAccessor, _emailSender);
+            facadeService.SaveObjectsToDB(detailCart,claim);
+            facadeService.ApplyCoupon(detailCart);
+            facadeService.ChargeMoney(detailCart, stripeToken);
+            facadeService.SendEmailCommitted(detailCart, claim);
+            facadeService.ClearSession();
 
-            detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
-            detailCart.OrderHeader.OrderDate = DateTime.Now;
-            detailCart.OrderHeader.UserId = claim.Value;
-            detailCart.OrderHeader.Status = SD.PaymentStatusPending;
-
-            List<OrderDetails> orderDetailsList = new List<OrderDetails>();
-            _db.OrderHeader.Add(detailCart.OrderHeader);
-            await _db.SaveChangesAsync();
-
-            detailCart.OrderHeader.OrderTotalOriginal = 0;
-
-            foreach (var item in detailCart.listCart)
-            {
-                item.Item = await _db.MenuItem.FirstOrDefaultAsync(m => m.Id == item.Item.Id);
-                _db.MenuItem.FirstOrDefault(a => a.Id == item.Item.Id).Quantity -= item.Quantity;
-                if(_db.MenuItem.FirstOrDefault(a => a.Id == item.Item.Id).Quantity == 0)
-                {
-                    _db.MenuItem.FirstOrDefault(a => a.Id == item.Item.Id).IsPublish = false;
-                }
-                OrderDetails orderDetails = new OrderDetails
-                {
-                    MenuItemId = item.Item.Id,
-                    OrderId = detailCart.OrderHeader.Id,
-                    Description = item.Item.Description,
-                    Name = item.Item.Name,
-                    Price = item.Item.Price * item.Quantity,
-                    Count = item.Quantity
-                };
-                detailCart.OrderHeader.OrderTotalOriginal += orderDetails.Count * item.Item.Price;
-                _db.OrderDetails.Add(orderDetails);
-            }
-
-            if (HttpContext.Session.GetString(SD.ssCouponCode) != null)
-            {
-                detailCart.OrderHeader.CouponCode = HttpContext.Session.GetString(SD.ssCouponCode);
-                var couponFromDb = await _db.Coupon.Where(c => c.Name.ToLower() == detailCart.OrderHeader.CouponCode.ToLower()).FirstOrDefaultAsync();
-                detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
-            }
-            else
-            {
-                detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotalOriginal;
-            }
-            detailCart.OrderHeader.CouponCodeDiscount = detailCart.OrderHeader.OrderTotalOriginal - detailCart.OrderHeader.OrderTotal;
-
-            HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart).Clear();
-            await _db.SaveChangesAsync();
-
-            var options = new ChargeCreateOptions
-            {
-                Amount = Convert.ToInt32(detailCart.OrderHeader.OrderTotal * 100),
-                Currency = "usd",
-                Description = "Order ID : " + detailCart.OrderHeader.Id,
-                Source = stripeToken
-            };
-            var service = new ChargeService();
-            Charge charge = service.Create(options);
-
-            if (charge.BalanceTransactionId == null)
-            {
-                detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusRejected;
-            }
-            else
-            {
-                detailCart.OrderHeader.TransactionId = charge.BalanceTransactionId;
-            }
-
-            if (charge.Status.ToLower() == "succeeded")
-            {
-                await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == claim.Value).FirstOrDefault().Email, "Hello Customer, Order number " + detailCart.OrderHeader.Id.ToString() + " is created", "Order has been created");
-                detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusApproved;
-                detailCart.OrderHeader.Status = SD.StatusSubmitted;
-            }
-            else
-            {
-                detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusRejected;
-            }
-
-            await _db.SaveChangesAsync();
-            var lstShoppingCart = new List<MenuItemsAndQuantity>();
-            HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
             return RedirectToAction("Index", "Home");
         }
 

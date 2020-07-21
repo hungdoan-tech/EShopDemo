@@ -39,7 +39,7 @@ namespace Spice.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var applicationUser = _unitOfWork.ApplicationUserRepository.ReadByID(id);
+            var applicationUser = _unitOfWork.ApplicationUserRepository.ReadOneByStringID(id);
 
             if(applicationUser==null)
             {
@@ -60,7 +60,7 @@ namespace Spice.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var applicationUser =  _unitOfWork.ApplicationUserRepository.ReadByID(id);
+            var applicationUser =  _unitOfWork.ApplicationUserRepository.ReadOneByStringID(id);
 
             if (applicationUser == null)
             {

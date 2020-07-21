@@ -18,6 +18,9 @@ namespace Spice.Repository
         private IApplicationUserRepository applicationUserRepository;
         private INewsRepository newsRepository;
         private IMenuItemRepository menuItemRepository;
+        private IOrderHeaderRepository orderHeaderRepository;
+        private IOrderDetailRepository orderDetailRepository;
+
         private bool disposed = false;
 
         public UnitOfWork(ApplicationDbContext context)
@@ -104,6 +107,30 @@ namespace Spice.Repository
                     this.menuItemRepository = new MenuItemRepository(_context);
                 }
                 return this.menuItemRepository;
+            }
+        }
+
+        public IOrderHeaderRepository OrderHeaderRepository
+        {
+            get
+            {
+                if (this.orderHeaderRepository == null)
+                {
+                    this.orderHeaderRepository = new OrderHeaderRepository(_context);
+                }
+                return this.orderHeaderRepository;
+            }
+        }
+
+        public IOrderDetailRepository OrderDetailRepository
+        {
+            get
+            {
+                if (this.orderDetailRepository == null)
+                {
+                    this.orderDetailRepository = new OrderDetailRepository(_context);
+                }
+                return this.orderDetailRepository;
             }
         }
 

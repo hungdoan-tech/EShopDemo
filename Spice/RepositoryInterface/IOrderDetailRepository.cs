@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Spice.RepositoryInterface
 {
-    public interface IApplicationUserRepository : IRepository<ApplicationUser> 
+    public interface IOrderDetailRepository:IRepository<OrderDetails>
     {
-        public ApplicationUser ReadOneByStringID(string id);
     }
 }

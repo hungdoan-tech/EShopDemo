@@ -14,7 +14,7 @@ namespace Spice.Repository
         {
         }
 
-        public ApplicationUser ReadByID(string id)
+        public ApplicationUser ReadOneByStringID(string id)
         {
             if (id == null)
             {
