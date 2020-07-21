@@ -13,6 +13,13 @@ namespace Spice.Service.State
         protected IEmailSender _emailSender;
         private IOrderState state;
 
+        public OrderContext(IUnitOfWork unitOfWork, IEmailSender emailSender, IOrderState state)
+        {
+            _unitOfWork = unitOfWork;
+            _emailSender = emailSender;
+            this.state = state;
+        }
+
         public void SetState(IOrderState state)
         {
             this.state = state;
