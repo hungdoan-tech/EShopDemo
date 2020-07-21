@@ -10,7 +10,6 @@ namespace Spice.Utility
     {
         public const string DefaultFoodImage = "default_food.png";
 
-
         public const string ManagerUser = "Manager";
         public const string RepositoryManager = "RepositoryManager";
         public const string Shipper = "Shipper";

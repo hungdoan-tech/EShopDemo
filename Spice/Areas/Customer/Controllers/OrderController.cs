@@ -209,7 +209,7 @@ namespace Spice.Areas.Customer.Controllers
             OrderHeader orderHeader = await _db.OrderHeader.FindAsync(OrderId);
             orderHeader.Status = SD.StatusInProcess;
             await _db.SaveChangesAsync();
-            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order number " + orderHeader.Id.ToString() + " is in prepare", "Order is ready for pickup.");
+            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order number " + orderHeader.Id.ToString() + " is in prepare", "Order is prepare in repository.");
 
             return RedirectToAction("ManageOrder", "Order");
         }
@@ -223,7 +223,7 @@ namespace Spice.Areas.Customer.Controllers
             await _db.SaveChangesAsync();
 
             //Email logic to notify user that order is ready for pickup
-            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order number " + orderHeader.Id.ToString() + " Ready for Pickup", "Order is ready for pickup.");
+            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order number " + orderHeader.Id.ToString() + " Ready for Pickup", "Order is on shipping.");
 
 
             return RedirectToAction("ManageOrder", "Order");
@@ -236,7 +236,7 @@ namespace Spice.Areas.Customer.Controllers
             OrderHeader orderHeader = await _db.OrderHeader.FindAsync(OrderId);
             orderHeader.Status = SD.StatusCancelled;
             await _db.SaveChangesAsync();
-            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order number " + orderHeader.Id.ToString() + " Cancelled", "Order has been cancelled successfully.");
+            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order number " + orderHeader.Id.ToString() + " Cancelled", "Order has been cancelled.");
 
             return RedirectToAction("ManageOrder", "Order");
         }
