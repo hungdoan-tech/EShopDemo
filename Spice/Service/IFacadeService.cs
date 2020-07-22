@@ -15,6 +15,8 @@ namespace Spice.Service
         void SendEmailCommitted(OrderDetailsCart detailCart, Claim claim);
         void CreateOrderHeaderBeforeSumary(OrderDetailsCart detailCart, Claim claim);
         void CheckCouponBeforeSumary(OrderDetailsCart detailCart);
+        void PrepareForIndexCart(OrderDetailsCart detailCart);
+        Boolean CheckCurrentItemQuantity(int cartId);
         void ClearSession();
     }
 }

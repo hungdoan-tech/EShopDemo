@@ -65,6 +65,7 @@ namespace Spice
             services.AddTransient<IEmailSender, EmailSender>();
             //services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IFacadeService, CartFacadeService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
 

@@ -125,6 +125,62 @@ namespace Spice.Service
             return detailCart;
         }
 
-       
+       public OrderDetailsCart PrepareForIndexCart(OrderDetailsCart detailCart)
+        {
+            var cart = _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
+
+            if (cart != null)
+            {
+                detailCart.listCart = cart.ToList();
+
+                foreach (var eachItem in detailCart.listCart)
+                {
+                    try
+                    {
+                        eachItem.Item = _unitOfWork.MenuItemRepository.ReadOne(eachItem.Item.Id);
+                        detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotal + (eachItem.Item.Price * eachItem.Quantity);
+
+                        eachItem.Item.Description = SD.ConvertToRawHtml(eachItem.Item.Description);
+
+                        if (eachItem.Item.Description.Length > 100)
+                        {
+                            eachItem.Item.Description = eachItem.Item.Description.Substring(0, 99) + "...";
+                        }
+                    }
+                    catch 
+                    {
+
+                    }
+                }
+                detailCart.OrderHeader.OrderTotalOriginal = detailCart.OrderHeader.OrderTotal;
+
+                detailCart = this.CheckCouponBeforeSumary(detailCart);
+                return detailCart;
+            }
+            else
+            {
+                detailCart.listCart = new List<MenuItemsAndQuantity>();
+                return detailCart;
+            }
+        }
+
+        public Boolean CheckCurrentItemQuantity(int cartId)
+        {
+            List<MenuItemsAndQuantity> lstShoppingCart = _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
+            var menuItemFromDb = _unitOfWork.MenuItemRepository.ReadOneIncludeCategoryAndSubCategory(cartId);
+            int currentQuantity = lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity;
+
+            bool flag = false;
+            if (currentQuantity >= menuItemFromDb.Quantity)
+            {
+                flag = true;
+            }
+            else
+            {
+                lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity += 1;
+                _httpContextAccessor.HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
+            }
+            return flag;
+        }
     }
 }

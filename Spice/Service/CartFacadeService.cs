@@ -61,10 +61,19 @@ namespace Spice.Service
         {
             this.cartService.CheckCouponBeforeSumary(detailCart);
         }
-
         public void ClearSession()
         {
             this.sessionService.Clear();
+        }
+
+        public void PrepareForIndexCart(OrderDetailsCart detailCart)
+        {
+            this.cartService.PrepareForIndexCart(detailCart);
+        }
+
+        public Boolean CheckCurrentItemQuantity(int cartId)
+        {
+            return this.cartService.CheckCurrentItemQuantity(cartId);
         }
     }
 }
