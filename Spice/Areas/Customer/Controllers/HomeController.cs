@@ -99,7 +99,8 @@ namespace Spice.Controllers
             MenuItemsAndQuantity menuItemsAndQuantity = new MenuItemsAndQuantity()
             {
                 Item = menuItemFromDb,
-                Quantity = 1
+                Quantity = 1,
+                News = await _db.News.Where(n => n.MenuItemId == id).FirstOrDefaultAsync()
             };
             return View(menuItemsAndQuantity);
         }

@@ -13,10 +13,7 @@ namespace Spice.Service.State
     {
         void IOrderState.HandleRequest(IUnitOfWork _unitOfWork, IEmailSender _emailSender, int OrderId)
         {
-            OrderHeader orderHeader = _unitOfWork.OrderHeaderRepository.ReadOne(OrderId);
-            orderHeader.Status = SD.StatusSubmitted;
-            _unitOfWork.SaveChanges();
-            _emailSender.SendEmailAsync(_unitOfWork.ApplicationUserRepository.ReadOneByStringID(orderHeader.UserId).Email, "Order number " + orderHeader.Id.ToString() + " Submit", "Order is Submited.");
+            StateStaticMethods.SendNotifyEmail(_unitOfWork, _emailSender, OrderId, SD.StatusSubmitted, Message: " is summitted");
         }
     }
 }

@@ -121,7 +121,7 @@ namespace Spice.Repository
             try
             {
                 TEntity entityToDelete = ReadOne(id);
-                Delete(entityToDelete);
+                Delete(entityToDelete);                
             }
             catch (Exception)
             {
@@ -129,6 +129,17 @@ namespace Spice.Repository
             }
         }
 
+        public virtual void DeleteRange(IEnumerable<TEntity> entities)
+        {
+            try
+            {
+                this.dbSet.RemoveRange(entities);
+            }
+            catch
+            {
+                throw new Exception($"{nameof(TEntity)} could not be deleted");
+            }
+        }
         public virtual void Delete(TEntity entity)
         {
             if (entity == null)

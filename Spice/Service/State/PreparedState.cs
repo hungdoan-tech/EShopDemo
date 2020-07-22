@@ -13,10 +13,7 @@ namespace Spice.Service.State
     {
         public void HandleRequest(IUnitOfWork _unitOfWork, IEmailSender _emailSender, int OrderId)
         {
-            OrderHeader orderHeader = _unitOfWork.OrderHeaderRepository.ReadOne(OrderId);
-            orderHeader.Status = SD.StatusInProcess;
-            _unitOfWork.SaveChanges();
-            _emailSender.SendEmailAsync(_unitOfWork.ApplicationUserRepository.ReadOneByStringID(orderHeader.UserId).Email, "Order number " + orderHeader.Id.ToString() + " is in prepare", "Order is prepare in repository.");
-        }
+            StateStaticMethods.SendNotifyEmail(_unitOfWork, _emailSender, OrderId, SD.StatusInProcess, Message: " is prepared at our repository");
+         }
     }
 }

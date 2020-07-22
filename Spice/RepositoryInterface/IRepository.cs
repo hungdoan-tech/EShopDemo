@@ -15,6 +15,7 @@ namespace Spice.RepositoryInterface
         Task<TEntity> CreateAsync(TEntity entity);
         void Update(TEntity entity);
         void Delete(int? id);
+        void DeleteRange(IEnumerable<TEntity> entities);
         void Delete(TEntity entity);
         IEnumerable<TEntity> Get(
            Expression<Func<TEntity, bool>> filter = null,

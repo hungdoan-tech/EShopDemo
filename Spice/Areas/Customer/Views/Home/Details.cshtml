@@ -96,6 +96,22 @@
     </div> <!-- card.// -->
     <input id="itemId" asp-for="Item.Id" hidden />
     <!--container.//-->
+    @if (Model.News != null)
+    {
+        <div class="container-fluid ">
+            <div class="container">
+                <div class=" backgroundWhite">
+                    <fieldset disabled>
+                        <div class="col-12">
+                            <h1>@Html.Raw(Model.News.Header)</h1>
+                            <p style="color:gray;font-size:14px">@Html.Raw(Model.News.PublishedDate.ToLongDateString())</p>
+                            <p class="col-10">@Html.Raw(Model.News.Content)</p>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    }
 </form>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

@@ -13,10 +13,7 @@ namespace Spice.Service.State
     {
         public void HandleRequest(IUnitOfWork _unitOfWork, IEmailSender _emailSender, int OrderId)
         {
-            OrderHeader orderHeader = _unitOfWork.OrderHeaderRepository.ReadOne(OrderId);
-            orderHeader.Status = SD.StatusCompleted;
-            _unitOfWork.SaveChanges();
-            _emailSender.SendEmailAsync(_unitOfWork.ApplicationUserRepository.ReadOneByStringID(orderHeader.UserId).Email, "Order number " + orderHeader.Id.ToString() + " Complete", "Order has been completed successfully.");
+            StateStaticMethods.SendNotifyEmail(_unitOfWork, _emailSender, OrderId, SD.StatusCompleted, Message: " has been completed");
         }
     }
 }

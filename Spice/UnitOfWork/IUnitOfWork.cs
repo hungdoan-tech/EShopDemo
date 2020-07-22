@@ -21,5 +21,6 @@ namespace Spice.Repository
 
         Task<int> SaveChangesAsync();
         void SaveChanges();
+        void Dispose();
     }
 }

@@ -15,8 +15,23 @@ namespace Spice.Service.State
         {
             OrderHeader orderHeader = _unitOfWork.OrderHeaderRepository.ReadOne(OrderId);
             orderHeader.Status = SD.StatusCancelled;
-            _unitOfWork.SaveChanges();
-            _emailSender.SendEmailAsync(_unitOfWork.ApplicationUserRepository.ReadOneByStringID(orderHeader.UserId).Email, "Order number " + orderHeader.Id.ToString() + " Cancelled", "Order has been cancelled.");
+
+            try
+            {
+                var ListOrderDetail = _unitOfWork.OrderDetailRepository.Get(a => a.OrderId == orderHeader.Id).ToList();
+                foreach(var orderDetail in ListOrderDetail)
+                {
+                    _unitOfWork.MenuItemRepository.ReadOne(orderDetail.MenuItemId).Quantity += orderDetail.Count; 
+                }
+                _unitOfWork.OrderDetailRepository.DeleteRange(ListOrderDetail);
+                _unitOfWork.OrderHeaderRepository.Delete(orderHeader);
+                _unitOfWork.SaveChanges();
+            }
+            catch
+            {
+                _unitOfWork.Dispose();
+            }
+            _emailSender.SendEmailAsync(_unitOfWork.ApplicationUserRepository.ReadOneByStringID(orderHeader.UserId).Email, "Order number " + orderHeader.Id.ToString() + " has been cancelled", "Order "+ orderHeader.Id.ToString() + "has been cancelled.");
         }
     }
 }

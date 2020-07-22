@@ -24,30 +24,15 @@ namespace Spice.Areas.Customer.Controllers
     [Area("Customer")]
     public class CartController : Controller
     {
-        //private readonly ApplicationDbContext _db;
-        //private readonly IUnitOfWork _unitOfWork;
-        //private readonly IEmailSender _emailSender;
-        //private readonly IHttpContextAccessor _httpContextAccessor;
-
         private readonly IFacadeService facadeService;
         [BindProperty]
         public OrderDetailsCart detailCart { get; set; }
-
-        //public CartController(ApplicationDbContext db,IEmailSender emailSender, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork)
-        //{
-        //    _db = db;
-        //    _emailSender = emailSender;
-        //    _httpContextAccessor = httpContextAccessor;
-        //    _unitOfWork = unitOfWork;
-        //}
-
         public CartController(IFacadeService FacadeService)
         {
             facadeService = FacadeService;
         }
         public IActionResult Index()
         {
-            //CartFacadeService facadeService = new CartFacadeService(_unitOfWork, _httpContextAccessor, _emailSender);
             detailCart = new OrderDetailsCart()
             {
                 OrderHeader = new Models.OrderHeader()
@@ -65,7 +50,6 @@ namespace Spice.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            //CartFacadeService facadeService = new CartFacadeService(_unitOfWork, _httpContextAccessor, _emailSender);
             facadeService.CreateOrderHeaderBeforeSumary(detailCart, claim);
             facadeService.CheckCouponBeforeSumary(detailCart);
 
@@ -81,7 +65,6 @@ namespace Spice.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            //CartFacadeService facadeService = new CartFacadeService(_unitOfWork, _httpContextAccessor, _emailSender);
             facadeService.SaveObjectsToDB(detailCart,claim);
             facadeService.ApplyCoupon(detailCart);
             facadeService.ChargeMoney(detailCart, stripeToken);
@@ -113,7 +96,6 @@ namespace Spice.Areas.Customer.Controllers
         public IActionResult Plus(int cartId)
         {
             ViewBag.Alert = false;
-            //CartFacadeService facadeService = new CartFacadeService(_unitOfWork, _httpContextAccessor, _emailSender);
             if(facadeService.CheckCurrentItemQuantity(cartId)==true)
             {
                 ViewBag.Alert = true;
