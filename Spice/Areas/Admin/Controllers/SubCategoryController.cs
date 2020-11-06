@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Models;
 using Spice.Models.ViewModels;
+using Spice.Repository;
 using Spice.Utility;
 
 namespace Spice.Areas.Admin.Controllers
@@ -17,33 +18,33 @@ namespace Spice.Areas.Admin.Controllers
     [Authorize(Roles = SD.ManagerUser +"," + SD.RepositoryManager)]
     public class SubCategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public SubCategoryController(ApplicationDbContext db)
+        public SubCategoryController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
-        [Authorize(Roles = SD.ManagerUser + "," + SD.RepositoryManager)]
-        //Get INDEX
+
         public async Task<IActionResult> Index()
         {
-            return View(await _db.SubCategory.ToListAsync());
+            return View(await _unitOfWork.SubCategoryRepository.ReadAll().ToListAsync());
         }
+
         [HttpGet]
         public IActionResult Create ()
         {
             return View();
         }
-        //GET - CREATE
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(SubCategory subCategory)
+        public IActionResult Create(SubCategory subCategory)
         {
             if (ModelState.IsValid)
             {
                 //if valid
-                _db.SubCategory.Add(subCategory);
-                await _db.SaveChangesAsync();
+                _unitOfWork.SubCategoryRepository.Create(subCategory);
+                _unitOfWork.SaveChanges();
 
                 return RedirectToAction(nameof(Index));
 
@@ -54,13 +55,13 @@ namespace Spice.Areas.Admin.Controllers
 
 
         //GET - EDIT
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var subcategory = await _db.SubCategory.FindAsync(id);
+            var subcategory =  _unitOfWork.SubCategoryRepository.ReadOne(id);
             if (subcategory == null)
             {
                 return NotFound();
@@ -71,28 +72,26 @@ namespace Spice.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(SubCategory subCategory)
+        public IActionResult Edit(SubCategory subCategory)
         {
             if (ModelState.IsValid)
             {
-                _db.Update(subCategory);
-                await _db.SaveChangesAsync();
+                _unitOfWork.SubCategoryRepository.Update(subCategory);
+                _unitOfWork.SaveChanges();
 
                 return RedirectToAction(nameof(Index));
             }
             return View(subCategory);
         }
 
-
-
         //GET - DELETE
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var subCategory = await _db.SubCategory.FindAsync(id);
+            var subCategory = _unitOfWork.SubCategoryRepository.ReadOne(id);
             if (subCategory == null)
             {
                 return NotFound();
@@ -102,28 +101,28 @@ namespace Spice.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int? id)
+        public IActionResult DeleteConfirmed(int? id)
         {
-            var subCategory = await _db.SubCategory.FindAsync(id);
+            var subCategory = _unitOfWork.SubCategoryRepository.ReadOne(id);
 
             if (subCategory == null)
             {
                 return View();
             }
-            _db.SubCategory.Remove(subCategory);
-            await _db.SaveChangesAsync();
+            _unitOfWork.SubCategoryRepository.Delete(subCategory);
+            _unitOfWork.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
         //GET - DETAILS
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var subCategory = await _db.SubCategory.FindAsync(id);
+            var subCategory = _unitOfWork.SubCategoryRepository.ReadOne(id);
             if (subCategory == null)
             {
                 return NotFound();

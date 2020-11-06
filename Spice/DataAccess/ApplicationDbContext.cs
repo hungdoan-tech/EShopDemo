@@ -219,7 +219,8 @@ namespace Spice.Data
 
             modelBuilder.Entity<Coupon>().HasData
                         (
-                            new Coupon { Id = 1, Name = "15OFF", CouponType = "0", Discount = 15, MinimumAmount = 75, IsActive = true }
+                        //new Coupon { Id = 1, Name = "15OFF", CouponType = "0", Discount = 15, MinimumAmount = 75, IsActive = true }
+                            new Coupon( 1, "15OFF", "0", 15, 75, true )
                         );
 
             modelBuilder.Entity<News>().HasData

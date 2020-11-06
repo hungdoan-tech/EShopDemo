@@ -10,8 +10,8 @@
 }
 <div class="container">
     <div class="container text-center mt-4 mb-4">
-        <h3 class="text-muted">Mã Hóa Đơn: <span class="text-info">@Model.OrderHeader.Id</span></h3>
-        <h3 class="text-muted">Tính Trạng Đơn Hàng: <span class="text-info">@Model.OrderHeader.Status</span></h3>
+        <h3 class="text-muted">Invoice Code: <span class="text-info">@Model.OrderHeader.Id</span></h3>
+        <h3 class="text-muted">Order Status: <span class="text-info">@Model.OrderHeader.Status</span></h3>
     </div>
 
     <div class="mt-4 mb-4"style="width:100%">
@@ -33,33 +33,13 @@
         }
     </div>
 
-    @*<div class="mt-4 mb-4" style="width:100%">
-        @if (Model.OrderHeader.Status == SD.StatusSubmitted)
-        {
-            <img src="~/images/OrderPlaced.png" width="100%" />
-        }
-        @if (Model.OrderHeader.Status == SD.StatusInProcess)
-        {
-            <img src="~/images/InKitchen.png" width="100%" />
-        }
-        @if (Model.OrderHeader.Status == SD.StatusReady)
-        {
-            <img src="~/images/ReadyForPickup.png" width="100%" />
-        }
-        @if (Model.OrderHeader.Status == SD.StatusCompleted)
-        {
-            <img src="~/images/completed.png" width="100%" />
-        }
-    </div>*@
-
-
     <div class="container row border ml-1 backgroundWhiteBorder10Padding mt-4 mb-4" style="width:100%">
         <div class="col-lg-8 col-12" style="border-right:1px solid #bbb9b9">
             <br />
             <input type="hidden" asp-for="OrderHeader.Id" />
             <div class="form-group row">
                 <div class="col-3">
-                    <label>Khách Hàng: </label>
+                    <label>Customer: </label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.PickupName" disabled class="form-control" />
@@ -75,7 +55,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label>Số Điện Thoại</label>
+                    <label>Phone Number</label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.PhoneNumber" disabled class="form-control" />
@@ -83,7 +63,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label>Địa Chỉ Giao Hàng</label>
+                    <label>Street Address</label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.StreetAddress" disabled class="form-control" />
@@ -91,7 +71,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label>Thành Phố</label>
+                    <label>City</label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.City" disabled class="form-control" />
@@ -99,7 +79,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label>Tổng Giá:</label>
+                    <label>Total Price:</label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.OrderTotal" disabled class="form-control" />
@@ -107,7 +87,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label>Ghi Chú Thêm</label>
+                    <label>Attach Note</label>
                 </div>
                 <div class="col-9">
                     <input asp-for="OrderHeader.Comments" disabled class="form-control" />
@@ -155,10 +135,10 @@
                 {
                     <button type="submit" class="btn btn-success form-control"><i class="genric-btn info large  anchorDetail"></i>Xác Nhận</button>
                 }
-                else
+                @*else
                 {
                     <button type="submit" disabled class="genric-btn info-border large btnOrderStatus">@Model.OrderHeader.Status</button>
-                }
+                }*@
          </div>
     </div>
 </div>

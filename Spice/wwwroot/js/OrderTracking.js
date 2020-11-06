@@ -4,7 +4,7 @@
             type: 'GET',
             url: '/Customer/Order/TrackingOrder',
             success: function (result) {
-                $('#trackingOrdering').html( "Theo Dõi Đơn Hàng" + "("+result+")");
+                $('#trackingOrdering').html( "Order Tracking" + "("+result+")");
             },
             //error: function (req, status, error) {
             //    alert(error);

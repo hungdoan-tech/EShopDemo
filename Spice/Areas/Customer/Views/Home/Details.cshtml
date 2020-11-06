@@ -2,7 +2,7 @@
 @using Spice.Extensions
 
 @{
-    ViewData["Title"] = "Chi tiết sản phẩm";
+    ViewData["Title"] = "Product Detail";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -17,14 +17,6 @@
                     <div class="img-big-wrap">
                         <div> <img src="@Model.Item.Image" width="100%" /></div>
                     </div> <!-- slider-product.// -->
-                    <!--
-                    <div class="img-small-wrap">
-                        <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
-                        <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
-                        <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
-                        <div class="item-gallery"> <img src="https://s9.postimg.org/tupxkvfj3/image.jpg"> </div>
-                    </div>
-                    -->
                 </article> <!-- gallery-wrap .end// -->
             </aside>
             <aside class="col-sm-7">
@@ -37,7 +29,7 @@
                         </span>
                     </p> <!-- price-detail-wrap .// -->
                     <dl class="item-property">
-                        <dt>Mô Tả</dt>
+                        <dt>Description</dt>
                         <dd>
                             <p>
                                 @Html.Raw(Model.Item.Description)
@@ -45,11 +37,11 @@
                         </dd>
                     </dl>
                     <dl class="param param-feature">
-                        <dt>Mã Sản Phẩm</dt>
+                        <dt>Product Code</dt>
                         <dd>@Model.Item.Id</dd>
                     </dl>  <!-- item-property-hor .// -->
                     <dl class="param param-feature">
-                        <dt>Màu: </dt>
+                        <dt>Color: </dt>
                         @*<select asp-for="Item.Color" readonly asp-items="Html.GetEnumSelectList<MenuItem.EColor>()" class="form-control"></select>*@
                         @if (ViewBag.itemColor != null)
                         {
@@ -69,7 +61,7 @@
                     <div class="row">
                         <div class="col-sm-5">
                             <dl class="param param-inline">
-                                <dt>Số Lượng: </dt>
+                                <dt>Quantity: </dt>
                                 <dd>
                                     <input asp-for="Quantity" class="form-control" />
                                     <span asp-validation-for="Quantity" class="text-danger"></span>
@@ -97,13 +89,29 @@
                         </div> <!-- col.// -->
                     </div> <!-- row.// -->
                     <hr>
-                    <button type="submit" value="Add to Cart" class="btn btn-primary form-control">Chọn Mua</button>
+                    <button type="submit" value="Add to Cart" class="btn btn-primary form-control">Adding to cart</button>
                 </article> <!-- card-body.// -->
             </aside> <!-- col.// -->
         </div> <!-- row.// -->
     </div> <!-- card.// -->
     <input id="itemId" asp-for="Item.Id" hidden />
     <!--container.//-->
+    @if (Model.News != null)
+    {
+        <div class="container-fluid ">
+            <div class="container">
+                <div class=" backgroundWhite">
+                    <fieldset disabled>
+                        <div class="col-12">
+                            <h1>@Html.Raw(Model.News.Header)</h1>
+                            <p style="color:gray;font-size:14px">@Html.Raw(Model.News.PublishedDate.ToLongDateString())</p>
+                            <p class="col-10">@Html.Raw(Model.News.Content)</p>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    }
 </form>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -126,7 +134,7 @@
             }
 
             if (quantity < 0 || quantityCurrent > quantity) {
-                alert("Kho hàng không đủ để cung cấp số lượng sản phẩm này. Khách hàng vui lòng thông cảm.)
+                alert("Kho hàng không đủ để cung cấp số lượng sản phẩm này. Khách hàng vui lòng thông cảm")
             }
             else {
                 $(this).unbind('submit').submit(); // continue the submit unbind preventDefault

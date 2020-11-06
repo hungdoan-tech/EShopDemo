@@ -33,36 +33,6 @@ namespace Spice.Controllers
 
         public async Task<IActionResult> Index(int productPage = 1)
         {
-            //IndexViewModel IndexVM = new IndexViewModel()
-            //{
-            //    MenuItem = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
-            //    Category = await _db.Category.ToListAsync(),
-            //    Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
-            //};
-
-            ////Pagination: - Url determine current pages.
-            //StringBuilder param = new StringBuilder();
-            //param.Append("?productPage=:");
-
-            ////Count a quantity in MenuItem.
-            //var count = IndexVM.MenuItem.Count();
-
-
-            //IndexVM.MenuItem = IndexVM.MenuItem.OrderBy(p => p.Price)
-            //   .Skip((productPage - 1) * PageSize).Take(PageSize).ToList();
-
-
-            //IndexVM.PagingInfo = new PagingInfo()
-            //{
-            //    CurrentPage = productPage,
-            //    ItemsPerPage = PageSize,
-            //    TotalItem = count,
-            //    urlParam = param.ToString()
-            //};
-
-            //return View(IndexVM);
-
-
             IndexHomeVM IndexVM = new IndexHomeVM()
             {
                 ListPopularMenuItem = await _db.MenuItem.Where(a => a.Tag == "2" && a.IsPublish == true).OrderByDescending(a => a.Id).Take(6).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
@@ -129,7 +99,8 @@ namespace Spice.Controllers
             MenuItemsAndQuantity menuItemsAndQuantity = new MenuItemsAndQuantity()
             {
                 Item = menuItemFromDb,
-                Quantity = 1
+                Quantity = 1,
+                News = await _db.News.Where(n => n.MenuItemId == id).FirstOrDefaultAsync()
             };
             return View(menuItemsAndQuantity);
         }

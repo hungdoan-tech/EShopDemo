@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Models;
 using Spice.Models.ViewModels;
+using Spice.Repository;
+using Spice.Service.State;
 using Spice.Utility;
 
 namespace Spice.Areas.Customer.Controllers
@@ -21,13 +23,15 @@ namespace Spice.Areas.Customer.Controllers
     {
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
 
         private int PageSize = 5;
         private int PageAdminSize = 10;
-        public OrderController(ApplicationDbContext db, IEmailSender emailSender)
+        public OrderController(ApplicationDbContext db, IEmailSender emailSender, IUnitOfWork unitOfWork)
         {
             _db = db;
             _emailSender = emailSender;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -206,11 +210,8 @@ namespace Spice.Areas.Customer.Controllers
         [Authorize(Roles =SD.RepositoryManager + ","+ SD.ManagerUser)]
         public async Task<IActionResult> OrderPrepare(int OrderId)
         {
-            OrderHeader orderHeader = await _db.OrderHeader.FindAsync(OrderId);
-            orderHeader.Status = SD.StatusInProcess;
-            await _db.SaveChangesAsync();
-            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order number " + orderHeader.Id.ToString() + " is in prepare", "Order is ready for pickup.");
-
+            OrderContext orderContext = new OrderContext(_unitOfWork, _emailSender, new PreparedState());
+            orderContext.ApplyState(OrderId);
             return RedirectToAction("ManageOrder", "Order");
         }
 
@@ -218,14 +219,8 @@ namespace Spice.Areas.Customer.Controllers
         [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
         public async Task<IActionResult> OrderReady(int OrderId)
         {
-            OrderHeader orderHeader = await _db.OrderHeader.FindAsync(OrderId);
-            orderHeader.Status = SD.StatusReady;
-            await _db.SaveChangesAsync();
-
-            //Email logic to notify user that order is ready for pickup
-            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order number " + orderHeader.Id.ToString() + " Ready for Pickup", "Order is ready for pickup.");
-
-
+            OrderContext orderContext = new OrderContext(_unitOfWork, _emailSender, new OnShippingState());
+            orderContext.ApplyState(OrderId);
             return RedirectToAction("ManageOrder", "Order");
         }
 
@@ -233,25 +228,29 @@ namespace Spice.Areas.Customer.Controllers
         [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
         public async Task<IActionResult> OrderCancel(int OrderId)
         {
-            OrderHeader orderHeader = await _db.OrderHeader.FindAsync(OrderId);
-            orderHeader.Status = SD.StatusCancelled;
-            await _db.SaveChangesAsync();
-            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order number " + orderHeader.Id.ToString() + " Cancelled", "Order has been cancelled successfully.");
-
+            OrderContext orderContext = new OrderContext(_unitOfWork, _emailSender, new CancelledState());
+            orderContext.ApplyState(OrderId);
             return RedirectToAction("ManageOrder", "Order");
         }
 
         [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
         public async Task<IActionResult> OrderSubmit(int OrderId)
         {
-            OrderHeader orderHeader = await _db.OrderHeader.FindAsync(OrderId);
-            orderHeader.Status = SD.StatusSubmitted;
-            await _db.SaveChangesAsync();
-            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order number " + orderHeader.Id.ToString() + " Submit", "Order is Submited.");
-
+            OrderContext orderContext = new OrderContext(_unitOfWork, _emailSender, new SubmittedState());
+            orderContext.ApplyState(OrderId);
             return RedirectToAction("ManageOrder", "Order");
         }
 
+        [Authorize(Roles = SD.Shipper + "," + SD.ManagerUser)]
+        [Route("~/Admin/Order/OrderPickup")]
+        [HttpPost]
+        [ActionName("OrderPickup")]
+        public async Task<IActionResult> OrderPickupPost(int OrderId)
+        {
+            OrderContext orderContext = new OrderContext(_unitOfWork, _emailSender, new CompletedState());
+            orderContext.ApplyState(OrderId);
+            return RedirectToAction("ManageOrder", "Order");
+        }
 
         [Authorize(Roles = SD.ManagerUser + "," + SD.Shipper)]
         [Route("~/Admin/Order/OrderPickup")]
@@ -347,32 +346,16 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderListVM);
         }
 
-        [Authorize(Roles =SD.Shipper + ","+ SD.ManagerUser)]
-        [Route("~/Admin/Order/OrderPickup")]
-        [HttpPost]
-        [ActionName("OrderPickup")]
-        public async Task<IActionResult> OrderPickupPost(int orderId)
-        {
-            OrderHeader orderHeader = await _db.OrderHeader.FindAsync(orderId);
-            orderHeader.Status = SD.StatusCompleted;
-            await _db.SaveChangesAsync();
-            await _emailSender.SendEmailAsync(_db.Users.Where(u => u.Id == orderHeader.UserId).FirstOrDefault().Email, "Order number " + orderHeader.Id.ToString() + " Complete", "Order has been completed successfully.");
 
-            return RedirectToAction("OrderPickup", "Order");
-        }
 
         [Authorize(Roles =  SD.ManagerUser)]
         [Route("~/Admin/Order/OrderHistoryAdmin")]
         public async Task<IActionResult> OrderHistoryAdmin(int productPage = 1)
         {
-
-
             OrderListViewModel orderListVM = new OrderListViewModel()
             {
                 Orders = new List<OrderDetailsViewModel>()
             };
-
-
 
             List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).ToListAsync();
 

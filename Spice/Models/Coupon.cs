@@ -14,7 +14,19 @@ namespace Spice.Models
         public enum ECouponType { Percent = 0, Dollar = 1 }
         public double Discount { get; set; }
         public double MinimumAmount { get; set; }
-        public byte[] Picture { get; set; }
         public bool IsActive { get; set; }
+        public Coupon()
+        {
+
+        }
+        public Coupon(int id, string name, string couponType, double discount, double minimumAmount, bool isActive)
+        {
+            Id = id;
+            Name = name;
+            CouponType = couponType;
+            Discount = discount;
+            MinimumAmount = minimumAmount;
+            IsActive = isActive;
+        }
     }
 }

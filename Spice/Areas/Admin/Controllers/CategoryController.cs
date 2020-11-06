@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Models;
+using Spice.Repository;
 using Spice.Utility;
 
 namespace Spice.Areas.Admin.Controllers
@@ -16,20 +17,17 @@ namespace Spice.Areas.Admin.Controllers
     [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryController(ApplicationDbContext db)
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
 
-
         //GET 
-        [Authorize(Roles = SD.ManagerUser + "," + SD.RepositoryManager)]
-
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _db.Category.ToListAsync());
+            return View(_unitOfWork.CategoryRepository.ReadAll().ToList());
         }
 
         //GET - CREATE
@@ -42,29 +40,27 @@ namespace Spice.Areas.Admin.Controllers
         //POST - CREATE
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Category category)
+        public IActionResult Create(Category category)
         {
             if(ModelState.IsValid)
             {
                 //if valid
-                _db.Category.Add(category);
-                await _db.SaveChangesAsync();
-
+                _unitOfWork.CategoryRepository.Create(category);
+                _unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
-
             }
             return View(category);
         }
 
 
         //GET - EDIT
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if(id==null)
             {
                 return NotFound();
             }
-            var category = await _db.Category.FindAsync(id);
+            var category = _unitOfWork.CategoryRepository.ReadOne(id);
             if(category==null)
             {
                 return NotFound();
@@ -75,28 +71,26 @@ namespace Spice.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Category category)
+        public IActionResult Edit(Category category)
         {
             if(ModelState.IsValid)
             {
-                _db.Update(category);
-                await _db.SaveChangesAsync();
+                _unitOfWork.CategoryRepository.Update(category);
+                _unitOfWork.SaveChanges();
 
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
         }
 
-
-
         //GET - DELETE
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            var category = await _db.Category.FindAsync(id);
+            var category = _unitOfWork.CategoryRepository.ReadOne(id);
             if (category == null)
             {
                 return NotFound();
@@ -106,28 +100,27 @@ namespace Spice.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int? id)
+        public IActionResult DeleteConfirmed(int? id)
         {
-            var category = await _db.Category.FindAsync(id);
-
+            var category = _unitOfWork.CategoryRepository.ReadOne(id);
             if(category ==null)
             {
                 return View();
             }
-            _db.Category.Remove(category);
-            await _db.SaveChangesAsync();
+            _unitOfWork.CategoryRepository.Delete(category);
+            _unitOfWork.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
 
         //GET - DETAILS
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _db.Category.FindAsync(id);
+            var category = _unitOfWork.CategoryRepository.ReadOne(id);
             if (category == null)
             {
                 return NotFound();
