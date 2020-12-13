@@ -1,23 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using MailKit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Spice.Data;
 using Spice.Extensions;
-using Spice.Models;
-using Spice.Models.Builder;
 using Spice.Models.ViewModels;
-using Spice.Repository;
 using Spice.Service;
 using Spice.Utility;
-using Stripe;
 
 namespace Spice.Areas.Customer.Controllers
 {

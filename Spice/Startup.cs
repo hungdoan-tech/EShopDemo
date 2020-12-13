@@ -15,12 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spice.Utility;
 using Stripe;
-//using Spice.Service;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Routing.Template;
-using NETCore.MailKit.Extensions;
-using NETCore.MailKit.Infrastructure.Internal;
 using Spice.Service;
 using Spice.Repository;
 
@@ -60,10 +56,11 @@ namespace Spice
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddScoped<IDbInitializer, DbInitializer>();
+            
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
             services.AddTransient<IEmailSender, EmailSender>();
-            //services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+            
+            services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IFacadeService, CartFacadeService>();
             services.AddControllersWithViews();
