@@ -5,9 +5,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Spice.Service
+namespace Spice.Service.ServiceInterfaces
 {
-    public interface IFacadeService
+    public interface IFacadeCartService
     {
         void SaveObjectsToDB(OrderDetailsCart detailCart, Claim claim);
         void ApplyCoupon(OrderDetailsCart detailCart);

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Spice.Extensions;
 using Spice.Models.ViewModels;
-using Spice.Service;
+using Spice.Service.ServiceInterfaces;
 using Spice.Utility;
 
 namespace Spice.Areas.Customer.Controllers

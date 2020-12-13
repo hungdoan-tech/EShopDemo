@@ -2,15 +2,14 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Spice.Models.ViewModels;
 using Spice.Repository;
+using Spice.Service.ServiceInterfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
+
 
 namespace Spice.Service
 {
-    public class CartFacadeService: IFacadeService
+    public class CartFacadeService: IFacadeCartService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContextAccessor;

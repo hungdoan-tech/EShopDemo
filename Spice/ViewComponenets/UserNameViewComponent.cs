@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -20,7 +17,7 @@ namespace Spice.ViewComponenets
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claimsIdentity = (ClaimsIdentity) User.Identity;
             var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             var userFromDb = await _db.ApplicationUser.FirstOrDefaultAsync(u => u.Id == claims.Value);

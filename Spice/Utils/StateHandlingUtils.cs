@@ -1,15 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
 using Spice.Models;
 using Spice.Repository;
-using Spice.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Spice.Service.State
+namespace Spice.Utility
 {
-    public static class StateStaticMethods
+    public static class StateHandlingUtils
     {
         public static void SendNotifyEmail(IUnitOfWork _unitOfWork, IEmailSender _emailSender, int OrderId, string OrderStatus, string Message)
         {

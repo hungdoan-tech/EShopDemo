@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using Spice.Models;
 using Spice.Repository;
+using Spice.Service.ServiceInterfaces;
 using Spice.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace Spice.Service.State
 {
@@ -13,7 +10,7 @@ namespace Spice.Service.State
     {
         public void HandleRequest(IUnitOfWork _unitOfWork, IEmailSender _emailSender, int OrderId)
         {
-            StateStaticMethods.SendNotifyEmail(_unitOfWork, _emailSender, OrderId, SD.StatusCompleted, Message: " has been completed");
+            StateHandlingUtils.SendNotifyEmail(_unitOfWork, _emailSender, OrderId, SD.StatusCompleted, Message: " has been completed");
         }
     }
 }

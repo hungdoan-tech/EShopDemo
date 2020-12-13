@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Hosting;
 using Spice.Service;
 using Spice.Repository;
+using Spice.Service.ServiceInterfaces;
 
 namespace Spice
 {
@@ -68,7 +69,7 @@ namespace Spice
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Our service section
-            services.AddScoped<IFacadeService, CartFacadeService>();
+            services.AddScoped<IFacadeCartService, CartFacadeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
