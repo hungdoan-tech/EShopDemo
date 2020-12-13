@@ -10,7 +10,6 @@ namespace Spice.Utility
     {
         public const string DefaultFoodImage = "default_food.png";
 
-
         public const string ManagerUser = "Manager";
         public const string RepositoryManager = "RepositoryManager";
         public const string Shipper = "Shipper";
@@ -28,7 +27,6 @@ namespace Spice.Utility
         public const string PaymentStatusPending = "Pending";
         public const string PaymentStatusApproved = "Approved";
         public const string PaymentStatusRejected = "Rejected";
-
 
         public static string ConvertToRawHtml(string source)
         {
@@ -87,6 +85,5 @@ namespace Spice.Utility
             }
             return OriginalOrderTotal;
         }
-
     }
 }

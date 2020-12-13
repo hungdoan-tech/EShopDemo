@@ -67,16 +67,16 @@ namespace Spice.Data
             IdentityUser user2 = await _db.Users.FirstOrDefaultAsync(u => u.Email == "repository@gmail.com");
             await _userManager.AddToRoleAsync(user2, SD.RepositoryManager);
 
-            _userManager.CreateAsync(new ApplicationUser
-            {
-                UserName = "shipper@gmail.com",
-                Email = "shipper@gmail.com",
-                Name = "Shipper",
-                EmailConfirmed = true,
-                PhoneNumber = "1112223333"
-            }, "Admin123*").GetAwaiter().GetResult();
-            IdentityUser user3 = await _db.Users.FirstOrDefaultAsync(u => u.Email == "shipper@gmail.com");
-            await _userManager.AddToRoleAsync(user3, SD.Shipper);       
+            //_userManager.CreateAsync(new ApplicationUser
+            //{
+            //    UserName = "shipper@gmail.com",
+            //    Email = "shipper@gmail.com",
+            //    Name = "Shipper",
+            //    EmailConfirmed = true,
+            //    PhoneNumber = "1112223333"
+            //}, "Admin123*").GetAwaiter().GetResult();
+            //IdentityUser user3 = await _db.Users.FirstOrDefaultAsync(u => u.Email == "shipper@gmail.com");
+            //await _userManager.AddToRoleAsync(user3, SD.Shipper);       
         }
     }
 }

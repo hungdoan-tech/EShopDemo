@@ -28,5 +28,21 @@ namespace Spice.Models
         public string City { get; set; }
         public string TransactionId { get; set; }
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
+
+        public OrderHeader()
+        {
+
+        }
+        public OrderHeader(string userId, double orderTotalOriginal, double orderTotal, string pickupName, string phoneNumber, string email, string streetAddress, string city)
+        {
+            UserId = userId;
+            OrderTotalOriginal = orderTotalOriginal;
+            OrderTotal = orderTotal;
+            PickupName = pickupName;
+            PhoneNumber = phoneNumber;
+            Email = email;
+            StreetAddress = streetAddress;
+            City = city;
+        }
     }
 }

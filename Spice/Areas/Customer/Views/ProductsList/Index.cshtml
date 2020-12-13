@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="hero-cap text-center">
-                        <h2>Cửa hàng Đồng Hồ</h2>
+                        <h2>List products</h2>
                     </div>
                 </div>
             </div>
@@ -28,12 +28,8 @@
                 <!--Nav Button  -->
                 <nav>
                     <div class="nav nav-tabs " id="nav-tab" role="tablist">
-
-                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descDate" class="nav-item nav-link active" id="nav-descDate-tab">Mới Nhất</a>
-                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descPrice" class="nav-item nav-link" id="nav-descPrice-tab">Giá Từ Cao Tới Thấp</a>
-                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="mostPopuler" class="nav-item nav-link" id="nav-mostPopuler-tab">Phổ biến </a>
                         <div class="dropdown">
-                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="category" asp-route-groupProductsSelected="Default" id="nav-cateall-tab">Loại Sản Phẩm</a>
+                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="category" asp-route-groupProductsSelected="Default" id="nav-cateall-tab">Product Categories</a>
                             <div class="dropdown-content">
                                 @foreach (var item in Model.Categories)
                                 {
@@ -43,7 +39,7 @@
                             </div>
                         </div>
                         <div class="dropdown">
-                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="brand" asp-route-groupProductsSelected="Default" id="nav-brandall-tab">Hãng</a>
+                            <a class="droplb nav-item nav-link" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="brand" asp-route-groupProductsSelected="Default" id="nav-brandall-tab">Brands</a>
                             <div class="dropdown-content">
                                 @foreach (var item in Model.SubCategories)
                                 {
@@ -51,6 +47,9 @@
                                 }
                             </div>
                         </div>
+                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descDate" class="nav-item nav-link" id="nav-descDate-tab">New arrivals</a>
+                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="mostPopuler" class="nav-item nav-link" id="nav-mostPopuler-tab">Popular </a>
+                        <a asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descPrice" class="nav-item nav-link" id="nav-descPrice-tab">Sort to priced</a>
                     </div>
                 </nav>
                 <!--End Nav Button  -->
@@ -63,10 +62,8 @@
                 <form id="formPageSize" method="get" asp-controller="ProductsList" asp-action="Index" asp-route-orderBy="descDate">
                     <div class="select-itms">
                         <select name="pageSize" onchange="requestSelect()" id="select1">
-                            <option value="10">10SP Mỗi Trang</option>
-                            <option value="20">20SP Mỗi Trang</option>
-                            <option value="30">30SP Mỗi Trang</option>
-                            <option value="40">40SP Mỗi Trang</option>
+                            <option value="10">10 per page</option>
+                            <option value="20">20 per page</option>
                         </select>
                     </div>
                 </form>
@@ -84,7 +81,7 @@
                                 <div class="popular-img">
                                     <a class="product-image" asp-action="Details" asp-controller="Home" asp-route-id="@product.Id"><img src="@product.Image"></a>
                                     <div class="img-cap">
-                                        <span><a asp-action="Details" asp-controller="Home" asp-route-id="@product.Id">Thêm vào giỏ hàng</a></span>
+                                        <span><a asp-action="Details" asp-controller="Home" asp-route-id="@product.Id">Click for detail</a></span>
                                     </div>
                                     <div class="favorit-items">
                                         <span class="flaticon-heart"></span>
@@ -92,7 +89,7 @@
                                 </div>
                                 <div>
                                     <h3><a asp-action="Details" asp-controller="Home" asp-route-id="@product.Id">@product.Name</a></h3>
-                                    <span>@product.Price VNĐ</span>
+                                    <span>$@product.Price</span>
                                 </div>
                             </div>
                         </div>

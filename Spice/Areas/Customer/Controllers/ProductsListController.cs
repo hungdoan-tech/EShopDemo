@@ -137,8 +137,6 @@ namespace Spice.Areas.Customer.Controllers
                 }
             }
 
-
-
             ProductsListVM.PagingInfo = new PagingInfo()
             {
                 CurrentPage = productPage,

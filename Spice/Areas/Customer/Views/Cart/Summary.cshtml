@@ -19,10 +19,10 @@
                     <div class="card-header bg-dark text-light ml-0 row container">
                         <div class="col-6">
                             <i class="fa fa-shopping-cart"></i> &nbsp;
-                            Thanh Toán Hóa Đơn
+                            Deal Detail
                         </div>
                         <div class="col-6 text-right">
-                            <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="btn_1">Trở về giỏ hàng</a>
+                            <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="btn_1">Back to cart</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -31,12 +31,12 @@
                                 <div class="col-12 col-lg-6 pb-4">
                                     <div class="row">
                                         <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                            <span class="text-info">Chi tiết giỏ hàng</span>
+                                            <span class="text-info">Cart Detail</span>
                                         </h4>
                                     </div>
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>Tên</label>
+                                            <label>Your name</label>
                                         </div>
                                         <div class="col-9">
                                             <input asp-for="@Model.OrderHeader.PickupName" id="txtName" type="text" class="form-control" />
@@ -44,7 +44,7 @@
                                     </div>
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>Sôs điện thoại</label>
+                                            <label>Your phone</label>
                                         </div>
                                         <div class="col-9">
                                             <input asp-for="@Model.OrderHeader.PhoneNumber" id="txtPhone" type="text" class="form-control" />
@@ -53,7 +53,7 @@
 
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>Địa chỉ</label>
+                                            <label>Address</label>
                                         </div>
                                         <div class="col-9">
                                             <input asp-for="@Model.OrderHeader.StreetAddress" id="txtAddress" type="text" class="form-control" />
@@ -71,7 +71,7 @@
 
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>Thành Phố</label>
+                                            <label>City</label>
                                         </div>
                                         <div class="col-9">
                                             <input asp-for="@Model.OrderHeader.City" id="txtCity" type="text" class="form-control" />
@@ -80,7 +80,7 @@
 
                                     <div class="row my-1">
                                         <div class="col-3">
-                                            <label>Ghi Chú Thêm (Nếu có)</label>
+                                            <label>Extend note (if have)</label>
                                         </div>
                                         <div class="col-9">
                                             <textarea asp-for="@Model.OrderHeader.Comments" style="height:100px;" class="form-control"></textarea>
@@ -90,7 +90,7 @@
 
                                 <div class="col-12 col-lg-5 offset-lg-1">
                                     <h4 class="d-flex justify-content-between align-items-center mb-3">
-                                        <span class="text-info">Thông tin đơn hàng:</span>
+                                        <span class="text-info">Deal Infomation:</span>
                                     </h4>
                                     <ul class="list-group mb-3">
                                         @{ var total = 0.0;}
@@ -100,7 +100,7 @@
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>
                                                     <h6 class="my-0">@details.Item.Name</h6>
-                                                    <small class="text-muted">Số Lượng: @details.Quantity</small>
+                                                    <small class="text-muted">Quantity: @details.Quantity</small>
                                                 </div>
                                                 <span class="text-muted">$@(details.Item.Price * details.Quantity)</span>
                                                 @{ total += (details.Item.Price * details.Quantity); }
@@ -110,15 +110,15 @@
                                         {
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div class="text-success">
-                                                    <h6 class="my-0">Mã Giảm Giá</h6>
+                                                    <h6 class="my-0">Coupon</h6>
                                                     <small class="text-success">@Model.OrderHeader.CouponCode</small>
                                                 </div>
                                                 <span class="text-success">-$@(total - Model.OrderHeader.OrderTotal)</span>
                                             </li>
                                         }
                                         <li class="list-group-item d-flex justify-content-between bg-light">
-                                            <small class="text-info">Total (VNĐ)</small>
-                                            <strong class="text-info">@(Model.OrderHeader.OrderTotal) VNĐ</strong>
+                                            <small class="text-info">Total</small>
+                                            <strong class="text-info">$@(Model.OrderHeader.OrderTotal)</strong>
                                         </li>
                                     </ul>
                                 </div>
@@ -135,9 +135,9 @@
                                 <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                                         data-key="@Stripe.Value.PublishableKey"
                                         data-amount="@OrderTotalForStrip"
-                                        data-name="Spice Restaurant"
-                                        data-label="Place Order"
-                                        data-description="Good Food, Good Mood."
+                                        data-name="Time Zone"
+                                        data-label="Good Place To Buy Your Watch"
+                                        data-description="Good Watch, Good Mood."
                                         data-locale="auto"
                                         data-allow-remember-me="false"
                                         data-image="https://stripe.com/img/documentation/checkout/marketplace.png">
@@ -145,7 +145,7 @@
                                 <script>
                                     document.getElementsByClassName("stripe-button-el")[0].style.display = 'none';
                                 </script>
-                                <button type="submit" id="btnPlaceOrder" onclick="return validateInput()" value="Place Order" class="btn btn-success form-control">Thanh Toán</button>
+                                <button type="submit" id="btnPlaceOrder" onclick="return validateInput()" value="Place Order" class="btn btn-success form-control">Charge</button>
                             </div>
                         </div>
                     </div>
@@ -155,7 +155,11 @@
     }
     else
     {
-        <div class="backgroundWhiteBorder">Không có sản phẩm nào trong giỏ hàng...</div>
+         <div class="container">
+            <h4>
+                There is no one exists in cart...
+            </h4>            
+        </div>
     }
 </form>
 

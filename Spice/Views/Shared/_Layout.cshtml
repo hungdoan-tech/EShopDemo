@@ -64,9 +64,9 @@
                         <div class="main-menu d-none d-lg-block">
                             <nav>
                                 <ul id="navigation">
-                                    <li><a asp-action="Index" asp-controller="Home" asp-area="Customer">Trang Chủ</a></li>
+                                    <li><a asp-action="Index" asp-controller="Home" asp-area="Customer">Home</a></li>
                                     <li>
-                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Loại Sản Phẩm</a>
+                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Categories</a>
                                         <ul class="submenu">
                                             <li>
                                             <li><a href="~/Customer/ProductsList?orderBy=category&groupProductsSelected=Analog"> Analog </a></li>
@@ -74,7 +74,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Hãng</a>
+                                        <a asp-action="Index" asp-controller="ProductsList" asp-area="Customer">Brands</a>
                                         <ul class="submenu">
                                             <li>
                                             <li><a href="~/Customer/ProductsList?orderBy=brand&groupProductsSelected=Rolex"> Rolex </a></li>
@@ -84,16 +84,16 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a asp-action="Index" asp-controller="NewsPost" asp-area="Customer">Tin Tức</a>
+                                        <a asp-action="Index" asp-controller="NewsPost" asp-area="Customer">News</a>
                                     </li>
-                                    <li><a asp-action="Privacy" asp-controller="Home" asp-area="Customer">Liên Hệ</a></li>
+                                    <li><a asp-action="Privacy" asp-controller="Home" asp-area="Customer">Contact</a></li>
                                     @if (User.IsInRole(SD.CustomerEndUser))
                                     {
                                         <li>
-                                            <a asp-action="OrderTracking" asp-controller="Order" asp-area="Customer" id="trackingOrdering">Theo Dõi Đơn Hàng</a>
+                                            <a asp-action="OrderTracking" asp-controller="Order" asp-area="Customer" id="trackingOrdering">Deal tracking</a>
                                             <ul class="submenu">
                                                 <li>
-                                                    <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory">Lịch Sử Hóa Đơn</a>
+                                                    <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory">Deal History</a>
                                                 </li>
                                             </ul>
                                         </li>
@@ -156,12 +156,12 @@
 
                         <!-- Heading -->
                         <h6 class="heading-xxs mb-1">
-                            Miễn Phí Giao Hàng
+                            Free Shipping
                         </h6>
 
                         <!-- Text -->
                         <p class="mb-0 font-size-sm text-muted">
-                            Với đơn hàng trên 500 nghìn đồng
+                            Free ship for every deal which has its toal amount is more than 100$
                         </p>
 
                     </div>
@@ -182,12 +182,12 @@
 
                         <!-- Heading -->
                         <h6 class="mb-1 heading-xxs">
-                            Đối Trả Miễn Phí
+                            Refund of exchange in our warranty
                         </h6>
 
                         <!-- Text -->
                         <p class="mb-0 font-size-sm text-muted">
-                            Hoàn tiền sản phẩm trong vòng 7 ngày.
+                            We will refund or exchange the foul one for any customer if thats watch is still in warranty time
                         </p>
 
                     </div>
@@ -208,12 +208,12 @@
 
                         <!-- Heading -->
                         <h6 class="mb-1 heading-xxs">
-                            Thanh Toán Bảo Mật
+                            Safe payment 
                         </h6>
 
                         <!-- Text -->
                         <p class="mb-0 font-size-sm text-muted">
-                            An Toàn và Nhanh Chóng
+                            You will get a safe and quick payment way to buy your good watchs
                         </p>
 
                     </div>
@@ -234,12 +234,12 @@
 
                         <!-- Heading -->
                         <h6 class="mb-1 heading-xxs">
-                            Sản Phẩm Đa Dạng
+                            The Diversity of our products
                         </h6>
 
                         <!-- Text -->
                         <p class="mb-0 font-size-sm text-muted">
-                            Cửa hàng sẵn sàng những mặt hàng bạn muốn.
+                           Our services is always ready for your request, whatever and whenver you need us
                         </p>
 
                     </div>
@@ -342,7 +342,7 @@
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-btn">+</div>
             <form class="search-model-form" asp-area="Customer" asp-controller="ProductsList" asp-action="Index">
-                <input type="text" id="search-input" name="searchName" placeholder="Sản phẩm mà bạn muốn tìm...">
+                <input type="text" id="search-input" name="searchName" placeholder="Typing some letter...">
             </form>
         </div>
     </div>
