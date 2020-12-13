@@ -28,38 +28,25 @@ namespace Spice.Repository
             _context = context;
         }
 
-        // Kiểm tra xem repository đã được khởi tạo chưa
         public ICategoryRepository CategoryRepository
         {
             get
             {
-                if (this.categoryRepository == null)
-                {
-                    this.categoryRepository = new CategoryRepository(_context);
-                }
-                return this.categoryRepository;
+                return this.categoryRepository ?? new CategoryRepository(_context); 
             }
         }
         public ISubCategoryRepository SubCategoryRepository
         {
             get
             {
-                if (this.subCategoryRepository == null)
-                {
-                    this.subCategoryRepository = new SubCategoryRepository(_context);
-                }
-                return this.subCategoryRepository;
+                return this.subCategoryRepository ?? new SubCategoryRepository(_context); ;
             }
         }
         public ICouponRepository CouponRepository
         {
             get
             {
-                if (this.couponRepository == null)
-                {
-                    this.couponRepository = new CouponRepository(_context);
-                }
-                return this.couponRepository;
+                return this.couponRepository ?? new CouponRepository(_context); ;
             }
         }
 
@@ -67,11 +54,7 @@ namespace Spice.Repository
         {
             get
             {
-                if (this.importHistoryRepository == null)
-                {
-                    this.importHistoryRepository = new ImportHistoryRepository(_context);
-                }
-                return this.importHistoryRepository;
+                return this.importHistoryRepository ?? new ImportHistoryRepository(_context); ;
             }
         }
 
@@ -79,22 +62,14 @@ namespace Spice.Repository
         {
             get
             {
-                if (this.applicationUserRepository == null)
-                {
-                    this.applicationUserRepository = new ApplicationUserRepository(_context);
-                }
-                return this.applicationUserRepository;
+                return this.applicationUserRepository ?? new ApplicationUserRepository(_context); ;
             }
         }
         public INewsRepository NewsRepository
         {
             get
             {
-                if (this.newsRepository == null)
-                {
-                    this.newsRepository = new NewsRepository(_context);
-                }
-                return this.newsRepository;
+                return this.newsRepository ?? new NewsRepository(_context); 
             }
         }
 
@@ -102,11 +77,7 @@ namespace Spice.Repository
         {
             get
             {
-                if (this.menuItemRepository == null)
-                {
-                    this.menuItemRepository = new MenuItemRepository(_context);
-                }
-                return this.menuItemRepository;
+                return this.menuItemRepository ?? new MenuItemRepository(_context); 
             }
         }
 
@@ -114,11 +85,7 @@ namespace Spice.Repository
         {
             get
             {
-                if (this.orderHeaderRepository == null)
-                {
-                    this.orderHeaderRepository = new OrderHeaderRepository(_context);
-                }
-                return this.orderHeaderRepository;
+                return this.orderHeaderRepository ?? new OrderHeaderRepository(_context); ;
             }
         }
 
@@ -126,11 +93,7 @@ namespace Spice.Repository
         {
             get
             {
-                if (this.orderDetailRepository == null)
-                {
-                    this.orderDetailRepository = new OrderDetailRepository(_context);
-                }
-                return this.orderDetailRepository;
+                return this.orderDetailRepository ?? new OrderDetailRepository(_context);
             }
         }
 
@@ -160,6 +123,5 @@ namespace Spice.Repository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
     }
 }

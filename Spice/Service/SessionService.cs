@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Spice.Data;
 using Spice.Extensions;
 using Spice.Models.ViewModels;
+using Spice.Service.ServiceInterfaces;
 using Spice.Utility;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 
 namespace Spice.Service
 {
-    public class SessionService
+    public class SessionService: ISessionService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         public SessionService(IHttpContextAccessor httpContextAccessor)

@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Microsoft.Extensions.Configuration;
@@ -40,11 +34,7 @@ namespace Spice
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-
+            
             services.AddIdentity<IdentityUser, IdentityRole>(config =>
             {
                 config.Password.RequiredLength = 4;
@@ -56,16 +46,8 @@ namespace Spice
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            
-            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
-            services.AddTransient<IEmailSender, EmailSender>();
-            
-            services.AddScoped<IDbInitializer, DbInitializer>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IFacadeService, CartFacadeService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
-
             services.AddSession(options =>
             {
                 options.Cookie.IsEssential = true;
@@ -74,6 +56,19 @@ namespace Spice
             });
             services.AddControllers(options => options.EnableEndpointRouting = false);
             services.AddMvc(options => options.EnableEndpointRouting = false);
+
+            // Config section
+            services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
+            services.AddTransient<IEmailSender, EmailSender>();
+
+            // Database section
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IDbInitializer, DbInitializer>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Our service section
+            services.AddScoped<IFacadeService, CartFacadeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,14 +95,14 @@ namespace Spice
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "areas",
-                    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
-                endpoints.MapControllers();
+                {
+                    endpoints.MapControllerRoute(
+                        name: "areas",
+                        pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapRazorPages();
+                    endpoints.MapControllers();
 
-            });
+                });
             }
         }
 } 

@@ -13,7 +13,7 @@ namespace Spice.Service.State
     {
         void IOrderState.HandleRequest(IUnitOfWork _unitOfWork, IEmailSender _emailSender, int OrderId)
         {
-            StateStaticMethods.SendNotifyEmail(_unitOfWork, _emailSender, OrderId, SD.StatusSubmitted, Message: " is summitted");
+            StateHandlingUtils.SendNotifyEmail(_unitOfWork, _emailSender, OrderId, SD.StatusSubmitted, Message: " is summitted");
         }
     }
 }

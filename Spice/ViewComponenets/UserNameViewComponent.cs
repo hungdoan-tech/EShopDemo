@@ -27,6 +27,5 @@ namespace Spice.ViewComponenets
 
             return View(userFromDb);
         }
-
     }
 }
