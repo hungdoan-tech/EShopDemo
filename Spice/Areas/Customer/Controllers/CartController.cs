@@ -73,7 +73,6 @@ namespace Spice.Areas.Customer.Controllers
                 detailCart.OrderHeader.CouponCode = "";
             }
             HttpContext.Session.SetString(SD.ssCouponCode, detailCart.OrderHeader.CouponCode);
-
             return RedirectToAction(nameof(Index));
         }
 

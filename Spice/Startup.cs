@@ -43,10 +43,10 @@ namespace Spice
                 config.Password.RequireDigit = false;
                 config.Password.RequireNonAlphanumeric = false;
                 config.Password.RequireUppercase = false;
-                config.SignIn.RequireConfirmedEmail = true;
+                config.SignIn.RequireConfirmedEmail = true;                
             })
-                .AddDefaultTokenProviders()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddDefaultTokenProviders()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -89,7 +89,9 @@ namespace Spice
                 app.UseHsts();
             }
             app.UseRouting();
+
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
+
             dbInitializer.Initialize();
             app.UseHttpsRedirection();
             app.UseStaticFiles();

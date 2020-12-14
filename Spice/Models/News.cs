@@ -17,9 +17,6 @@ namespace Spice.Models
         public string ImageHeader { get; set; }
         public string Type { get; set; }
         public enum EType { IntergratedInItem = 0, Coupon = 1, News = 2 }
-
-        //public int ApplicationUserId { get; set; }
-        //public virtual ApplicationUser ApplicationUser { get; set; }
         public int? MenuItemId { get; set; }
         public virtual MenuItem MenuItem { get; set; }
     }

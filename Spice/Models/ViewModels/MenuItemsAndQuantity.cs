@@ -13,5 +13,6 @@ namespace Spice.Models.ViewModels
         [Range(1, int.MaxValue, ErrorMessage = "Please enter a value greater than or equal to {1}")]
         public int Quantity { get; set; }
         public News News { get; set; }
+        public List<MenuItem> SimilarProducts { get; set;}
     }
 }

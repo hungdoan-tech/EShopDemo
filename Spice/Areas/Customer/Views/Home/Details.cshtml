@@ -7,7 +7,6 @@
 }
 
 <br />
-
 <form id="myform" method="post">
     <div>
         <div class="row">
@@ -70,21 +69,6 @@
                         </div> <!-- col.// -->
                         <div class="col-sm-7">
                             <dl class="param param-inline">
-                                @*<dt>Size: </dt>
-                                    <dd>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                            <span class="form-check-label">SM</span>
-                                        </label>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                            <span class="form-check-label">MD</span>
-                                        </label>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                            <span class="form-check-label">XXL</span>
-                                        </label>
-                                    </dd>*@
                             </dl>  <!-- item-property .// -->
                         </div> <!-- col.// -->
                     </div> <!-- row.// -->
@@ -114,6 +98,33 @@
     }
 </form>
 
+<div class="container-fluid" style="padding-left:20%">
+    <div class="row">
+        @foreach (MenuItem recommendProduct in Model.SimilarProducts)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="card" style="width:400px">
+                    <img src="@recommendProduct.Image" alt="Avatar" style="width:50%; height:50%; margin:auto">
+                    <div class="card-body" style="margin:auto">
+                        <h4 class="card-title">@recommendProduct.Name</h4>
+                        <p class="card-text">@recommendProduct.Description</p>
+                        <a asp-action="Details" asp-route-id="@recommendProduct.Id" class="btn btn-info">See Profile</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+@*<div class="card" style=" display: inline;">
+        <img src="@tec.Image" alt="Avatar" style="width:10%">
+        <div class="container">
+            <h4><b>@tec.Name</b></h4>
+            <p>@tec.Description</p>
+        </div>
+    </div>*@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <script>

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
@@ -14,6 +6,12 @@ using Spice.Extensions;
 using Spice.Models;
 using Spice.Models.ViewModels;
 using Spice.Utility;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Spice.Controllers
 {
@@ -22,7 +20,7 @@ namespace Spice.Controllers
     {
         private readonly ApplicationDbContext _db;
 
-        //Once a page has default limit 3 products.
+        // a page has default limit 3 products.
         private int PageSize = 3;
 
         public HomeController(ApplicationDbContext db)
@@ -68,7 +66,7 @@ namespace Spice.Controllers
 
             IndexViewModel IndexVM = new IndexViewModel()
             {
-                MenuItem = await _db.MenuItem.Where(a=>a.IsPublish!=false)
+                MenuItem = await _db.MenuItem.Where(a => a.IsPublish != false)
                                              .Include(m => m.Category)
                                              .Include(m => m.SubCategory)
                                              .ToListAsync(),
@@ -115,11 +113,17 @@ namespace Spice.Controllers
             //Convert Enum Color -> String
             ViewBag.itemColor = Enum.GetName(typeof(MenuItem.EColor), Convert.ToInt32(menuItemFromDb.Color));
 
+            var highLimitPrice = menuItemFromDb.Price + (menuItemFromDb.Price * 25 / 100);
+            var lowLimitPrice = menuItemFromDb.Price - (menuItemFromDb.Price * 25 / 100);
+
+            var similarPriceProducts = _db.MenuItem.Take(2);
+
             MenuItemsAndQuantity menuItemsAndQuantity = new MenuItemsAndQuantity()
             {
                 Item = menuItemFromDb,
                 Quantity = 1,
-                News = await _db.News.Where(n => n.MenuItemId == id).FirstOrDefaultAsync()
+                News = await _db.News.Where(n => n.MenuItemId == id).FirstOrDefaultAsync(),
+                SimilarProducts = similarPriceProducts.ToList()
             };
             return View(menuItemsAndQuantity);
         }
@@ -136,17 +140,16 @@ namespace Spice.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Details(MenuItemsAndQuantity CartItemObject)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 List<MenuItemsAndQuantity> lstShoppingCart = HttpContext.Session.Get<List<MenuItemsAndQuantity>>("ssShoppingCart");
                 if (lstShoppingCart == null)
-
                 {
                     lstShoppingCart = new List<MenuItemsAndQuantity>();
                 }
                 foreach (var a in lstShoppingCart)
                 {
-                    if(a.Item.Id == CartItemObject.Item.Id)
+                    if (a.Item.Id == CartItemObject.Item.Id)
                     {
                         a.Quantity += CartItemObject.Quantity;
                         HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
@@ -154,7 +157,7 @@ namespace Spice.Controllers
                     }
                 }
                 lstShoppingCart.Add(CartItemObject);
-                HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);               
+                HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
                 return RedirectToAction("Index");
             }
             else
