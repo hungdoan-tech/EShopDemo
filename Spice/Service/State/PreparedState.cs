@@ -6,10 +6,10 @@ using Spice.Utility;
 namespace Spice.Service.State
 {
     public class PreparedState : IOrderState
-    {
-        public void HandleRequest(IUnitOfWork _unitOfWork, IEmailSender _emailSender, int OrderId)
+    {       
+        public void HandleRequest(IEmailService _emailService, int OrderId)
         {
-            StateHandlingUtils.SendNotifyEmail(_unitOfWork, _emailSender, OrderId, SD.StatusInProcess, Message: " is prepared at our repository");
-         }
+            _emailService.SendNotifyEmail(OrderId, SD.StatusInProcess, Message: " is prepared at our repository");
+        }
     }
 }

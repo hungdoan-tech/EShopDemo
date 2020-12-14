@@ -4,6 +4,6 @@ namespace Spice.Service.ServiceInterfaces
 {
     public interface IPaymentService
     {
-        public OrderDetailsCart Charge(OrderDetailsCart detailCart, string stripeToken);
+        public OrderDetailsCart ChargeStripe(OrderDetailsCart detailCart, string stripeToken);
     }
 }

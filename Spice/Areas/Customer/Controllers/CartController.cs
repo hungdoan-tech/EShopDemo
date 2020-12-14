@@ -22,6 +22,7 @@ namespace Spice.Areas.Customer.Controllers
         {
             _facadeCartService = FacadeService;
         }
+
         public IActionResult Index()
         {
             detailCart = new OrderDetailsCart()
@@ -59,7 +60,7 @@ namespace Spice.Areas.Customer.Controllers
             _facadeCartService.SaveObjectsToDB(detailCart,claim);
             _facadeCartService.ApplyCoupon(detailCart);
             _facadeCartService.ChargeMoney(detailCart, stripeToken);
-            _facadeCartService.SendEmailCommitted(detailCart, claim);
+            _facadeCartService.SendCommittedEmail(detailCart, claim);
             _facadeCartService.ClearSession();
 
             return RedirectToAction("Index", "Home");

@@ -12,7 +12,7 @@ namespace Spice.Service.ServiceInterfaces
         void SaveObjectsToDB(OrderDetailsCart detailCart, Claim claim);
         void ApplyCoupon(OrderDetailsCart detailCart);
         void ChargeMoney(OrderDetailsCart detailCart, string stripeToken);
-        void SendEmailCommitted(OrderDetailsCart detailCart, Claim claim);
+        void SendCommittedEmail(OrderDetailsCart detailCart, Claim claim);
         void CreateOrderHeaderBeforeSumary(OrderDetailsCart detailCart, Claim claim);
         void CheckCouponBeforeSumary(OrderDetailsCart detailCart);
         void PrepareForIndexCart(OrderDetailsCart detailCart);

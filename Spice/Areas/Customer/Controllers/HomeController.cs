@@ -22,7 +22,7 @@ namespace Spice.Controllers
     {
         private readonly ApplicationDbContext _db;
 
-        //Once a page has limit 3 products.
+        //Once a page has default limit 3 products.
         private int PageSize = 3;
 
         public HomeController(ApplicationDbContext db)
@@ -35,10 +35,25 @@ namespace Spice.Controllers
         {
             IndexHomeVM IndexVM = new IndexHomeVM()
             {
-                ListPopularMenuItem = await _db.MenuItem.Where(a => a.Tag == "2" && a.IsPublish == true).OrderByDescending(a => a.Id).Take(6).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
-                ListNewMenuItem = await _db.MenuItem.Where(a => a.Tag == "1" && a.IsPublish == true).OrderByDescending(a => a.Id).Take(6).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
-                ListBestSellerMenuItem = await _db.MenuItem.Where(a => a.Tag == "0" && a.IsPublish == true).OrderByDescending(a => a.Id).Take(2).Include(a => a.Category).Include(a => a.SubCategory).ToListAsync(),
-                ListNews = await _db.News.Where(a => a.Type != "0").OrderByDescending(a => a.PublishedDate).Take(2).ToListAsync()
+                ListPopularMenuItem = await _db.MenuItem.Where(a => a.Tag == "2" && a.IsPublish == true)
+                                                        .OrderByDescending(a => a.Id)
+                                                        .Take(6)
+                                                        .Include(a => a.Category)
+                                                        .Include(a => a.SubCategory).ToListAsync(),
+                ListNewMenuItem = await _db.MenuItem.Where(a => a.Tag == "1" && a.IsPublish == true)
+                                                    .OrderByDescending(a => a.Id)
+                                                    .Take(6).Include(a => a.Category)
+                                                    .Include(a => a.SubCategory)
+                                                    .ToListAsync(),
+                ListBestSellerMenuItem = await _db.MenuItem.Where(a => a.Tag == "0" && a.IsPublish == true)
+                                                    .OrderByDescending(a => a.Id)
+                                                    .Take(2).Include(a => a.Category)
+                                                    .Include(a => a.SubCategory)
+                                                    .ToListAsync(),
+                ListNews = await _db.News.Where(a => a.Type != "0")
+                                         .OrderByDescending(a => a.PublishedDate)
+                                         .Take(2)
+                                         .ToListAsync()
             };
             return View(IndexVM);
         }
@@ -53,9 +68,13 @@ namespace Spice.Controllers
 
             IndexViewModel IndexVM = new IndexViewModel()
             {
-                MenuItem = await _db.MenuItem.Where(a=>a.IsPublish!=false).Include(m => m.Category).Include(m => m.SubCategory).ToListAsync(),
+                MenuItem = await _db.MenuItem.Where(a=>a.IsPublish!=false)
+                                             .Include(m => m.Category)
+                                             .Include(m => m.SubCategory)
+                                             .ToListAsync(),
                 Category = await _db.Category.ToListAsync(),
-                Coupon = await _db.Coupon.Where(c => c.IsActive == true).ToListAsync()
+                Coupon = await _db.Coupon.Where(c => c.IsActive == true)
+                                         .ToListAsync()
             };
 
             //Pagination: - Url determine current pages.

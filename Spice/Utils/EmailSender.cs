@@ -8,7 +8,7 @@ namespace Spice.Service
 {
     public class EmailSender : IEmailSender
     {
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             var client = new SmtpClient("smtp.gmail.com")
             {
@@ -25,13 +25,12 @@ namespace Spice.Service
             mailMessage.Body = htmlMessage;
             try
             {
-                return client.SendMailAsync(mailMessage);
+                await client.SendMailAsync(mailMessage);
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-            }
-            return null;
+            }            
         }
     }
 }

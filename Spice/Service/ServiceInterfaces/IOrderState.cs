@@ -9,6 +9,6 @@ namespace Spice.Service.ServiceInterfaces
 {
     public interface IOrderState
     {
-        public void HandleRequest(IUnitOfWork _unitOfWork, IEmailSender _emailSender, int OrderId);
+        public void HandleRequest(IEmailService _emailService, int OrderId);
     }
 }

@@ -7,9 +7,9 @@ namespace Spice.Service.State
 {
     public class SubmittedState: IOrderState
     {
-        void IOrderState.HandleRequest(IUnitOfWork _unitOfWork, IEmailSender _emailSender, int OrderId)
+        public void HandleRequest(IEmailService _emailService, int OrderId)
         {
-            StateHandlingUtils.SendNotifyEmail(_unitOfWork, _emailSender, OrderId, SD.StatusSubmitted, Message: " is summitted");
+            _emailService.SendNotifyEmail(OrderId, SD.StatusSubmitted, Message: " is summitted");
         }
     }
 }

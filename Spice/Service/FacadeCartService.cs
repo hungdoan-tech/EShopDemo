@@ -13,66 +13,68 @@ namespace Spice.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IEmailSender _emailSender;
 
-        private CartService cartService;
-        private PaymentService paymentService;
-        private EmailService emailService;
-        private SessionService sessionService;
+        private readonly CartService _cartService;
+        private readonly PaymentService _paymentService;
+        private readonly IEmailService _emailService;
+        private readonly SessionService _sessionService;
 
-        public CartFacadeService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, IEmailSender emailSender)
+        public CartFacadeService(IUnitOfWork unitOfWork, 
+                                IHttpContextAccessor httpContextAccessor,
+                                IEmailService emailService)
         {
-            _unitOfWork = unitOfWork;
-            _httpContextAccessor = httpContextAccessor;
-            _emailSender = emailSender;
+            this._unitOfWork = unitOfWork;
+            this._httpContextAccessor = httpContextAccessor;
+            this._emailService = emailService;
 
-            this.cartService = new CartService(_unitOfWork, _httpContextAccessor);
-            this.paymentService = new PaymentService();
-            this.emailService = new EmailService(_unitOfWork, _emailSender);
-            this.sessionService = new SessionService(_httpContextAccessor);
+            this._cartService = new CartService(_unitOfWork, _httpContextAccessor);
+            this._paymentService = new PaymentService();            
+            this._sessionService = new SessionService(_httpContextAccessor);
         }
 
         public void SaveObjectsToDB(OrderDetailsCart detailCart, Claim claim)
         {
-            this.cartService.SaveOrderHeaderAddOrderDetail(detailCart,claim);
+            this._cartService.SaveOrderHeaderAddOrderDetail(detailCart,claim);
         }
 
         public void ApplyCoupon(OrderDetailsCart detailCart)
         {
-            this.cartService.ApplyCoupon(detailCart);
+            this._cartService.ApplyCoupon(detailCart);
         }
 
         public void ChargeMoney(OrderDetailsCart detailCart,string stripeToken)
         {
-            this.paymentService.Charge(detailCart, stripeToken);
+            this._paymentService.ChargeStripe(detailCart, stripeToken);
         }
 
-        public void SendEmailCommitted(OrderDetailsCart detailCart, Claim claim)
+        public void SendCommittedEmail(OrderDetailsCart detailCart, Claim claim)
         {
-            this.emailService.SendMailSummitted(detailCart, claim);
+            this._emailService.SendSummittedMail(detailCart, claim);
         }
 
         public void CreateOrderHeaderBeforeSumary(OrderDetailsCart detailCart, Claim claim)
         {
-            this.cartService.CreateOrderHeaderBeforeSumary(detailCart, claim);
+            this._cartService.CreateOrderHeaderBeforeSumary(detailCart, claim);
         }
+
         public void CheckCouponBeforeSumary(OrderDetailsCart detailCart)
         {
-            this.cartService.CheckCouponBeforeSumary(detailCart);
+            this._cartService.CheckCouponBeforeSumary(detailCart);
         }
+
         public void ClearSession()
         {
-            this.sessionService.Clear();
+            this._sessionService.Clear();
         }
 
         public void PrepareForIndexCart(OrderDetailsCart detailCart)
         {
-            this.cartService.PrepareForIndexCart(detailCart);
+            this._cartService.PrepareForIndexCart(detailCart);
         }
 
         public Boolean CheckCurrentItemQuantity(int cartId)
         {
-            return this.cartService.CheckCurrentItemQuantity(cartId);
+            return this._cartService.CheckCurrentItemQuantity(cartId);
         }
     }
 }

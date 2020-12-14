@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Spice.Service;
 using Spice.Repository;
 using Spice.Service.ServiceInterfaces;
+using Spice.Service.State;
 
 namespace Spice
 {
@@ -61,15 +62,16 @@ namespace Spice
             // Config section
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IEmailService, EmailService>();
 
             // Database section
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Our service section
             services.AddScoped<IFacadeCartService, CartFacadeService>();
+            services.AddTransient<IOrderContext, OrderContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

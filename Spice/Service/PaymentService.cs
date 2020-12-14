@@ -8,12 +8,12 @@ namespace Spice.Service
 {
     public class PaymentService: IPaymentService
     {
-        public OrderDetailsCart Charge(OrderDetailsCart detailCart, string stripeToken)
+        public OrderDetailsCart ChargeStripe(OrderDetailsCart detailCart, string stripeToken)
         {
             var options = new ChargeCreateOptions
             {
                 Amount = Convert.ToInt32(detailCart.OrderHeader.OrderTotal * 100),
-                Currency = "usd",
+                Currency = "USD",
                 Description = "Order ID : " + detailCart.OrderHeader.Id,
                 Source = stripeToken
             };

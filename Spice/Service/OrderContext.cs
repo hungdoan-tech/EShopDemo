@@ -4,17 +4,14 @@ using Spice.Service.ServiceInterfaces;
 
 namespace Spice.Service.State
 {
-    public class OrderContext
+    public class OrderContext : IOrderContext
     {
-        protected IUnitOfWork _unitOfWork;
-        protected IEmailSender _emailSender;
+        protected readonly IEmailService _emailService;
         private IOrderState state;
 
-        public OrderContext(IUnitOfWork unitOfWork, IEmailSender emailSender, IOrderState state)
+        public OrderContext(IEmailService emailService)
         {
-            _unitOfWork = unitOfWork;
-            _emailSender = emailSender;
-            this.state = state;
+            this._emailService = emailService;
         }
 
         public void SetState(IOrderState state)
@@ -24,7 +21,7 @@ namespace Spice.Service.State
 
         public void ApplyState(int OrderId)
         {
-            this.state.HandleRequest(_unitOfWork,_emailSender, OrderId);
+            this.state.HandleRequest(this._emailService, OrderId);
         }
     }
 }

@@ -7,10 +7,10 @@ using Spice.Utility;
 namespace Spice.Service.State
 {
     public class OnShippingState : IOrderState
-    {
-        public void HandleRequest(IUnitOfWork _unitOfWork, IEmailSender _emailSender, int OrderId)
+    {       
+        public void HandleRequest(IEmailService _emailService, int OrderId)
         {
-            StateHandlingUtils.SendNotifyEmail(_unitOfWork, _emailSender, OrderId, SD.StatusReady, Message: " is on shipping");
+            _emailService.SendNotifyEmail(OrderId, SD.StatusReady, Message: " is on shipping");
         }
     }
 }

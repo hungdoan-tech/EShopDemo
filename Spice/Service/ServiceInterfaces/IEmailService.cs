@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Spice.Service.ServiceInterfaces
 {
-    interface IEmailService
+    public interface IEmailService
     {
-        public void SendMailSummitted(OrderDetailsCart detailCart, Claim claim);
+        public void SendSummittedMail(OrderDetailsCart detailCart, Claim claim);
+        public void SendNotifyEmail(int OrderId, string OrderStatus, string Message);
+        public void SendCanceledMail(int OrderId);
     }
 }
