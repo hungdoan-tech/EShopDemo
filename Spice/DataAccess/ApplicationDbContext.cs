@@ -24,6 +24,7 @@ namespace Spice.Data
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<ImportHistory> ImportHistories { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

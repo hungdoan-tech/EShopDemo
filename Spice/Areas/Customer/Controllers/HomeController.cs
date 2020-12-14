@@ -13,6 +13,7 @@ using Spice.Data;
 using Spice.Extensions;
 using Spice.Models;
 using Spice.Models.ViewModels;
+using Spice.Repository;
 using Spice.Utility;
 
 namespace Spice.Controllers
@@ -21,12 +22,13 @@ namespace Spice.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _db;
-
+        private readonly IUnitOfWork _unitOfWork;
         //Once a page has limit 3 products.
         private int PageSize = 3;
 
-        public HomeController(ApplicationDbContext db)
+        public HomeController(ApplicationDbContext db, IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
             _db = db;
         }
 
@@ -149,6 +151,19 @@ namespace Spice.Controllers
                 };
                 return View(cartObj);
             }
+        }
+        [Authorize]
+        public IActionResult CreateRating(Rating rating)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                //if valid
+                _unitOfWork.RatingRepository.Create(rating);
+                _unitOfWork.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction();
         }
 
         public IActionResult Privacy()

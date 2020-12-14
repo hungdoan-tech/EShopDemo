@@ -383,7 +383,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Rolex 1",
                             Price = 100.0,
-                            PublishedDate = new DateTime(2020, 7, 21, 10, 45, 6, 369, DateTimeKind.Local).AddTicks(8913),
+                            PublishedDate = new DateTime(2020, 12, 14, 15, 30, 12, 766, DateTimeKind.Local).AddTicks(4251),
                             Quantity = 6,
                             SubCategoryId = 3,
                             Tag = "2"
@@ -398,7 +398,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Rolex 2",
                             Price = 156.0,
-                            PublishedDate = new DateTime(2020, 7, 21, 10, 45, 6, 370, DateTimeKind.Local).AddTicks(2415),
+                            PublishedDate = new DateTime(2020, 12, 14, 15, 30, 12, 766, DateTimeKind.Local).AddTicks(6074),
                             Quantity = 20,
                             SubCategoryId = 3,
                             Tag = "2"
@@ -413,7 +413,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Rolex 3",
                             Price = 25.0,
-                            PublishedDate = new DateTime(2020, 7, 21, 10, 45, 6, 370, DateTimeKind.Local).AddTicks(2517),
+                            PublishedDate = new DateTime(2020, 12, 14, 15, 30, 12, 766, DateTimeKind.Local).AddTicks(6109),
                             Quantity = 23,
                             SubCategoryId = 3,
                             Tag = "2"
@@ -428,7 +428,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Casio 1",
                             Price = 245.0,
-                            PublishedDate = new DateTime(2020, 7, 21, 10, 45, 6, 370, DateTimeKind.Local).AddTicks(2524),
+                            PublishedDate = new DateTime(2020, 12, 14, 15, 30, 12, 766, DateTimeKind.Local).AddTicks(6111),
                             Quantity = 20,
                             SubCategoryId = 2,
                             Tag = "2"
@@ -443,7 +443,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Casio 2",
                             Price = 154.0,
-                            PublishedDate = new DateTime(2020, 7, 21, 10, 45, 6, 370, DateTimeKind.Local).AddTicks(2528),
+                            PublishedDate = new DateTime(2020, 12, 14, 15, 30, 12, 766, DateTimeKind.Local).AddTicks(6113),
                             Quantity = 25,
                             SubCategoryId = 2,
                             Tag = "1"
@@ -458,7 +458,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Casio 3",
                             Price = 157.0,
-                            PublishedDate = new DateTime(2020, 7, 21, 10, 45, 6, 370, DateTimeKind.Local).AddTicks(2533),
+                            PublishedDate = new DateTime(2020, 12, 14, 15, 30, 12, 766, DateTimeKind.Local).AddTicks(6115),
                             Quantity = 15,
                             SubCategoryId = 2,
                             Tag = "1"
@@ -473,7 +473,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Samsung 1",
                             Price = 198.0,
-                            PublishedDate = new DateTime(2020, 7, 21, 10, 45, 6, 370, DateTimeKind.Local).AddTicks(2537),
+                            PublishedDate = new DateTime(2020, 12, 14, 15, 30, 12, 766, DateTimeKind.Local).AddTicks(6117),
                             Quantity = 23,
                             SubCategoryId = 3,
                             Tag = "0"
@@ -488,7 +488,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Apple 1",
                             Price = 998.0,
-                            PublishedDate = new DateTime(2020, 7, 21, 10, 45, 6, 370, DateTimeKind.Local).AddTicks(2542),
+                            PublishedDate = new DateTime(2020, 12, 14, 15, 30, 12, 766, DateTimeKind.Local).AddTicks(6119),
                             Quantity = 18,
                             SubCategoryId = 1,
                             Tag = "0"
@@ -541,7 +541,7 @@ namespace Spice.Migrations
                             Content = "<p>In this summer, we have a coupon for everything for 15 % each deal which is larger than 50 $&nbsp;</p><p><img alt=15 Off Images, Stock Photos &amp; Vectors | Shutterstocksrc=https://image.shutterstock.com/image-vector/special-offer-15-off-label-260nw-1109101598.jpg/></p><div class=eJOY__extension_root_classid=eJOY__extension_rootstyle=all:unset>&nbsp;</div>",
                             Header = "Sale on for everything 15OFF",
                             ImageHeader = "\\images\\News1.png",
-                            PublishedDate = new DateTime(2020, 7, 21, 10, 45, 6, 366, DateTimeKind.Local).AddTicks(3179),
+                            PublishedDate = new DateTime(2020, 12, 14, 15, 30, 12, 764, DateTimeKind.Local).AddTicks(5686),
                             Type = "1"
                         });
                 });
@@ -638,6 +638,40 @@ namespace Spice.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("OrderHeader");
+                });
+
+            modelBuilder.Entity("Spice.Models.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MenuItemId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PublishedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RatingStar")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("MenuItemId");
+
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("Spice.Models.SubCategory", b =>
@@ -814,6 +848,17 @@ namespace Spice.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Spice.Models.Rating", b =>
+                {
+                    b.HasOne("Spice.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("Spice.Models.MenuItem", "MenuItem")
+                        .WithMany()
+                        .HasForeignKey("MenuItemId");
                 });
 #pragma warning restore 612, 618
         }
