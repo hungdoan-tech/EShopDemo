@@ -15,6 +15,7 @@ namespace Spice.Data
         {
 
         }
+
         public DbSet<Category> Category { get; set; }
         public DbSet<SubCategory> SubCategory { get; set; }
         public DbSet<MenuItem> MenuItem { get; set; }
@@ -24,6 +25,8 @@ namespace Spice.Data
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<ImportHistory> ImportHistories { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+        public DbSet<FavoritedProduct> FavoritedProducts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -176,7 +179,6 @@ namespace Spice.Data
             //    .WithMany(b => b.News)
             //    .HasForeignKey(a => a.ApplicationUserId);
 
-
             //Import History
             modelBuilder.Entity<ImportHistory>()
                 .HasKey(a => a.Id);
@@ -200,8 +202,39 @@ namespace Spice.Data
                .Property(a => a.Quantity)
                .IsRequired();
 
+            modelBuilder.Entity<Rating>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<Rating>()
+                .Property(a => a.Id)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Rating>()
+                .Property(a => a.Comment)
+                .IsRequired();
+            modelBuilder.Entity<Rating>()
+                .Property(a => a.RatingStar)
+                .IsRequired();
+            modelBuilder.Entity<Rating>()
+                .Property(a => a.PublishedDate)
+                .IsRequired();
+            modelBuilder.Entity<Rating>()
+                .HasOne(a => a.ApplicationUser)
+                .WithMany(b => b.Ratings)
+                .HasForeignKey(a => a.UserId);
+            modelBuilder.Entity<Rating>()
+                .HasOne(a => a.MenuItem)
+                .WithMany(b => b.Ratings)
+                .HasForeignKey(a => a.MenuItemId);
 
-
+            modelBuilder.Entity<FavoritedProduct>()
+                .HasKey(pc => new { pc.UserId, pc.ItemId });
+            modelBuilder.Entity<FavoritedProduct>()
+                .HasOne(a => a.ApplicationUser)
+                .WithMany(b => b.FavoritedProducts)
+                .HasForeignKey(a => a.UserId);
+            modelBuilder.Entity<FavoritedProduct>()
+                .HasOne(a => a.MenuItem)
+                .WithMany(b => b.FavoritedProducts)
+                .HasForeignKey(a => a.ItemId);
 
             modelBuilder.Entity<Category>().HasData
                         (
@@ -239,16 +272,16 @@ namespace Spice.Data
                         );
 
             modelBuilder.Entity<MenuItem>().HasData
-                (
-                        new MenuItem { Id = 1, Name = "Rolex 1", Description = "Awesome", Image = "\\images\\1.png", Price = 100, IsPublish = true, Quantity = 6, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
-                        new MenuItem { Id = 2, Name = "Rolex 2", Description = "Awesome", Image = "\\images\\2.png", Price = 156, IsPublish = true, Quantity = 20, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
-                        new MenuItem { Id = 3, Name = "Rolex 3", Description = "Awesome", Image = "\\images\\3.png", Price = 25, IsPublish = true, Quantity = 23, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
-                        new MenuItem { Id = 4, Name = "Casio 1", Description = "Awesome", Image = "\\images\\4.png", Price = 245, IsPublish = true, Quantity = 20, Color = "1", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 2 },
-                        new MenuItem { Id = 5, Name = "Casio 2", Description = "Awesome", Image = "\\images\\5.png", Price = 154, IsPublish = true, Quantity = 25, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
-                        new MenuItem { Id = 6, Name = "Casio 3", Description = "Awesome", Image = "\\images\\6.png", Price = 157, IsPublish = true, Quantity = 15, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
-                        new MenuItem { Id = 7, Name = "Samsung 1", Description = "Awesome", Image = "\\images\\7.png", Price = 198, IsPublish = true, Quantity = 23, Color = "3", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 3 },
-                        new MenuItem { Id = 8, Name = "Apple 1", Description = "Awesome", Image = "\\images\\8.png", Price = 998, IsPublish = true, Quantity = 18, Color = "1", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 1 }
-                );
+            (
+                    new MenuItem { Id = 1, Name = "Rolex 1", Description = "Awesome", Image = "\\images\\1.png", Price = 100, IsPublish = true, Quantity = 6, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+                    new MenuItem { Id = 2, Name = "Rolex 2", Description = "Awesome", Image = "\\images\\2.png", Price = 156, IsPublish = true, Quantity = 20, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+                    new MenuItem { Id = 3, Name = "Rolex 3", Description = "Awesome", Image = "\\images\\3.png", Price = 25, IsPublish = true, Quantity = 23, Color = "3", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 3 },
+                    new MenuItem { Id = 4, Name = "Casio 1", Description = "Awesome", Image = "\\images\\4.png", Price = 245, IsPublish = true, Quantity = 20, Color = "1", Tag = "2", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 2 },
+                    new MenuItem { Id = 5, Name = "Casio 2", Description = "Awesome", Image = "\\images\\5.png", Price = 154, IsPublish = true, Quantity = 25, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
+                    new MenuItem { Id = 6, Name = "Casio 3", Description = "Awesome", Image = "\\images\\6.png", Price = 157, IsPublish = true, Quantity = 15, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
+                    new MenuItem { Id = 7, Name = "Samsung 1", Description = "Awesome", Image = "\\images\\7.png", Price = 198, IsPublish = true, Quantity = 23, Color = "3", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 3 },
+                    new MenuItem { Id = 8, Name = "Apple 1", Description = "Awesome", Image = "\\images\\8.png", Price = 998, IsPublish = true, Quantity = 18, Color = "1", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 1 }
+            );
         }
     }
 }

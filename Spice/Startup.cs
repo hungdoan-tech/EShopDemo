@@ -72,6 +72,7 @@ namespace Spice
             // Our service section
             services.AddScoped<IFacadeCartService, CartFacadeService>();
             services.AddTransient<IOrderContext, OrderContext>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

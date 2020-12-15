@@ -20,6 +20,7 @@ namespace Spice.Repository
         private IMenuItemRepository menuItemRepository;
         private IOrderHeaderRepository orderHeaderRepository;
         private IOrderDetailRepository orderDetailRepository;
+        private IRatingRepository ratingRepository;
 
         private bool disposed = false;
 
@@ -94,6 +95,17 @@ namespace Spice.Repository
             get
             {
                 return this.orderDetailRepository ?? new OrderDetailRepository(_context);
+            }
+        }
+        public IRatingRepository RatingRepository
+        {
+            get
+            {
+                if (this.ratingRepository == null)
+                {
+                    this.ratingRepository = new RatingRepository(_context);
+                }
+                return this.ratingRepository;
             }
         }
 

@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Extensions;
 using Spice.Models;
 using Spice.Models.ViewModels;
+using Spice.Repository;
+using Spice.Service;
 using Spice.Utility;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,13 +20,14 @@ namespace Spice.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _db;
-
-        // a page has default limit 3 products.
+        private readonly IUnitOfWork _unitOfWork;
         private int PageSize = 3;
-
-        public HomeController(ApplicationDbContext db)
+        private readonly IUserService _userService;
+        public HomeController(ApplicationDbContext db, IUnitOfWork unitOfWork, IUserService userService)
         {
+            _unitOfWork = unitOfWork;
             _db = db;
+            _userService = userService;
         }
 
 
@@ -66,6 +68,7 @@ namespace Spice.Controllers
 
             IndexViewModel IndexVM = new IndexViewModel()
             {
+
                 MenuItem = await _db.MenuItem.Where(a => a.IsPublish != false)
                                              .Include(m => m.Category)
                                              .Include(m => m.SubCategory)
@@ -108,10 +111,40 @@ namespace Spice.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
+            var userId = _userService.GetUserId();
             var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == id).FirstOrDefaultAsync();
-
+            var listStar = _db.Ratings.Where(a => a.MenuItemId == id).Include(a => a.ApplicationUser).ToList();
+           
+            FavoritedProduct favoritedProduct = new FavoritedProduct();
+            if (userId != null)
+            {
+                var favor = _db.FavoritedProducts.FirstOrDefault(a => a.ItemId == id && a.UserId == userId);
+                if (favor != null)
+                {
+                    favoritedProduct.ItemId = favor.ItemId;
+                    favoritedProduct.UserId = favor.UserId;
+                }
+            }
+            ProductStar productStar = new ProductStar();
+            if (listStar.Count > 0)
+            {
+                productStar.totalOneStar = listStar.Where(a => a.RatingStar == 1).Count();
+                productStar.totalTwoStar = listStar.Where(a => a.RatingStar == 2).Count();
+                productStar.totalThreeStar = listStar.Where(a => a.RatingStar == 3).Count();
+                productStar.totalFourStar = listStar.Where(a => a.RatingStar == 4).Count();
+                productStar.totalFiveStar = listStar.Where(a => a.RatingStar == 5).Count();
+                productStar.averageStar = listStar.Average(a => a.RatingStar);
+            }
+            else {
+                productStar.totalOneStar = 0;
+                productStar.totalTwoStar = 0;
+                productStar.totalThreeStar = 0;
+                productStar.totalFourStar = 0;
+                productStar.totalFiveStar = 0;
+                productStar.averageStar = 0;
+            }
             //Convert Enum Color -> String
-            ViewBag.itemColor = Enum.GetName(typeof(MenuItem.EColor), Convert.ToInt32(menuItemFromDb.Color));
+            /*  ViewBag.itemColor = Enum.GetName(typeof(MenuItem.EColor), Convert.ToInt32(menuItemFromDb.Color));*/
 
             var highLimitPrice = menuItemFromDb.Price + (menuItemFromDb.Price * 25 / 100);
             var lowLimitPrice = menuItemFromDb.Price - (menuItemFromDb.Price * 25 / 100);
@@ -123,9 +156,14 @@ namespace Spice.Controllers
                 Item = menuItemFromDb,
                 Quantity = 1,
                 News = await _db.News.Where(n => n.MenuItemId == id).FirstOrDefaultAsync(),
-                SimilarProducts = similarPriceProducts.ToList()
+                SimilarProducts = similarPriceProducts.ToList(),
+                ExistedRatings = listStar.Take(3).ToList(),
+                ProductStar = productStar,
+                FavoritedProduct = favoritedProduct
             };
+
             return View(menuItemsAndQuantity);
+
         }
 
         public async Task<IActionResult> CheckQuantity(int id)
@@ -173,6 +211,52 @@ namespace Spice.Controllers
             }
         }
 
+        [Route("/Home/FavoriteProductConfirm/{id}")]
+        public IActionResult FavoriteProductConfirm(int id)
+        {
+            string userId = _userService.GetUserId();
+            int productId = id;
+            var temp = _db.FavoritedProducts.FirstOrDefault(a => a.ItemId == productId && a.UserId == userId);
+            if(temp == null)
+            {
+                FavoritedProduct favoritedProduct = new FavoritedProduct()
+                {
+                    ItemId = productId,
+                    UserId = userId
+                };
+                _db.FavoritedProducts.Add(favoritedProduct);
+            }
+            else
+            {
+                _db.Remove(temp);
+            }
+            _db.SaveChanges();
+            return LocalRedirect("/Customer/Home/Details/" + id);
+        }
+
+        [Authorize]
+        public IActionResult CreateRating(MenuItemsAndQuantity temp)
+        {            
+            var userId = _userService.GetUserId();
+            Rating rating = new Rating();
+            rating.UserId = userId;
+            rating.PublishedDate = temp.CustomerRating.PublishedDate;
+            rating.RatingStar = temp.CustomerRating.RatingStar;
+            rating.Comment = temp.CustomerRating.Comment;
+            rating.MenuItemId = temp.CustomerRating.MenuItemId;
+                
+            _unitOfWork.RatingRepository.Create(rating);
+            _unitOfWork.SaveChanges();
+            return LocalRedirect("/Customer/Home/Details/" + temp.CustomerRating.MenuItemId);
+        }
+        [HttpGet]
+        public IActionResult FavoriteProductIndex()
+        {
+            var userId = _userService.GetUserId();
+            var listFavor = _db.FavoritedProducts.Include(a => a.MenuItem).Where(a => a.UserId == userId).ToList();
+
+            return View(listFavor);
+        }
         public IActionResult Privacy()
         {
             return View();

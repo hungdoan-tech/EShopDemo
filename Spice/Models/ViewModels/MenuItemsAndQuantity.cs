@@ -14,5 +14,9 @@ namespace Spice.Models.ViewModels
         public int Quantity { get; set; }
         public News News { get; set; }
         public List<MenuItem> SimilarProducts { get; set;}
+        public FavoritedProduct FavoritedProduct { get; set; }
+        public Rating CustomerRating { get; set; }
+        public ProductStar ProductStar { get; set; }
+        public List<Rating> ExistedRatings { get; set; }
     }
 }
