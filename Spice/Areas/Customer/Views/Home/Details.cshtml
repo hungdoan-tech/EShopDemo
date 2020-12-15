@@ -244,7 +244,8 @@
         .news-content {
             width: 100%;
         }
-        progress{
+
+        progress {
             width: 100%;
             height: 100%;
         }
@@ -376,7 +377,7 @@
                 <div class="total-rate-number">@Model.ProductStar.averageStar /5</div>
                 <div class="choose-star">
                     @for (int i = 1; i <= Model.ProductStar.averageStar; i++)
-                    { 
+                    {
                         <i class="fa fa-star" id="@i-star" aria-hidden="true"></i>
                     }
                     @for (int j = 1; j <= 5 - Model.ProductStar.averageStar; j++)
@@ -431,23 +432,23 @@
                             <td class="totalStar">
                                 @if (i == 5)
                                 {
-                                    <p class ="fiveStar">@Model.ProductStar.totalFiveStar</p>
+                                    <p class="fiveStar">@Model.ProductStar.totalFiveStar</p>
                                 }
                                 @if (i == 4)
                                 {
-                                    <p class ="fourStar">@Model.ProductStar.totalFourStar</p>
+                                    <p class="fourStar">@Model.ProductStar.totalFourStar</p>
                                 }
                                 @if (i == 3)
                                 {
-                                    <p class ="threeStar">@Model.ProductStar.totalThreeStar</p>
+                                    <p class="threeStar">@Model.ProductStar.totalThreeStar</p>
                                 }
                                 @if (i == 2)
                                 {
-                                    <p class ="twoStar">@Model.ProductStar.totalTwoStar</p>
+                                    <p class="twoStar">@Model.ProductStar.totalTwoStar</p>
                                 }
                                 @if (i == 1)
                                 {
-                                    <p class ="oneStar">@Model.ProductStar.totalOneStar</p>
+                                    <p class="oneStar">@Model.ProductStar.totalOneStar</p>
                                 }
                             </td>
                         </tr>
@@ -469,12 +470,12 @@
             </div>
             <div class="col-5">
                 <div>
-                    <input id="today" type="datetime-local" asp-for="CustomerRating.PublishedDate" class="form-control" readonly/>
+                    <input id="today" type="datetime-local" asp-for="CustomerRating.PublishedDate" class="form-control" readonly />
                 </div>
             </div>
         </div>
         <div>
-            <input id="currentItem" asp-for="CustomerRating.MenuItemId" value="@Model.Item.Id" hidden/>
+            <input id="currentItem" asp-for="CustomerRating.MenuItemId" value="@Model.Item.Id" hidden />
         </div>
         <div class="row">
             <div class="col-lg-4">
@@ -503,13 +504,14 @@
 </form>
 
 <div class="container">
+    <h4>Recent rating from other customer</h4>
     @foreach (var comment in Model.ExistedRatings)
     {
         <div class="row">
             <div class="be-comment col-lg-7">
                 <div class="be-img-comment ">
                     <a href="blog-detail-2.html">
-                        <img src="/assets/img/blog/author.png" alt="" class="be-ava-comment">
+                        <img src="/assets/img/author/author_3.png" alt="" class="be-ava-comment">
                     </a>
                 </div>
                 <div class="be-comment-content">
@@ -529,26 +531,30 @@
     }
 </div>
 
-
-<div class="container-fluid" style="padding-left:20%">
-    <h3>Some products you maybe like</h3>
-    <div class="row">
+<br />
+<br />
+<br />
+<div class="container-fluid">
+    <h2 style="margin:0 20%">Some products you maybe like</h2>
+    <div class="row" style="margin:0 10%">
         @foreach (MenuItem recommendProduct in Model.SimilarProducts)
         {
             <div class="col-lg-4 col-md-6">
                 <div class="card" style="width:400px">
-                    <img src="@recommendProduct.Image" alt="Avatar" style="width:50%; height:50%; margin:auto">
+                    <img src="@recommendProduct.Image" alt="Avatar" style="width:35%; height:35%; margin:auto">
                     <div class="card-body" style="margin:auto">
                         <h4 class="card-title">@recommendProduct.Name</h4>
                         <p class="card-text">@recommendProduct.Description</p>
-                        <a asp-action="Details" asp-route-id="@recommendProduct.Id" class="btn btn-info">See Profile</a>
+                        <a asp-action="Details" asp-route-id="@recommendProduct.Id" class="btn btn-info btn-sm">Click for detail</a>
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
-
+<br />
+<br />
+<br />
 
 
 @*<div class="card" style=" display: inline;">

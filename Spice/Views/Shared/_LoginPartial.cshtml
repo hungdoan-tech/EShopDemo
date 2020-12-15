@@ -3,6 +3,28 @@
 @inject UserManager<IdentityUser> UserManager
 
 @*<span class="flaticon-user"></span>*@
+<style>
+    .admin-container {
+        position: relative;
+    }
+
+    .admin-hover-result {
+        visibility: hidden;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+    }
+
+    .admin-container:hover .admin-hover-result {
+        visibility: visible;
+    }
+
+    a:hover {
+        color: red;
+        cursor: pointer;
+    }
+</style>
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="admin-container">        
@@ -27,22 +49,3 @@ else
         <a class="black-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
-<style>
-    .admin-container{
-        position: relative;
-    }
-    .admin-hover-result{
-        visibility: hidden;
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        background-color: white;
-    }
-    .admin-container:hover .admin-hover-result{
-        visibility: visible;
-    }
-    a:hover{
-        color: red;
-        cursor: pointer;
-    }
-</style>

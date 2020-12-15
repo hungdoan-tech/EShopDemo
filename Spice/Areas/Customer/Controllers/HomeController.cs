@@ -8,6 +8,7 @@ using Spice.Models.ViewModels;
 using Spice.Repository;
 using Spice.Service;
 using Spice.Utility;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -144,12 +145,12 @@ namespace Spice.Controllers
                 productStar.averageStar = 0;
             }
             //Convert Enum Color -> String
-            /*  ViewBag.itemColor = Enum.GetName(typeof(MenuItem.EColor), Convert.ToInt32(menuItemFromDb.Color));*/
+            ViewBag.itemColor = Enum.GetName(typeof(MenuItem.EColor), Convert.ToInt32(menuItemFromDb.Color));
 
             var highLimitPrice = menuItemFromDb.Price + (menuItemFromDb.Price * 25 / 100);
             var lowLimitPrice = menuItemFromDb.Price - (menuItemFromDb.Price * 25 / 100);
 
-            var similarPriceProducts = _db.MenuItem.Take(2);
+            var similarPriceProducts = _db.MenuItem.Take(3);
 
             MenuItemsAndQuantity menuItemsAndQuantity = new MenuItemsAndQuantity()
             {
@@ -249,7 +250,9 @@ namespace Spice.Controllers
             _unitOfWork.SaveChanges();
             return LocalRedirect("/Customer/Home/Details/" + temp.CustomerRating.MenuItemId);
         }
+
         [HttpGet]
+        [Authorize]
         public IActionResult FavoriteProductIndex()
         {
             var userId = _userService.GetUserId();
