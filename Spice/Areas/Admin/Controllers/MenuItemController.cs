@@ -124,10 +124,10 @@ namespace Spice.Areas.Admin.Controllers
             }
             //MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
                 //MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
-                return View(MenuItemVM);
+                return LocalRedirect("/MenuItem/Edit/" + id);
             }
 
             //Work on the image saving section
