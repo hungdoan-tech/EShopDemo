@@ -5,13 +5,17 @@
 @*<span class="flaticon-user"></span>*@
 @if (SignInManager.IsSignedIn(User))
 {
-    <li>        
-        <a class="black-link" asp-area="Identity" asp-page="/Account/Manage/Index">@await Component.InvokeAsync("UserName") </a>
+    <li class="admin-container">        
+        <a class="black-link admin-hover" asp-area="Identity" asp-page="/Account/Manage/Index">@await Component.InvokeAsync("UserName") </a>
+       <div class="admin-hover-result">
+            <a asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
+            <a href="/Customer/Home/FavoriteProductIndex">Favorite Products</a>
+        </div>  
     </li>
     <li>        
         <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button type="submit" class="btn-logout black-link">Logout</button>
-        </form>   
+        </form>
     </li>
 }
 else
@@ -23,3 +27,22 @@ else
         <a class="black-link" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
+<style>
+    .admin-container{
+        position: relative;
+    }
+    .admin-hover-result{
+        visibility: hidden;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+    }
+    .admin-container:hover .admin-hover-result{
+        visibility: visible;
+    }
+    a:hover{
+        color: red;
+        cursor: pointer;
+    }
+</style>
