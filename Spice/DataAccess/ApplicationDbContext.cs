@@ -202,7 +202,13 @@ namespace Spice.Data
                .IsRequired();
 
 
-
+            modelBuilder.Entity<Rating>().HasKey(a => a.Id);
+            modelBuilder.Entity<Rating>().Property(a => a.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Rating>().Property(a => a.Comment).IsRequired();
+            modelBuilder.Entity<Rating>().Property(a => a.RatingStar).IsRequired();
+            modelBuilder.Entity<Rating>().Property(a => a.PublishedDate).IsRequired();
+            modelBuilder.Entity<Rating>().HasOne(a => a.ApplicationUser).WithMany(b => b.Ratings).HasForeignKey(a => a.UserId);
+            modelBuilder.Entity<Rating>().HasOne(a => a.MenuItem).WithMany(b => b.Ratings).HasForeignKey(a => a.MenuItemId);
 
             modelBuilder.Entity<Category>().HasData
                         (

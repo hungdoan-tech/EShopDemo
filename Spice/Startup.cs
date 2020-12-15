@@ -66,6 +66,8 @@ namespace Spice
             //services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IFacadeService, CartFacadeService>();
+
+            services.AddScoped<IUserService, UserService>();
             services.AddControllersWithViews();
             services.AddRazorPages();
 

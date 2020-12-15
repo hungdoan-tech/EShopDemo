@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
@@ -14,6 +15,7 @@ using Spice.Extensions;
 using Spice.Models;
 using Spice.Models.ViewModels;
 using Spice.Repository;
+using Spice.Service;
 using Spice.Utility;
 
 namespace Spice.Controllers
@@ -25,11 +27,12 @@ namespace Spice.Controllers
         private readonly IUnitOfWork _unitOfWork;
         //Once a page has limit 3 products.
         private int PageSize = 3;
-
-        public HomeController(ApplicationDbContext db, IUnitOfWork unitOfWork)
+        private readonly IUserService _userService;
+        public HomeController(ApplicationDbContext db, IUnitOfWork unitOfWork, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _db = db;
+            _userService = userService;
         }
 
 
@@ -93,18 +96,43 @@ namespace Spice.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
+
             var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == id).FirstOrDefaultAsync();
 
+            var listStar = _db.Ratings.Where(a => a.MenuItemId == id).Include(a => a.ApplicationUser).ToList();
+            ProductStar productStar = new ProductStar();
+            if (listStar.Count > 0)
+            {
+                productStar.totalOneStar = listStar.Where(a => a.RatingStar == 1).Count();
+                productStar.totalTwoStar = listStar.Where(a => a.RatingStar == 2).Count();
+                productStar.totalThreeStar = listStar.Where(a => a.RatingStar == 3).Count();
+                productStar.totalFourStar = listStar.Where(a => a.RatingStar == 4).Count();
+                productStar.totalFiveStar = listStar.Where(a => a.RatingStar == 5).Count();
+                productStar.averageStar = listStar.Average(a => a.RatingStar);
+                
+            }
+            else {
+                productStar.totalOneStar = 0;
+                productStar.totalTwoStar = 0;
+                productStar.totalThreeStar = 0;
+                productStar.totalFourStar = 0;
+                productStar.totalFiveStar = 0;
+                productStar.averageStar = 0;
+            } 
             //Convert Enum Color -> String
-            ViewBag.itemColor = Enum.GetName(typeof(MenuItem.EColor), Convert.ToInt32(menuItemFromDb.Color));
+          /*  ViewBag.itemColor = Enum.GetName(typeof(MenuItem.EColor), Convert.ToInt32(menuItemFromDb.Color));*/
 
             MenuItemsAndQuantity menuItemsAndQuantity = new MenuItemsAndQuantity()
             {
                 Item = menuItemFromDb,
                 Quantity = 1,
-                News = await _db.News.Where(n => n.MenuItemId == id).FirstOrDefaultAsync()
+                News = await _db.News.Where(n => n.MenuItemId == id).FirstOrDefaultAsync(),
+                ExistedRatings = listStar.Take(3).ToList(),
+                ProductStar = productStar
             };
+            
             return View(menuItemsAndQuantity);
+            
         }
 
         public async Task<IActionResult> CheckQuantity(int id)
@@ -155,15 +183,26 @@ namespace Spice.Controllers
         [Authorize]
         public IActionResult CreateRating(Rating rating)
         {
-            
-            if (ModelState.IsValid)
+            try
             {
-                //if valid
-                _unitOfWork.RatingRepository.Create(rating);
-                _unitOfWork.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                var userId = _userService.GetUserId();
+                var isRated = _db.Ratings.Where(a => a.UserId == userId).Where(a => a.MenuItemId == rating.MenuItemId);
+
+                rating.UserId = userId;
+                if (ModelState.IsValid)
+                {
+                    //if valid
+                    _unitOfWork.RatingRepository.Create(rating);
+                    _unitOfWork.SaveChanges();
+                    return LocalRedirect("/Customer/Home/Details/" + rating.MenuItemId);
+                }
+               
             }
-            return RedirectToAction();
+            catch
+            {
+                Console.WriteLine(rating.Comment);
+            }
+            return LocalRedirect("/Customer/Home/Details/" + rating.MenuItemId);
         }
 
         public IActionResult Privacy()

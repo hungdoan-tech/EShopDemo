@@ -15,6 +15,7 @@ namespace Spice.Models
         public string PostalCode { get; set; }
         public virtual ICollection<OrderHeader> OrderHeaders { get; set; }
         public virtual ICollection<ImportHistory> ImportHistories { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
 
         //public virtual ICollection<News> News { get; set; }
     }

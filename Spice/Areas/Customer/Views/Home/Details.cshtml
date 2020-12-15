@@ -42,6 +42,8 @@
 
         table .progress {
             width: 200px;
+            height: 25px;
+            background-color: transparent;
         }
 
         table td {
@@ -131,6 +133,11 @@
         .news-content {
             width: 100%;
         }
+        progress{
+            width: 100%;
+            height: 100%;
+        }
+        
     </style>
 </head>
 
@@ -257,18 +264,15 @@
         <h1>Rating and Reviews</h1>
         <div class="row">
             <div class="col-lg-3 total-rate">
-                <div class="total-rate-number">0/5</div>
+                <div class="total-rate-number">@Model.ProductStar.averageStar /5</div>
                 <div class="choose-star">
-                    @for (int i = 1; i < 6; i++)
+                    @for (int i = 1; i <= Model.ProductStar.averageStar; i++)
+                    { 
+                        <i class="fa fa-star" id="@i-star" aria-hidden="true"></i>
+                    }
+                    @for (int j = 1; j <= 5 - Model.ProductStar.averageStar; j++)
                     {
-                        @if (i == 1)
-                        {
-                            <i class="fa fa-star" id="@i-star" aria-hidden="true"></i>
-                        }
-                        else
-                        {
-                            <i class="fa fa-star-o" id="@i-star" aria-hidden="true"></i>
-                        }
+                        <i class="fa fa-star-o" id="@j-star" aria-hidden="true"></i>
                     }
                 </div>
             </div>
@@ -280,7 +284,7 @@
                     </tr>
                     @for (int i = 5; i > 0; i--)
                     {
-                        <tr class="@i-star-result">
+                        <tr class="@i-star result">
                             <td>
                                 @for (int j = 5; j > 5 - i; j--)
                                 {
@@ -293,13 +297,51 @@
                             </td>
                             <td>
                                 <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
-                                    </div>
+                                    @if (i == 5)
+                                    {
+                                        <progress max="20" value="@Model.ProductStar.totalFiveStar"></progress>
+                                    }
+                                    @if (i == 4)
+                                    {
+                                        <progress max="20" value="@Model.ProductStar.totalFourStar"></progress>
+                                    }
+                                    @if (i == 3)
+                                    {
+                                        <progress max="20" value="@Model.ProductStar.totalThreeStar"></progress>
+                                    }
+                                    @if (i == 2)
+                                    {
+                                        <progress max="20" value="@Model.ProductStar.totalTwoStar"></progress>
+                                    }
+                                    @if (i == 1)
+                                    {
+                                        <progress max="20" value="@Model.ProductStar.totalOneStar"></progress>
+                                    }
                                 </div>
                             </td>
-                            <td>@i </td>
+                            <td class="totalStar">
+                                @if (i == 5)
+                                {
+                                    <p class ="fiveStar">@Model.ProductStar.totalFiveStar</p>
+                                }
+                                @if (i == 4)
+                                {
+                                    <p class ="fourStar">@Model.ProductStar.totalFourStar</p>
+                                }
+                                @if (i == 3)
+                                {
+                                    <p class ="threeStar">@Model.ProductStar.totalThreeStar</p>
+                                }
+                                @if (i == 2)
+                                {
+                                    <p class ="twoStar">@Model.ProductStar.totalTwoStar</p>
+                                }
+                                @if (i == 1)
+                                {
+                                    <p class ="oneStar">@Model.ProductStar.totalOneStar</p>
+                                }
+                            </td>
                         </tr>
-
                     }
                     <tr>
                 </table>
@@ -309,28 +351,23 @@
         <div class="row">
             <div class="col-lg-7">
                 <label>Your comment</label>
-                <textarea asp-for="Rating.Comment" type="text" style="width: 100%" placeholder="Type your review this product"></textarea>
-                <span asp-validation-for="Rating.Comment"></span>
+                <textarea asp-for="CustomerRating.Comment" type="text" style="width: 100%" placeholder="Type your review this product"></textarea>
             </div>
         </div>
         <div class="row" style="visibility:hidden;position:absolute">
             <div class="col-2">
-                <label asp-for="Rating.PublishedDate" class="col-form-label"></label>
+                <label asp-for="CustomerRating.PublishedDate" class="col-form-label"></label>
             </div>
             <div class="col-5">
                 <div>
-                    <input id="today" type="datetime-local" asp-for="Rating.PublishedDate" class="form-control" readonly />
+                    <input id="today" type="datetime-local" asp-for="CustomerRating.PublishedDate" class="form-control" readonly />
                 </div>
-                <span asp-validation-for="Rating.PublishedDate" class="text-danger"></span>
+                <span asp-validation-for="CustomerRating.PublishedDate" class="text-danger"></span>
             </div>
         </div>
         <div>
-            <input id="currentItem" asp-for="Rating.MenuItemId" hidden />
-            <span asp-validation-for="Rating.MenuItemId" class="text-danger"></span>
-        </div>
-        <div>
-            <input type="text" asp-for="Rating.UserId" />
-            <p></p>
+            <input id="currentItem" asp-for="CustomerRating.MenuItemId" hidden />
+            <span asp-validation-for="CustomerRating.MenuItemId" class="text-danger"></span>
         </div>
         <div class="row">
             <div class="col-lg-4">
@@ -347,8 +384,8 @@
                             <i class="fa fa-star-o rating" id="@i-star" aria-hidden="true"></i>
                         }
                     }
-                    <input type="hidden" asp-for="Rating.RatingStar" class="result-rating-star" readonly />
-                    <span asp-validation-for="Rating.RatingStar" class="text-danger"></span>
+                    <input type="hidden" asp-for="CustomerRating.RatingStar" class="result-rating-star" readonly />
+                    <span asp-validation-for="CustomerRating.RatingStar" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-lg-3">
@@ -590,6 +627,12 @@
 
     const menuItem = document.querySelector("#itemId");
     document.querySelector("#currentItem").value = menuItem.value;
+
+    function calcProgress(a, i) {
+        const width = (parseInt((a / 20) * 100)).toString() + "%";
+        document.querySelector(`.progress-${i}-star`).style.width = width;
+    }
+
 </script>
 
 @section Scripts{
