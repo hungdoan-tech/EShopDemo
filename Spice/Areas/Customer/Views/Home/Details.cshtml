@@ -360,14 +360,12 @@
             </div>
             <div class="col-5">
                 <div>
-                    <input id="today" type="datetime-local" asp-for="CustomerRating.PublishedDate" class="form-control" readonly />
+                    <input id="today" type="datetime-local" asp-for="CustomerRating.PublishedDate" class="form-control" readonly/>
                 </div>
-                <span asp-validation-for="CustomerRating.PublishedDate" class="text-danger"></span>
             </div>
         </div>
         <div>
-            <input id="currentItem" asp-for="CustomerRating.MenuItemId" hidden />
-            <span asp-validation-for="CustomerRating.MenuItemId" class="text-danger"></span>
+            <input id="currentItem" asp-for="CustomerRating.MenuItemId" value="@Model.Item.Id" hidden/>
         </div>
         <div class="row">
             <div class="col-lg-4">

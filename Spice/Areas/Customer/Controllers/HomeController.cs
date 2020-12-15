@@ -181,28 +181,19 @@ namespace Spice.Controllers
             }
         }
         [Authorize]
-        public IActionResult CreateRating(Rating rating)
-        {
-            try
-            {
-                var userId = _userService.GetUserId();
-                var isRated = _db.Ratings.Where(a => a.UserId == userId).Where(a => a.MenuItemId == rating.MenuItemId);
-
-                rating.UserId = userId;
-                if (ModelState.IsValid)
-                {
-                    //if valid
-                    _unitOfWork.RatingRepository.Create(rating);
-                    _unitOfWork.SaveChanges();
-                    return LocalRedirect("/Customer/Home/Details/" + rating.MenuItemId);
-                }
-               
-            }
-            catch
-            {
-                Console.WriteLine(rating.Comment);
-            }
-            return LocalRedirect("/Customer/Home/Details/" + rating.MenuItemId);
+        public IActionResult CreateRating(MenuItemsAndQuantity temp)
+        {            
+            var userId = _userService.GetUserId();
+            Rating rating = new Rating();
+            rating.UserId = userId;
+            rating.PublishedDate = temp.CustomerRating.PublishedDate;
+            rating.RatingStar = temp.CustomerRating.RatingStar;
+            rating.Comment = temp.CustomerRating.Comment;
+            rating.MenuItemId = temp.CustomerRating.MenuItemId;
+                
+            _unitOfWork.RatingRepository.Create(rating);
+            _unitOfWork.SaveChanges();
+            return LocalRedirect("/Customer/Home/Details/" + temp.CustomerRating.MenuItemId);
         }
 
         public IActionResult Privacy()
