@@ -15,6 +15,7 @@ namespace Spice.Data
         {
 
         }
+
         public DbSet<Category> Category { get; set; }
         public DbSet<SubCategory> SubCategory { get; set; }
         public DbSet<MenuItem> MenuItem { get; set; }
@@ -25,6 +26,7 @@ namespace Spice.Data
         public DbSet<News> News { get; set; }
         public DbSet<ImportHistory> ImportHistories { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<FavoritedProduct> FavoritedProducts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -177,7 +179,6 @@ namespace Spice.Data
             //    .WithMany(b => b.News)
             //    .HasForeignKey(a => a.ApplicationUserId);
 
-
             //Import History
             modelBuilder.Entity<ImportHistory>()
                 .HasKey(a => a.Id);
@@ -201,14 +202,39 @@ namespace Spice.Data
                .Property(a => a.Quantity)
                .IsRequired();
 
+            modelBuilder.Entity<Rating>()
+                .HasKey(a => a.Id);
+            modelBuilder.Entity<Rating>()
+                .Property(a => a.Id)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Rating>()
+                .Property(a => a.Comment)
+                .IsRequired();
+            modelBuilder.Entity<Rating>()
+                .Property(a => a.RatingStar)
+                .IsRequired();
+            modelBuilder.Entity<Rating>()
+                .Property(a => a.PublishedDate)
+                .IsRequired();
+            modelBuilder.Entity<Rating>()
+                .HasOne(a => a.ApplicationUser)
+                .WithMany(b => b.Ratings)
+                .HasForeignKey(a => a.UserId);
+            modelBuilder.Entity<Rating>()
+                .HasOne(a => a.MenuItem)
+                .WithMany(b => b.Ratings)
+                .HasForeignKey(a => a.MenuItemId);
 
-            modelBuilder.Entity<Rating>().HasKey(a => a.Id);
-            modelBuilder.Entity<Rating>().Property(a => a.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Rating>().Property(a => a.Comment).IsRequired();
-            modelBuilder.Entity<Rating>().Property(a => a.RatingStar).IsRequired();
-            modelBuilder.Entity<Rating>().Property(a => a.PublishedDate).IsRequired();
-            modelBuilder.Entity<Rating>().HasOne(a => a.ApplicationUser).WithMany(b => b.Ratings).HasForeignKey(a => a.UserId);
-            modelBuilder.Entity<Rating>().HasOne(a => a.MenuItem).WithMany(b => b.Ratings).HasForeignKey(a => a.MenuItemId);
+            modelBuilder.Entity<FavoritedProduct>()
+                .HasKey(pc => new { pc.UserId, pc.ItemId });
+            modelBuilder.Entity<FavoritedProduct>()
+                .HasOne(a => a.ApplicationUser)
+                .WithMany(b => b.FavoritedProducts)
+                .HasForeignKey(a => a.UserId);
+            modelBuilder.Entity<FavoritedProduct>()
+                .HasOne(a => a.MenuItem)
+                .WithMany(b => b.FavoritedProducts)
+                .HasForeignKey(a => a.ItemId);
 
             modelBuilder.Entity<Category>().HasData
                         (

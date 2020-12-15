@@ -289,6 +289,21 @@ namespace Spice.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Spice.Models.FavoritedProduct", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "ItemId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("FavoritedProducts");
+                });
+
             modelBuilder.Entity("Spice.Models.ImportHistory", b =>
                 {
                     b.Property<int>("Id")
@@ -383,7 +398,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Rolex 1",
                             Price = 100.0,
-                            PublishedDate = new DateTime(2020, 12, 15, 16, 4, 16, 208, DateTimeKind.Local).AddTicks(1081),
+                            PublishedDate = new DateTime(2020, 12, 15, 17, 34, 33, 51, DateTimeKind.Local).AddTicks(2892),
                             Quantity = 6,
                             SubCategoryId = 3,
                             Tag = "2"
@@ -398,7 +413,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Rolex 2",
                             Price = 156.0,
-                            PublishedDate = new DateTime(2020, 12, 15, 16, 4, 16, 208, DateTimeKind.Local).AddTicks(2740),
+                            PublishedDate = new DateTime(2020, 12, 15, 17, 34, 33, 51, DateTimeKind.Local).AddTicks(5905),
                             Quantity = 20,
                             SubCategoryId = 3,
                             Tag = "2"
@@ -413,7 +428,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Rolex 3",
                             Price = 25.0,
-                            PublishedDate = new DateTime(2020, 12, 15, 16, 4, 16, 208, DateTimeKind.Local).AddTicks(2775),
+                            PublishedDate = new DateTime(2020, 12, 15, 17, 34, 33, 51, DateTimeKind.Local).AddTicks(5960),
                             Quantity = 23,
                             SubCategoryId = 3,
                             Tag = "2"
@@ -428,7 +443,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Casio 1",
                             Price = 245.0,
-                            PublishedDate = new DateTime(2020, 12, 15, 16, 4, 16, 208, DateTimeKind.Local).AddTicks(2779),
+                            PublishedDate = new DateTime(2020, 12, 15, 17, 34, 33, 51, DateTimeKind.Local).AddTicks(5966),
                             Quantity = 20,
                             SubCategoryId = 2,
                             Tag = "2"
@@ -443,7 +458,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Casio 2",
                             Price = 154.0,
-                            PublishedDate = new DateTime(2020, 12, 15, 16, 4, 16, 208, DateTimeKind.Local).AddTicks(2781),
+                            PublishedDate = new DateTime(2020, 12, 15, 17, 34, 33, 51, DateTimeKind.Local).AddTicks(5969),
                             Quantity = 25,
                             SubCategoryId = 2,
                             Tag = "1"
@@ -458,7 +473,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Casio 3",
                             Price = 157.0,
-                            PublishedDate = new DateTime(2020, 12, 15, 16, 4, 16, 208, DateTimeKind.Local).AddTicks(2787),
+                            PublishedDate = new DateTime(2020, 12, 15, 17, 34, 33, 51, DateTimeKind.Local).AddTicks(5972),
                             Quantity = 15,
                             SubCategoryId = 2,
                             Tag = "1"
@@ -473,7 +488,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Samsung 1",
                             Price = 198.0,
-                            PublishedDate = new DateTime(2020, 12, 15, 16, 4, 16, 208, DateTimeKind.Local).AddTicks(2789),
+                            PublishedDate = new DateTime(2020, 12, 15, 17, 34, 33, 51, DateTimeKind.Local).AddTicks(5976),
                             Quantity = 23,
                             SubCategoryId = 3,
                             Tag = "0"
@@ -488,7 +503,7 @@ namespace Spice.Migrations
                             IsPublish = true,
                             Name = "Apple 1",
                             Price = 998.0,
-                            PublishedDate = new DateTime(2020, 12, 15, 16, 4, 16, 208, DateTimeKind.Local).AddTicks(2792),
+                            PublishedDate = new DateTime(2020, 12, 15, 17, 34, 33, 51, DateTimeKind.Local).AddTicks(5978),
                             Quantity = 18,
                             SubCategoryId = 1,
                             Tag = "0"
@@ -541,7 +556,7 @@ namespace Spice.Migrations
                             Content = "<p>In this summer, we have a coupon for everything for 15 % each deal which is larger than 50 $&nbsp;</p><p><img alt=15 Off Images, Stock Photos &amp; Vectors | Shutterstocksrc=https://image.shutterstock.com/image-vector/special-offer-15-off-label-260nw-1109101598.jpg/></p><div class=eJOY__extension_root_classid=eJOY__extension_rootstyle=all:unset>&nbsp;</div>",
                             Header = "Sale on for everything 15OFF",
                             ImageHeader = "\\images\\News1.png",
-                            PublishedDate = new DateTime(2020, 12, 15, 16, 4, 16, 206, DateTimeKind.Local).AddTicks(4115),
+                            PublishedDate = new DateTime(2020, 12, 15, 17, 34, 33, 49, DateTimeKind.Local).AddTicks(978),
                             Type = "1"
                         });
                 });
@@ -778,6 +793,21 @@ namespace Spice.Migrations
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Spice.Models.FavoritedProduct", b =>
+                {
+                    b.HasOne("Spice.Models.MenuItem", "MenuItem")
+                        .WithMany("FavoritedProducts")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Spice.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("FavoritedProducts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

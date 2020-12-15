@@ -10,6 +10,117 @@
 <br />
 <head>
     <style>
+        .be-comment-block {
+            margin-bottom: 50px !important;
+            border: 1px solid #edeff2;
+            border-radius: 2px;
+            padding: 50px 70px;
+            border: 1px solid #ffffff;
+        }
+
+        .comments-title {
+            font-size: 16px;
+            color: #262626;
+            margin-bottom: 15px;
+            font-family: 'Conv_helveticaneuecyr-bold';
+        }
+
+        .be-img-comment {
+            width: 60px;
+            height: 60px;
+            float: left;
+            margin-bottom: 15px;
+        }
+
+        .be-ava-comment {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+
+        .be-comment-content {
+            margin-left: 80px;
+        }
+
+            .be-comment-content span {
+                display: inline-block;
+                width: 49%;
+                margin-bottom: 15px;
+            }
+
+        .be-comment-name {
+            font-size: 13px;
+            font-family: 'Conv_helveticaneuecyr-bold';
+        }
+
+        .be-comment-content a {
+            color: #383b43;
+        }
+
+        .be-comment-content span {
+            display: inline-block;
+            width: 49%;
+            margin-bottom: 15px;
+        }
+
+        .be-comment-time {
+            text-align: right;
+        }
+
+        .be-comment-time {
+            font-size: 11px;
+            color: #b4b7c1;
+        }
+
+        .be-comment-text {
+            font-size: 13px;
+            line-height: 18px;
+            color: #7a8192;
+            display: block;
+            background: #f6f6f7;
+            border: 1px solid #edeff2;
+            padding: 15px 20px 20px 20px;
+        }
+
+        .form-group.fl_icon .icon {
+            position: absolute;
+            top: 1px;
+            left: 16px;
+            width: 48px;
+            height: 48px;
+            background: #f6f6f7;
+            color: #b5b8c2;
+            text-align: center;
+            line-height: 50px;
+            -webkit-border-top-left-radius: 2px;
+            -webkit-border-bottom-left-radius: 2px;
+            -moz-border-radius-topleft: 2px;
+            -moz-border-radius-bottomleft: 2px;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+        }
+
+        .form-group .form-input {
+            font-size: 13px;
+            line-height: 50px;
+            font-weight: 400;
+            color: #b4b7c1;
+            width: 100%;
+            height: 50px;
+            padding-left: 20px;
+            padding-right: 20px;
+            border: 1px solid #edeff2;
+            border-radius: 3px;
+        }
+
+        .form-group.fl_icon .form-input {
+            padding-left: 70px;
+        }
+
+        .form-group textarea.form-input {
+            height: 150px;
+        }
+
         .image-container .result {
             border: 1px solid black;
             visibility: hidden;
@@ -160,7 +271,9 @@
             <aside class="col-xl-4 col-lg-4">
                 <article class="card-body p-5">
                     <h3 class="title mb-3">@Model.Item.Name</h3>
-
+                    <div class="favorit-items">
+                        <span class="flaticon-heart"></span>
+                    </div>
                     <p class="price-detail-wrap">
                         <span class="price h3 text-warning">
                             <span class="currency"></span><span class="num">$ @Model.Item.Price</span>
@@ -209,20 +322,20 @@
                         <div class="col-sm-7">
                             <dl class="param param-inline">
                                 @*<dt>Size: </dt>
-                                    <dd>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                            <span class="form-check-label">SM</span>
-                                        </label>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                            <span class="form-check-label">MD</span>
-                                        </label>
-                                        <label class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                                            <span class="form-check-label">XXL</span>
-                                        </label>
-                                    </dd>*@
+                    <dd>
+                        <label class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                            <span class="form-check-label">SM</span>
+                        </label>
+                        <label class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                            <span class="form-check-label">MD</span>
+                        </label>
+                        <label class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                            <span class="form-check-label">XXL</span>
+                        </label>
+                    </dd>*@
                             </dl>  <!-- item-property .// -->
                         </div> <!-- col.// -->
                     </div> <!-- row.// -->
@@ -392,6 +505,33 @@
         </div>
     </div>
 </form>
+
+<div class="container-fluid">
+    @foreach (var comment in Model.ExistedRatings)
+    {
+        <div class="row">
+            <div class="be-comment">
+                <div class="be-img-comment">
+                    <a href="blog-detail-2.html">
+                        <img src="/assets/img/blog/author.png" alt="" class="be-ava-comment">
+                    </a>
+                </div>
+                <div class="be-comment-content">
+                    <span class="be-comment-name">
+                        <a href="blog-detail-2.html">@comment.ApplicationUser.Name</a>
+                    </span>
+                    <span class="be-comment-time">
+                        <i class="fa fa-clock-o"></i>
+                        @comment.PublishedDate
+                    </span>
+                    <p class="be-comment-text">
+                        @comment.Comment
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
@@ -631,6 +771,7 @@
         document.querySelector(`.progress-${i}-star`).style.width = width;
     }
 
+    "/Home/FavoritedProduct/Model.item.id"
 </script>
 
 @section Scripts{

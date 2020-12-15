@@ -98,8 +98,8 @@ namespace Spice.Controllers
         {
 
             var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == id).FirstOrDefaultAsync();
-
             var listStar = _db.Ratings.Where(a => a.MenuItemId == id).Include(a => a.ApplicationUser).ToList();
+
             ProductStar productStar = new ProductStar();
             if (listStar.Count > 0)
             {
@@ -108,8 +108,7 @@ namespace Spice.Controllers
                 productStar.totalThreeStar = listStar.Where(a => a.RatingStar == 3).Count();
                 productStar.totalFourStar = listStar.Where(a => a.RatingStar == 4).Count();
                 productStar.totalFiveStar = listStar.Where(a => a.RatingStar == 5).Count();
-                productStar.averageStar = listStar.Average(a => a.RatingStar);
-                
+                productStar.averageStar = listStar.Average(a => a.RatingStar);                
             }
             else {
                 productStar.totalOneStar = 0;
@@ -180,6 +179,29 @@ namespace Spice.Controllers
                 return View(cartObj);
             }
         }
+
+        [Route("/Home/FavoriteProductConfirm/{id}")]
+        public void FavoriteProductConfirm(int id)
+        {
+            string userId = _userService.GetUserId();
+            int productId = id;
+            var temp = _db.FavoritedProducts.First(a => a.ItemId == productId && a.UserId == userId);
+            if(temp == null)
+            {
+                FavoritedProduct favoritedProduct = new FavoritedProduct()
+                {
+                    ItemId = productId,
+                    UserId = userId
+                };
+                _db.FavoritedProducts.Add(favoritedProduct);
+            }
+            else
+            {
+                _db.Remove(temp);
+            }
+            _db.SaveChanges();
+        }
+
         [Authorize]
         public IActionResult CreateRating(MenuItemsAndQuantity temp)
         {            

@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.EntityFrameworkCore;
-using Spice.Data;
-using Spice.Models;
-using Spice.Models.ViewModels;
 using Spice.Repository;
 
 namespace Spice.Areas.Customer.Controllers
@@ -22,6 +13,7 @@ namespace Spice.Areas.Customer.Controllers
         {
             _unitOfWork = UnitOfWork;
         }
+
         //[Route("NewsPost/{Alias}-{Id}")]
         public IActionResult NewsPost(int? id)
         {
