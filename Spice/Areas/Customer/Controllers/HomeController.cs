@@ -126,6 +126,7 @@ namespace Spice.Controllers
                     favoritedProduct.UserId = favor.UserId;
                 }
             }
+
             ProductStar productStar = new ProductStar();
             if (listStar.Count > 0)
             {
@@ -144,12 +145,12 @@ namespace Spice.Controllers
                 productStar.totalFiveStar = 0;
                 productStar.averageStar = 0;
             }
+
             //Convert Enum Color -> String
             ViewBag.itemColor = Enum.GetName(typeof(MenuItem.EColor), Convert.ToInt32(menuItemFromDb.Color));
 
             var highLimitPrice = menuItemFromDb.Price + (menuItemFromDb.Price * 25 / 100);
             var lowLimitPrice = menuItemFromDb.Price - (menuItemFromDb.Price * 25 / 100);
-
             var similarPriceProducts = _db.MenuItem.Take(3);
 
             MenuItemsAndQuantity menuItemsAndQuantity = new MenuItemsAndQuantity()
@@ -162,9 +163,7 @@ namespace Spice.Controllers
                 ProductStar = productStar,
                 FavoritedProduct = favoritedProduct
             };
-
             return View(menuItemsAndQuantity);
-
         }
 
         public async Task<IActionResult> CheckQuantity(int id)
@@ -212,6 +211,8 @@ namespace Spice.Controllers
             }
         }
 
+        [HttpGet]
+        [Authorize]
         [Route("/Home/FavoriteProductConfirm/{id}")]
         public IActionResult FavoriteProductConfirm(int id)
         {
@@ -235,6 +236,7 @@ namespace Spice.Controllers
             return LocalRedirect("/Customer/Home/Details/" + id);
         }
 
+        [HttpGet]
         [Authorize]
         public IActionResult CreateRating(MenuItemsAndQuantity temp)
         {            
