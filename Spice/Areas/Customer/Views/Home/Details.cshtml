@@ -544,6 +544,7 @@
                     <img src="@recommendProduct.Image" alt="Avatar" style="width:35%; height:35%; margin:auto">
                     <div class="card-body" style="margin:auto">
                         <h4 class="card-title">@recommendProduct.Name</h4>
+                        <p class="card-text">@recommendProduct.Price $</p>
                         <p class="card-text">@recommendProduct.Description</p>
                         <a asp-action="Details" asp-route-id="@recommendProduct.Id" class="btn btn-info btn-sm">Click for detail</a>
                     </div>

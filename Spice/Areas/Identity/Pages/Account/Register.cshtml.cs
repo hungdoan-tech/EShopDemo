@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Encodings.Web;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -90,7 +87,7 @@ namespace Spice.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             string role = Request.Form["rdUserRole"].ToString();
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl = returnUrl ?? Url.Content("/Customer/Home/AfterRegistering");
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
@@ -179,41 +176,47 @@ namespace Spice.Areas.Identity.Pages.Account
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
-                }
+                }               
             }
-            //register functionality
-            //    string role = Request.Form["rdUserRole"].ToString();
-            //returnUrl = returnUrl ?? Url.Content("~/");
-            //var user = new ApplicationUser
-            //{
-            //    UserName = Input.Email,
-            //    Email = Input.Email,
-            //    Name = Input.Name,
-            //    City = Input.City,
-            //    StreetAddress = Input.StreetAddress,
-            //    State = Input.State,
-            //    PostalCode = Input.PostalCode,
-            //    PhoneNumber = Input.PhoneNumber
-            //};
-            //var result = await _userManager.CreateAsync(user, Input.Password);
-            //if (result.Succeeded)
-            //{
-            //    //generation of the email token
-            //    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            //    //var link = Url.Page(nameof(VerifyEmail), "Register", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
-            //    var callbackUrl = Url.Page(
-            //              "/Account/ConfirmEmail",
-            //              pageHandler: null,
-            //              values: new { userId = user.Id, code = code },
-            //              protocol: Request.Scheme);
-            //    await _emailService.SendAsync(Input.Email, "email verify", $"<a href=\"{callbackUrl}\">Verify Email</a>", true);
-            //    //return RedirectToAction("EmailVerification");
-            //    return Page();
-            //}
-            //return RedirectToPage("/Index");
-            // If we got this far, something failed, redisplay form
             return Page();
         }
+
+
+        //It would on the return command of above method
+
+        //register functionality
+        //    string role = Request.Form["rdUserRole"].ToString();
+        //returnUrl = returnUrl ?? Url.Content("~/");
+        //var user = new ApplicationUser
+        //{
+        //    UserName = Input.Email,
+        //    Email = Input.Email,
+        //    Name = Input.Name,
+        //    City = Input.City,
+        //    StreetAddress = Input.StreetAddress,
+        //    State = Input.State,
+        //    PostalCode = Input.PostalCode,
+        //    PhoneNumber = Input.PhoneNumber
+        //};
+        //var result = await _userManager.CreateAsync(user, Input.Password);
+        //if (result.Succeeded)
+        //{
+        //    //generation of the email token
+        //    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        //    //var link = Url.Page(nameof(VerifyEmail), "Register", new { userId = user.Id, code }, Request.Scheme, Request.Host.ToString());
+        //    var callbackUrl = Url.Page(
+        //              "/Account/ConfirmEmail",
+        //              pageHandler: null,
+        //              values: new { userId = user.Id, code = code },
+        //              protocol: Request.Scheme);
+        //    await _emailService.SendAsync(Input.Email, "email verify", $"<a href=\"{callbackUrl}\">Verify Email</a>", true);
+        //    //return RedirectToAction("EmailVerification");
+        //    return Page();
+        //}
+        //return RedirectToPage("/Index");
+        // If we got this far, something failed, redisplay form
+
+
 
         /*
         public async Task<IActionResult> VerifyEmail(string userId, string code)

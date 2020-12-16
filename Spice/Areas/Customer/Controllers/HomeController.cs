@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Spice.Controllers
 {
-    [Area("Customer")]
+    [Area("Customer")]   
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -269,6 +269,12 @@ namespace Spice.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        public IActionResult AfterRegistering()
+        {
+            return View();
         }
     }
 }

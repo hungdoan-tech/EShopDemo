@@ -262,8 +262,7 @@ namespace Spice.Data
                             {
                                 Id = 1,
                                 Header = "Sale on for everything 15OFF",
-                                Content = "<p>In this summer, we have a coupon for everything for 15 % each deal which is larger than 50 $&nbsp;</p><p><img alt=" + "15 Off Images, Stock Photos &amp; Vectors | Shutterstock" + "src=" + "https://image.shutterstock.com/image-vector/special-offer-15-off-label-260nw-1109101598.jpg" + "/></p>"
-            + "<div class=" + "eJOY__extension_root_class" + "id=" + "eJOY__extension_root" + "style=" + "all:unset" + ">&nbsp;</div>",
+                                Content = "<p>In this summer, we have a coupon for everything for 15 % each deal which is larger than 50 $&nbsp;</p><p><img alt=" + "15 Off Images, Stock Photos &amp; Vectors | Shutterstock" + "src=" + "https://www.springhillcourt.com/wp-content/uploads/2018/01/15off.jpg" + "/></p>",
                                 Alias = "Sale-Off-15OFF",
                                 PublishedDate = DateTime.Now,
                                 Type = "1",
