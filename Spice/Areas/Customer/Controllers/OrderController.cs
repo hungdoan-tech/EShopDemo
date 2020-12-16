@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Models;
 using Spice.Models.ViewModels;
 using Spice.Repository;
+using Spice.Service.ServiceInterfaces;
 using Spice.Service.State;
 using Spice.Utility;
 
@@ -21,19 +19,21 @@ namespace Spice.Areas.Customer.Controllers
     [Area("Customer")]
     public class OrderController : Controller
     {
-        private readonly IEmailSender _emailSender;
+        private readonly IOrderContext _orderContext;
         private readonly ApplicationDbContext _db;
-        private readonly IUnitOfWork _unitOfWork;
 
         private int PageSize = 5;
         private int PageAdminSize = 10;
-        public OrderController(ApplicationDbContext db, IEmailSender emailSender, IUnitOfWork unitOfWork)
+        public OrderController(ApplicationDbContext db, IOrderContext orderContext)
         {
-            _db = db;
-            _emailSender = emailSender;
-            _unitOfWork = unitOfWork;
+            this._db = db;
+            this._orderContext = orderContext;
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
 
         [Authorize]
         public async Task<IActionResult> Confirm(int id)
@@ -48,11 +48,6 @@ namespace Spice.Areas.Customer.Controllers
             };
 
             return View(orderDetailsViewModel);
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         public IActionResult GetOrderStatus(int Id)
@@ -208,36 +203,36 @@ namespace Spice.Areas.Customer.Controllers
         }
 
         [Authorize(Roles =SD.RepositoryManager + ","+ SD.ManagerUser)]
-        public async Task<IActionResult> OrderPrepare(int OrderId)
+        public IActionResult OrderPrepare(int OrderId)
         {
-            OrderContext orderContext = new OrderContext(_unitOfWork, _emailSender, new PreparedState());
-            orderContext.ApplyState(OrderId);
+            this._orderContext.SetState(new PreparedState());
+            this._orderContext.ApplyState(OrderId);
             return RedirectToAction("ManageOrder", "Order");
         }
 
 
         [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
-        public async Task<IActionResult> OrderReady(int OrderId)
+        public IActionResult OrderReady(int OrderId)
         {
-            OrderContext orderContext = new OrderContext(_unitOfWork, _emailSender, new OnShippingState());
-            orderContext.ApplyState(OrderId);
+            this._orderContext.SetState(new OnShippingState());
+            this._orderContext.ApplyState(OrderId);
             return RedirectToAction("ManageOrder", "Order");
         }
 
 
         [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
-        public async Task<IActionResult> OrderCancel(int OrderId)
+        public IActionResult OrderCancel(int OrderId)
         {
-            OrderContext orderContext = new OrderContext(_unitOfWork, _emailSender, new CancelledState());
-            orderContext.ApplyState(OrderId);
+            this._orderContext.SetState(new CancelledState());
+            this._orderContext.ApplyState(OrderId);
             return RedirectToAction("ManageOrder", "Order");
         }
 
         [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
-        public async Task<IActionResult> OrderSubmit(int OrderId)
+        public IActionResult OrderSubmit(int OrderId)
         {
-            OrderContext orderContext = new OrderContext(_unitOfWork, _emailSender, new SubmittedState());
-            orderContext.ApplyState(OrderId);
+            this._orderContext.SetState(new SubmittedState());
+            this._orderContext.ApplyState(OrderId);            
             return RedirectToAction("ManageOrder", "Order");
         }
 
@@ -245,10 +240,10 @@ namespace Spice.Areas.Customer.Controllers
         [Route("~/Admin/Order/OrderPickup")]
         [HttpPost]
         [ActionName("OrderPickup")]
-        public async Task<IActionResult> OrderPickupPost(int OrderId)
+        public IActionResult OrderPickupPost(int OrderId)
         {
-            OrderContext orderContext = new OrderContext(_unitOfWork, _emailSender, new CompletedState());
-            orderContext.ApplyState(OrderId);
+            this._orderContext.SetState(new CompletedState());
+            this._orderContext.ApplyState(OrderId);            
             return RedirectToAction("ManageOrder", "Order");
         }
 

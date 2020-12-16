@@ -1,19 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity.UI.Services;
-using Spice.Models;
 using Spice.Repository;
+using Spice.Service.ServiceInterfaces;
 using Spice.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Spice.Service.State
 {
     public class PreparedState : IOrderState
-    {
-        public void HandleRequest(IUnitOfWork _unitOfWork, IEmailSender _emailSender, int OrderId)
+    {       
+        public void HandleRequest(IEmailService _emailService, int OrderId)
         {
-            StateStaticMethods.SendNotifyEmail(_unitOfWork, _emailSender, OrderId, SD.StatusInProcess, Message: " is prepared at our repository");
-         }
+            _emailService.SendNotifyEmail(OrderId, SD.StatusInProcess, Message: " is prepared at our repository");
+        }
     }
 }

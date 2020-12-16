@@ -12,7 +12,7 @@ namespace Spice.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Image { get; set; }
+        public string? Image { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = " Price should be greater than ${1}")]
         public double Price { get; set; }
         public Boolean IsPublish { get; set; }
@@ -25,13 +25,15 @@ namespace Spice.Models
         public string Tag { get; set; }
         public DateTime PublishedDate { get; set; }
 
-
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
         public int SubCategoryId { get; set; }
         public virtual SubCategory SubCategory { get; set; }
+
         public ICollection<OrderDetails> OrderDetails { get; set; }
         public virtual ICollection<News> News { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
+        public virtual ICollection<FavoritedProduct> FavoritedProducts { get; set; }
         public virtual ICollection<ImportHistory> ImportHistories { get; set; }
     }
 }

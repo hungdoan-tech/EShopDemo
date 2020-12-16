@@ -1,25 +1,19 @@
 ﻿using Spice.Models.ViewModels;
+using Spice.Service.ServiceInterfaces;
 using Spice.Utility;
 using Stripe;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Spice.Service
 {
-    public class PaymentService
+    public class PaymentService: IPaymentService
     {
-        public PaymentService()
-        {
-        }
-
-        public OrderDetailsCart Charge(OrderDetailsCart detailCart, string stripeToken)
+        public OrderDetailsCart ChargeStripe(OrderDetailsCart detailCart, string stripeToken)
         {
             var options = new ChargeCreateOptions
             {
                 Amount = Convert.ToInt32(detailCart.OrderHeader.OrderTotal * 100),
-                Currency = "usd",
+                Currency = "USD",
                 Description = "Order ID : " + detailCart.OrderHeader.Id,
                 Source = stripeToken
             };

@@ -153,7 +153,6 @@ namespace Spice.Service
                     }
                 }
                 detailCart.OrderHeader.OrderTotalOriginal = detailCart.OrderHeader.OrderTotal;
-
                 detailCart = this.CheckCouponBeforeSumary(detailCart);
                 return detailCart;
             }
