@@ -17,6 +17,7 @@ namespace Spice.Areas.Admin
         [Route("Admin/Dashboard/Index")]
         public IActionResult Index()
         {
+
             return View();
         }
     }

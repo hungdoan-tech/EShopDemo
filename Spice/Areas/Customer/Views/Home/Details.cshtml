@@ -510,7 +510,7 @@
     }
 
 </form>
-<form asp-action="CreateRating" method="post">
+<form asp-action="CreateRating" method="get">
     <div class="container grid">
         <h1 class="trans-rating-for">Rating and Reviews</h1>
         <div class="row">
@@ -693,7 +693,9 @@
                     <img src="@recommendProduct.Image" alt="Avatar" style="width:100%; height:50%; margin:auto">
                     <div class="card-body" style="margin:auto">
                         <h4 class="card-title">@recommendProduct.Name</h4>
-                        <p class="card-text">$@recommendProduct.Price</p>
+                        <p class="card-text">@recommendProduct.Price $</p>
+                        <p class="card-text">@recommendProduct.Description</p>
+
                         <a asp-action="Details" asp-route-id="@recommendProduct.Id" class="btn btn-info btn-sm">Click for detail</a>
                     </div>
                 </div>

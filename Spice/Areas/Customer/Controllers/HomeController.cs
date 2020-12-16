@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Spice.Controllers
 {
-    [Area("Customer")]
+    [Area("Customer")]   
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -126,6 +126,7 @@ namespace Spice.Controllers
                     favoritedProduct.UserId = favor.UserId;
                 }
             }
+
             ProductStar productStar = new ProductStar();
             if (listStar.Count > 0)
             {
@@ -144,6 +145,7 @@ namespace Spice.Controllers
                 productStar.totalFiveStar = 0;
                 productStar.averageStar = 0;
             }
+
             //Convert Enum Color -> String
             ViewBag.itemColor = Enum.GetName(typeof(MenuItem.EColor), Convert.ToInt32(menuItemFromDb.Color));
 
@@ -162,9 +164,7 @@ namespace Spice.Controllers
                 ProductStar = productStar,
                 FavoritedProduct = favoritedProduct
             };
-
             return View(menuItemsAndQuantity);
-
         }
 
         public async Task<IActionResult> CheckQuantity(int id)
@@ -212,6 +212,8 @@ namespace Spice.Controllers
             }
         }
 
+        [HttpGet]
+        [Authorize]
         [Route("/Home/FavoriteProductConfirm/{id}")]
         public IActionResult FavoriteProductConfirm(int id)
         {
@@ -235,6 +237,7 @@ namespace Spice.Controllers
             return LocalRedirect("/Customer/Home/Details/" + id);
         }
 
+        [HttpGet]
         [Authorize]
         public IActionResult CreateRating(MenuItemsAndQuantity temp)
         {            
@@ -269,6 +272,12 @@ namespace Spice.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        public IActionResult AfterRegistering()
+        {
+            return View();
         }
     }
 }
