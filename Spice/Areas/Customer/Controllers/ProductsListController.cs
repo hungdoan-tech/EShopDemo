@@ -32,7 +32,7 @@ namespace Spice.Areas.Customer.Controllers
         }
 
         public async Task<IActionResult> Index(int pageSize = 10, int productPage = 1, string searchName = null, string groupProductsSelected = "Default", string orderBy = "descDate")
-        {
+        {           
             if (pageSize >= 10 || pageSize <= 100)
             {
                 this.PageSize = pageSize;
