@@ -5,22 +5,34 @@
 @*<span class="flaticon-user"></span>*@
 <style>
     .admin-container {
-        position: relative;
+      margin-bottom: 0px;
     }
 
     .admin-hover-result {
-        visibility: hidden;
         position: absolute;
-        display: flex;
-        flex-direction: column;
+        border-top: solid 3px red;
+        box-shadow: .1px .1px .1px .1px #888888;
+        border-radius: 10px 10px 0px 0px;
+        padding: 30px 5px 10px 0px;
+        z-index: 999;
+        width: 150px;
         background-color: white;
+        visibility: hidden;
     }
-
-    .admin-container:hover .admin-hover-result {
+    .admin-hover-result a {
+        margin-bottom: 100px;
+        padding-left: 10px;
+        visibility: hidden;
+        transition: all .03s linear;
+    }
+    .admin-container:hover .admin-hover-result a {
         visibility: visible;
     }
-
-    a:hover {
+    .admin-container:hover .admin-hover-result {
+        visibility: visible;
+        background-color: white;
+    }
+    .admin-hover-result a:hover {
         color: red;
         cursor: pointer;
     }
@@ -31,6 +43,8 @@
         <a class="black-link admin-hover" asp-area="Identity" asp-page="/Account/Manage/Index">@await Component.InvokeAsync("UserName") </a>
        <div class="admin-hover-result">
             <a asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
+            <br />
+            <br/>
             <a href="/Customer/Home/FavoriteProductIndex">Favorite Products</a>
         </div>  
     </li>

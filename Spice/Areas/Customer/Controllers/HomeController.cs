@@ -151,7 +151,8 @@ namespace Spice.Controllers
 
             var highLimitPrice = menuItemFromDb.Price + (menuItemFromDb.Price * 25 / 100);
             var lowLimitPrice = menuItemFromDb.Price - (menuItemFromDb.Price * 25 / 100);
-            var similarPriceProducts = _db.MenuItem.Take(3);
+
+            var similarPriceProducts = _db.MenuItem.Take(4);
 
             MenuItemsAndQuantity menuItemsAndQuantity = new MenuItemsAndQuantity()
             {
