@@ -1,0 +1,33 @@
+﻿
+.thead-dark {
+    background: rgb(128, 128, 128);
+    color: white;
+}
+
+tr {
+    cursor: pointer;
+    transition: height .5s linear;
+}
+
+tbody tr:hover {
+    background: rgb(237, 237, 237);
+}
+
+tbody tr:active .img-index {
+    visibility: visible;
+    border: 1px solid;
+    height: 200px;
+    width: 200px;
+}
+
+.img-index {
+    position: absolute;
+    background: white;
+    border: none;
+    width: 0px;
+    height: 0px;
+    visibility: hidden;
+    transition-delay: 1s;
+    transition: height .5s linear;
+}
+
