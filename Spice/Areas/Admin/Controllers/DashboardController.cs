@@ -41,7 +41,7 @@ namespace Spice.Areas.Admin
                 SoldProducts eachProduct = new SoldProducts()
                 {
                     ProductId = element,
-                    Count = listOrderDetails.Where(a => a.Id == element).Select(a => a.Id).Count()
+                    Count = listOrderDetails.Where(a => a.Id == element).Select(a => a.Count).Sum()
                 };   
                 soldProducts.Add(eachProduct);
             }
@@ -53,6 +53,6 @@ namespace Spice.Areas.Admin
                         .GetJson();
 
             return Content(json);
-        }
+        }        
     }
 }
