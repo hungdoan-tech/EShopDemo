@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Spice.Models;
+using Spice.Utility;
 
 namespace Spice.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -27,7 +28,7 @@ namespace Spice.Data
         public DbSet<ImportHistory> ImportHistories { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<FavoritedProduct> FavoritedProducts { get; set; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override async void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
@@ -280,7 +281,7 @@ namespace Spice.Data
                     new MenuItem { Id = 6, Name = "Casio 3", Description = "Awesome", Image = "\\images\\6.png", Price = 157, IsPublish = true, Quantity = 15, Color = "1", Tag = "1", PublishedDate = DateTime.Now, CategoryId = 2, SubCategoryId = 2 },
                     new MenuItem { Id = 7, Name = "Samsung 1", Description = "Awesome", Image = "\\images\\7.png", Price = 198, IsPublish = true, Quantity = 23, Color = "3", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 3 },
                     new MenuItem { Id = 8, Name = "Apple 1", Description = "Awesome", Image = "\\images\\8.png", Price = 998, IsPublish = true, Quantity = 18, Color = "1", Tag = "0", PublishedDate = DateTime.Now, CategoryId = 1, SubCategoryId = 1 }
-            );
+            );        
         }
     }
 }
