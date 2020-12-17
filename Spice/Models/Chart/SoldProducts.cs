@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace Spice.Models.Chart
 {
-    public class SoldProducts
+    public class BestSellerProducts
     {
-        public int ProductId { get; set; }
+        public int MenuItemId { get; set; }
+        public string MenuItemName { get; set; }
         public int Count { get; set; }
     }
 }

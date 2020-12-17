@@ -71,6 +71,8 @@ namespace Spice.Data
             user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "admin2@gmail.com");
             await _userManager.AddToRoleAsync(user, SD.ManagerUser);
 
+            Thread.Sleep(2000);
+
             _userManager.CreateAsync(new ApplicationUser
             {
                 UserName = "repository@gmail.com",
@@ -93,6 +95,8 @@ namespace Spice.Data
             user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "repository2@gmail.com");
             await _userManager.AddToRoleAsync(user, SD.RepositoryManager);
 
+            Thread.Sleep(2000);
+
             _userManager.CreateAsync(new ApplicationUser
             {
                 UserName = "shipper@gmail.com",
@@ -114,6 +118,8 @@ namespace Spice.Data
             }, "Admin123*").GetAwaiter().GetResult();
             user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "shipper2@gmail.com");
             await _userManager.AddToRoleAsync(user, SD.Shipper);
+
+            Thread.Sleep(2000);
 
             _userManager.CreateAsync(new ApplicationUser
             {

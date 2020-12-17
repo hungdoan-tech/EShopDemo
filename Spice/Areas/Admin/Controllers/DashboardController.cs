@@ -33,21 +33,31 @@ namespace Spice.Areas.Admin
         public IActionResult getBestSellerProducts()
         {
             var listOrderDetails = this._db.OrderDetails.ToList();
-            List<int> listSoldProducts = listOrderDetails.Distinct().Select(a=>a.Id).ToList();
-            List<SoldProducts> soldProducts = new List<SoldProducts>();            
+            var listSoldProducts = listOrderDetails.Distinct().ToList();
+            List<BestSellerProducts> chartData = new List<BestSellerProducts>();            
 
             foreach (var element in listSoldProducts)
             {
-                SoldProducts eachProduct = new SoldProducts()
+                var itemCount = chartData.Where(a => a.MenuItemId == element.MenuItemId);
+                if (itemCount.Count() > 0)
                 {
-                    ProductId = element,
-                    Count = listOrderDetails.Where(a => a.Id == element).Select(a => a.Count).Sum()
-                };   
-                soldProducts.Add(eachProduct);
+                    var temp = chartData.First(a => a.MenuItemId == element.MenuItemId);
+                    temp.Count += element.Count;
+                }
+                else
+                {
+                    BestSellerProducts eachProduct = new BestSellerProducts()
+                    {
+                        MenuItemId = element.MenuItemId,
+                        MenuItemName = element.Name,
+                        Count = element.Count
+                    };
+                    chartData.Add(eachProduct);
+                }                
             }
 
-            var json = soldProducts.ToGoogleDataTable()
-                        .NewColumn(new Column(ColumnType.String, "ProductID"), x => x.ProductId)
+            var json = chartData.Take(5).ToGoogleDataTable()
+                        .NewColumn(new Column(ColumnType.String, "ProductName"), x => x.MenuItemName)
                         .NewColumn(new Column(ColumnType.Number, "Quantity"), x => x.Count)
                         .Build()
                         .GetJson();
