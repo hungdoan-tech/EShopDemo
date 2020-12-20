@@ -2,15 +2,62 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
-
+<style>
+    .icon-button button{
+        width: 60%;
+        height: 70px;
+        margin: 30px;
+        background-color: white;
+        border: none;
+        padding:0px;
+        text-align:left;
+        font-weight: 900;
+    }
+    .icon-button i {
+        font-size: 40px;
+        width: 70px;
+        height: 70px;
+        padding: 15px;
+        text-align: center;
+    }
+    .icon-button {
+        font-size: 20px
+    }
+</style>
+<nav class="navbar navbar-default" style="background-color:white;">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Admin Dashboard - The business overview</a>
+        </div>
+    </div>
+</nav>
+<div class="row icon-button">
+    <div class="col-lg-3">
+        <button><i class="far fa-user" style="background-color: #15aabf; color: white"></i>  USERS (10)</button>
+    </div>
+    <div class="col-lg-3">
+        <button><i class="fas fa-heart" style="background-color: rgb(246, 76, 76); color: white"></i>  LIKE (4)</button>
+    </div>
+    <div class="col-lg-3">
+        <button><i class="far fa-star" style="background-color: rgb(241, 238, 131); color: white"></i>  RATING (5)</button>
+    </div>
+    <div class="col-lg-3">
+        <button><i class="fas fa-shopping-cart" style="background-color: rgb(69, 118, 233); color: white"></i>  PRODUCT (15)</button>
+    </div>
+</div>
 <div class="container-fluid">
-    <h2>Admin Dashboard - The business overview</h2>
     <div class="row">
-        <div id="circleChart" class="col-lg-6"></div>
-        <div id="columnChart" class="col-lg-6"></div>
-    </div>    
+        <div class="col-lg-3">
+
+        </div>
+    </div>
+    <div class="row">
+        <div id="categoryCircleChart" class="col-lg-6"></div>
+        <div id="brandCircleChart" class="col-lg-6"></div>
+    </div>
     <div class="row" style="margin-top:5%">
         <div id="lineChart" class="col-lg-6"></div>
+        <div id="columnChart" class="col-lg-6"></div>
     </div>
 </div>
 
@@ -20,38 +67,64 @@
 
     <script type="text/javascript">
 
-      // Load the Visualization API and the corechart package.
-        google.charts.load('current', {'packages':['corechart']});
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', { 'packages': ['corechart'] });
 
-      // Set a callback to run when the Google Visualization API is loaded.
-        google.charts.setOnLoadCallback(drawCircleChart);
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawCategoryCircleChart);
+        google.charts.setOnLoadCallback(drawBrandCircleChart);
         google.charts.setOnLoadCallback(drawColumnChart);
-        google.charts.setOnLoadCallback(drawLineChart);        
+        google.charts.setOnLoadCallback(drawLineChart);
 
-      // Callback that creates and populates a data table,
-      // instantiates the pie chart, passes in the data and
-      // draws it.
-      function drawCircleChart() {
+        // Callback that creates and populates a data table,
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+        function drawCategoryCircleChart() {
 
-             // Create the data table.
+            // Create the data table.
             let data = new google.visualization.DataTable();
-            data.addColumn('string', 'Topping');
-            data.addColumn('number', 'Slices');
+            data.addColumn('string', 'Category');
+            data.addColumn('number', 'Count');
             data.addRows([
-              ['Mushrooms', 3],
-              ['Onions', 1],
-              ['Olives', 1],
-              ['Zucchini', 1],
-              ['Pepperoni', 2]
+                ['Smart', 13],
+                ['Analog', 15],
+                ['Mechanical', 20]
             ]);
 
             // Set chart options
-            let options = {'title':'How Much Pizza I Ate Last Night',
-                           'width':600,
-                           'height':350};
+            let options = {
+                'title': 'The percent of all Categories in Shop',
+                'width': 600,
+                'height': 350
+            };
 
             // Instantiate and draw our chart, passing in some options.
-            let chart = new google.visualization.PieChart(document.getElementById('circleChart'));
+            let chart = new google.visualization.PieChart(document.getElementById('categoryCircleChart'));
+            chart.draw(data, options);
+        }
+        function drawBrandCircleChart() {
+
+            // Create the data table.
+            let data = new google.visualization.DataTable();
+            data.addColumn('string', 'Brand');
+            data.addColumn('number', 'Count');
+            data.addRows([
+                ['Rolex', 13],
+                ['Casio', 11],
+                ['Samsung', 8],
+                ['Apple', 21],
+                ['Omega', 2]
+            ]);
+
+            // Set chart options
+            let options = {
+                'title': 'The percent of all Brands in Shop',
+                'width': 600,
+                'height': 350
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            let chart = new google.visualization.PieChart(document.getElementById('brandCircleChart'));
             chart.draw(data, options);
         }
 
@@ -83,15 +156,15 @@
         function drawLineChart() {
             var data = google.visualization.arrayToDataTable([
                 ['Year', 'Sales', 'Expenses'],
-                ['2004', 1000, 400],
-                ['2005', 1170, 460],
-                ['2006', 660, 1120],
-                ['2007', 1030, 540]
+                ['9', 1000, 400],
+                ['10', 1170, 460],
+                ['11', 660, 1120],
+                ['12', 1030, 540]
             ]);
 
             var options = {
                 chart: {
-                    title: 'Company Performance',
+                    title: 'Monthly Sales',
                     curveType: 'function',
                     legend: { position: 'bottom' }
                 },
