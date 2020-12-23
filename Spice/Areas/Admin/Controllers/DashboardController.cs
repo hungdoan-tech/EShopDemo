@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using Spice.Models.Chart;
 using Google.DataTable.Net.Wrapper.Extension;
 using Google.DataTable.Net.Wrapper;
+using Spice.Models;
+using System;
 
 namespace Spice.Areas.Admin
 {
@@ -26,7 +28,14 @@ namespace Spice.Areas.Admin
         [Route("Admin/Dashboard/Index")]
         public IActionResult Index()
         {
-            return View();
+            OverviewDataDashboad overviewData = new OverviewDataDashboad()
+            {
+                userCount = _db.ApplicationUser.Count(),
+                productCount = _db.MenuItem.Count(),
+                likeCount = _db.FavoritedProducts.Count(),
+                ratingCount = _db.Ratings.Count()
+            };
+            return View(overviewData);
         }
 
         [HttpGet]    
@@ -63,6 +72,117 @@ namespace Spice.Areas.Admin
                         .GetJson();
 
             return Content(json);
-        }        
+        }
+
+        public IActionResult getCategoriesPercent()
+        {
+            var listMenuItems = this._db.MenuItem.ToList();
+            var listCategories = this._db.Category.ToList();
+
+            List<CategoriesPercent> chartData = new List<CategoriesPercent>();
+
+            foreach (var element in listCategories)
+            {
+                CategoriesPercent temp = new CategoriesPercent()
+                {
+                    CategoryId = element.Id,
+                    CategoryName = element.Name,
+                    Count = this.calculateCategoriesPercent(listMenuItems, element.Id)
+                };
+                chartData.Add(temp);
+            }
+
+            var json = chartData.ToGoogleDataTable()
+                        .NewColumn(new Column(ColumnType.String, "Category Name"), x => x.CategoryName)
+                        .NewColumn(new Column(ColumnType.Number, "Quantity"), x => x.Count)
+                        .Build()
+                        .GetJson();
+
+            return Content(json);
+        }
+
+        public IActionResult getBrandsPercent()
+        {
+            var listMenuItems = this._db.MenuItem.ToList();
+            var listBrands = this._db.SubCategory.ToList();
+
+            List<BrandsPercent> chartData = new List<BrandsPercent>();
+
+            foreach (var element in listBrands)
+            {
+                BrandsPercent temp = new BrandsPercent()
+                {
+                    BrandId = element.Id,
+                    BrandName = element.Name,
+                    Count = this.calculateBrandPercent(listMenuItems, element.Id)
+                };
+                chartData.Add(temp);
+            }
+
+            var json = chartData.ToGoogleDataTable()
+                        .NewColumn(new Column(ColumnType.String, "Brand Name"), x => x.BrandName)
+                        .NewColumn(new Column(ColumnType.Number, "Quantity"), x => x.Count)
+                        .Build()
+                        .GetJson();
+
+            return Content(json);
+        }
+
+        public IActionResult getProfits()
+        {
+            DateTime now = DateTime.Now;
+            var listOrderHeader = _db.OrderHeader.ToList();
+            List<ProfitData> chartData = new List<ProfitData>();
+            
+            for(int i = 0;i < 5; i++)
+            {
+                TimeSpan aInterval = new System.TimeSpan(i, 0, 0, 0);
+                var considerDate = now.Subtract(aInterval);
+                var totalProfitInDay = listOrderHeader.Where(a => a.OrderDate.Day == considerDate.Day).Sum(a => a.OrderTotal);
+
+                ProfitData profitData = new ProfitData()
+                {
+                    date = considerDate.ToString(),
+                    profit = totalProfitInDay
+                };
+                chartData.Add(profitData);
+            }
+
+            var json = chartData.ToGoogleDataTable()
+                        .NewColumn(new Column(ColumnType.String, "Date"), x => x.date)
+                        .NewColumn(new Column(ColumnType.Number, "Quantity"), x => x.profit)
+                        .Build()
+                        .GetJson();
+
+            return Content(json);
+        }
+
+
+
+        public int calculateCategoriesPercent(List<MenuItem> menuItems, int CategoryId)
+        {
+            int sum = 0;
+            foreach (var element in menuItems)
+            {
+                if(element.CategoryId == CategoryId)
+                {
+                    sum += 1;
+                }
+            }
+            return sum;
+        }
+
+        public int calculateBrandPercent(List<MenuItem> menuItems, int subCategoryId)
+        {
+            int sum = 0;
+            foreach (var element in menuItems)
+            {
+                if (element.SubCategoryId == subCategoryId)
+                {
+                    sum += 1;
+                }
+            }
+            return sum;
+        }
     }
 }

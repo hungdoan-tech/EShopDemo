@@ -1,18 +1,20 @@
-﻿@{
+﻿@model Spice.Models.Chart.OverviewDataDashboad
+@{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
 <style>
-    .icon-button button{
+    .icon-button button {
         width: 60%;
         height: 70px;
         margin: 30px;
         background-color: white;
         border: none;
-        padding:0px;
-        text-align:left;
+        padding: 0px;
+        text-align: left;
         font-weight: 900;
     }
+
     .icon-button i {
         font-size: 40px;
         width: 70px;
@@ -20,6 +22,7 @@
         padding: 15px;
         text-align: center;
     }
+
     .icon-button {
         font-size: 20px
     }
@@ -33,16 +36,16 @@
 </nav>
 <div class="row icon-button">
     <div class="col-lg-3">
-        <button><i class="far fa-user" style="background-color: #15aabf; color: white"></i>  USERS (10)</button>
+        <button><i class="far fa-user" style="background-color: #15aabf; color: white"></i>  USERS (@Model.userCount)</button>
     </div>
     <div class="col-lg-3">
-        <button><i class="fas fa-heart" style="background-color: rgb(246, 76, 76); color: white"></i>  LIKE (4)</button>
+        <button><i class="fas fa-shopping-cart" style="background-color: rgb(69, 118, 233); color: white"></i>  PRODUCT (@Model.productCount)</button>
     </div>
     <div class="col-lg-3">
-        <button><i class="far fa-star" style="background-color: rgb(241, 238, 131); color: white"></i>  RATING (5)</button>
+        <button><i class="fas fa-heart" style="background-color: rgb(246, 76, 76); color: white"></i>  LIKE (@Model.likeCount)</button>
     </div>
     <div class="col-lg-3">
-        <button><i class="fas fa-shopping-cart" style="background-color: rgb(69, 118, 233); color: white"></i>  PRODUCT (15)</button>
+        <button><i class="far fa-star" style="background-color: rgb(241, 238, 131); color: white"></i>  RATING (@Model.ratingCount)</button>
     </div>
 </div>
 <div class="container-fluid">
@@ -60,7 +63,7 @@
         <div id="columnChart" class="col-lg-6"></div>
     </div>
 </div>
-
+<button><a asp-action="getCategoriesPercent">content</a></button>
 @section Scripts
 {
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -73,7 +76,7 @@
         // Set a callback to run when the Google Visualization API is loaded.
         google.charts.setOnLoadCallback(drawCategoryCircleChart);
         google.charts.setOnLoadCallback(drawBrandCircleChart);
-        google.charts.setOnLoadCallback(drawColumnChart);
+        google.charts.setOnLoadCallback(drawBestSellerProductsColumnChart);
         google.charts.setOnLoadCallback(drawLineChart);
 
         // Callback that creates and populates a data table,
@@ -82,20 +85,20 @@
         function drawCategoryCircleChart() {
 
             // Create the data table.
-            let data = new google.visualization.DataTable();
-            data.addColumn('string', 'Category');
-            data.addColumn('number', 'Count');
-            data.addRows([
-                ['Smart', 13],
-                ['Analog', 15],
-                ['Mechanical', 20]
-            ]);
+            let jsonData = $.ajax({
+                url: "/Admin/Dashboard/getCategoriesPercent",
+                dataType: "json",
+                async: false
+            }).responseText;
+
+            // Create the data table.
+            let data = new google.visualization.DataTable(jsonData);
 
             // Set chart options
             let options = {
                 'title': 'The percent of all Categories in Shop',
                 'width': 600,
-                'height': 350
+                'height': 300
             };
 
             // Instantiate and draw our chart, passing in some options.
@@ -105,22 +108,20 @@
         function drawBrandCircleChart() {
 
             // Create the data table.
-            let data = new google.visualization.DataTable();
-            data.addColumn('string', 'Brand');
-            data.addColumn('number', 'Count');
-            data.addRows([
-                ['Rolex', 13],
-                ['Casio', 11],
-                ['Samsung', 8],
-                ['Apple', 21],
-                ['Omega', 2]
-            ]);
+            let jsonData = $.ajax({
+                url: "/Admin/Dashboard/getBrandsPercent",
+                dataType: "json",
+                async: false
+            }).responseText;
+
+            // Create the data table.
+            let data = new google.visualization.DataTable(jsonData);
 
             // Set chart options
             let options = {
                 'title': 'The percent of all Brands in Shop',
                 'width': 600,
-                'height': 350
+                'height': 300
             };
 
             // Instantiate and draw our chart, passing in some options.
@@ -129,7 +130,7 @@
         }
 
 
-        function drawColumnChart() {
+        function drawBestSellerProductsColumnChart() {
 
             // Create the data table.
             let jsonData = $.ajax({
@@ -154,13 +155,14 @@
 
 
         function drawLineChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Year', 'Sales', 'Expenses'],
-                ['9', 1000, 400],
-                ['10', 1170, 460],
-                ['11', 660, 1120],
-                ['12', 1030, 540]
-            ]);
+            // Create the data table.
+            let jsonData = $.ajax({
+                url: "/Admin/Dashboard/getProfits",
+                dataType: "json",
+                async: false
+            }).responseText;
+            // Create the data table.
+            let data = new google.visualization.DataTable(jsonData);
 
             var options = {
                 chart: {

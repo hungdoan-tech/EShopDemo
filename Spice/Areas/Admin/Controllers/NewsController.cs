@@ -91,8 +91,7 @@ namespace Spice.Areas.Admin.Controllers
             else
             {
                 //no file was uploaded, so use default
-                var uploads = Path.Combine(webRootPath, @"images\" + SD.DefaultFoodImage);
-                System.IO.File.Copy(uploads, webRootPath + @"\images\" +  "DefaultNewsImage" + ".png");
+                var uploads = Path.Combine(webRootPath, @"images\" + SD.DefaultProductNewsImage);                
                 NewsFromDb.ImageHeader = @"\images\" + "DefaultNewsImage" + ".png";
             }
             //_db.News.Add(NewsVM.News);
