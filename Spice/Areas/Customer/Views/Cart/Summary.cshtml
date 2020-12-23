@@ -9,7 +9,7 @@
 }
 
 <form method="post">
-    @if (Model.listCart.Count > 0)
+    @if (Model.ListCart.Count > 0)
     {
         <br />
         <input id="userId" asp-for="@Model.OrderHeader.UserId" hidden />
@@ -95,7 +95,7 @@
                                     <ul class="list-group mb-3">
                                         @{ var total = 0.0;}
 
-                                        @foreach (var details in Model.listCart)
+                                        @foreach (var details in Model.ListCart)
                                         {
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <div>

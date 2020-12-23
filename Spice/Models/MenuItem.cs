@@ -12,7 +12,15 @@ namespace Spice.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Size { get; set; }
+        public double Thickness { get; set; }
+        public string Band { get; set; }
+        public string Crystal { get; set; }
+        
+        #nullable enable
         public string? Image { get; set; }
+        #nullable disable
+
         [Range(1, int.MaxValue, ErrorMessage = " Price should be greater than ${1}")]
         public double Price { get; set; }
         public Boolean IsPublish { get; set; }

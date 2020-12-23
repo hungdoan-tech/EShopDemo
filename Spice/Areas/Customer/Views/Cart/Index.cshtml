@@ -6,7 +6,7 @@
 }
 
 <form method="post">
-    @if (Model.listCart.Count > 0)
+    @if (Model.ListCart.Count > 0)
     {
         <!-- Hero Area Start-->
         <div class="slider-area ">
@@ -39,7 +39,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.listCart)
+                                @foreach (var item in Model.ListCart)
                                 {
                                     <tr>
                                         <td>
@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        @foreach (var item in Model.listCart)
+                        @foreach (var item in Model.ListCart)
                         {
                             <div class="row">
                                 <div class="d-none d-lg-block col-lg-2 text-center py-2">

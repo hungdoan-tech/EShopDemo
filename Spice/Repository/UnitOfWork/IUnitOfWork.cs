@@ -1,4 +1,5 @@
 ﻿using Spice.Models;
+using Spice.Repository.RepositoryInterface;
 using Spice.RepositoryInterface;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,6 @@ namespace Spice.Repository
         IOrderHeaderRepository OrderHeaderRepository { get; }
         IMenuItemRepository MenuItemRepository { get; }
         IOrderDetailRepository OrderDetailRepository { get; }
-
         IRatingRepository RatingRepository { get; }
         Task<int> SaveChangesAsync();
         void SaveChanges();

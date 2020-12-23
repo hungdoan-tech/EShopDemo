@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace Spice.Utility
 {
     public static class SD
-    {
-        public const string DefaultFoodImage = "default_food.png";
+    {     
+        public const string DefaultProductNewsImage = "DefaultNewsImage.png";
 
         public const string ManagerUser = "Manager";
-        public const string RepositoryManager = "RepositoryManager";
+        public const string RepositoryManager = "RepositoryManager"; 
         public const string Shipper = "Shipper";
         public const string CustomerEndUser = "Customer";
 
