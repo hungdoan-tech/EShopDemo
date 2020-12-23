@@ -14,7 +14,6 @@ using Spice.Repository;
 using Spice.Service.ServiceInterfaces;
 using Spice.Service.State;
 using Spice.Utility;
-using Spice.Utils;
 
 namespace Spice.Areas.Customer.Controllers
 {
