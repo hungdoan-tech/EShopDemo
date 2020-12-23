@@ -7,7 +7,7 @@ namespace Spice.Models.Chart
 {
     public class ProfitData
     {
-        public string date { get; set; }
-        public double profit { get; set; }
+        public string Date { get; set; }
+        public double Profit { get; set; }
     }
 }

@@ -30,16 +30,16 @@ namespace Spice.Areas.Admin
         {
             OverviewDataDashboad overviewData = new OverviewDataDashboad()
             {
-                userCount = _db.ApplicationUser.Count(),
-                productCount = _db.MenuItem.Count(),
-                likeCount = _db.FavoritedProducts.Count(),
-                ratingCount = _db.Ratings.Count()
+                UserCount = _db.ApplicationUser.Count(),
+                ProductCount = _db.MenuItem.Count(),
+                LikeCount = _db.FavoritedProducts.Count(),
+                RatingCount = _db.Ratings.Count()
             };
             return View(overviewData);
         }
 
         [HttpGet]    
-        public IActionResult getBestSellerProducts()
+        public IActionResult GetBestSellerProducts()
         {
             var listOrderDetails = this._db.OrderDetails.ToList();
             var listSoldProducts = listOrderDetails.Distinct().ToList();
@@ -74,7 +74,7 @@ namespace Spice.Areas.Admin
             return Content(json);
         }
 
-        public IActionResult getCategoriesPercent()
+        public IActionResult GetCategoriesPercent()
         {
             var listMenuItems = this._db.MenuItem.ToList();
             var listCategories = this._db.Category.ToList();
@@ -87,7 +87,7 @@ namespace Spice.Areas.Admin
                 {
                     CategoryId = element.Id,
                     CategoryName = element.Name,
-                    Count = this.calculateCategoriesPercent(listMenuItems, element.Id)
+                    Count = this.CalculateCategoriesPercent(listMenuItems, element.Id)
                 };
                 chartData.Add(temp);
             }
@@ -101,7 +101,7 @@ namespace Spice.Areas.Admin
             return Content(json);
         }
 
-        public IActionResult getBrandsPercent()
+        public IActionResult GetBrandsPercent()
         {
             var listMenuItems = this._db.MenuItem.ToList();
             var listBrands = this._db.SubCategory.ToList();
@@ -114,7 +114,7 @@ namespace Spice.Areas.Admin
                 {
                     BrandId = element.Id,
                     BrandName = element.Name,
-                    Count = this.calculateBrandPercent(listMenuItems, element.Id)
+                    Count = this.CalculateBrandPercent(listMenuItems, element.Id)
                 };
                 chartData.Add(temp);
             }
@@ -128,7 +128,7 @@ namespace Spice.Areas.Admin
             return Content(json);
         }
 
-        public IActionResult getProfits()
+        public IActionResult GetProfits()
         {
             DateTime now = DateTime.Now;
             var listOrderHeader = _db.OrderHeader.ToList();
@@ -142,15 +142,15 @@ namespace Spice.Areas.Admin
 
                 ProfitData profitData = new ProfitData()
                 {
-                    date = considerDate.ToString(),
-                    profit = totalProfitInDay
+                    Date = considerDate.ToString(),
+                    Profit = totalProfitInDay
                 };
                 chartData.Add(profitData);
             }
 
             var json = chartData.ToGoogleDataTable()
-                        .NewColumn(new Column(ColumnType.String, "Date"), x => x.date)
-                        .NewColumn(new Column(ColumnType.Number, "Quantity"), x => x.profit)
+                        .NewColumn(new Column(ColumnType.String, "Date"), x => x.Date)
+                        .NewColumn(new Column(ColumnType.Number, "Quantity"), x => x.Profit)
                         .Build()
                         .GetJson();
 
@@ -159,7 +159,7 @@ namespace Spice.Areas.Admin
 
 
 
-        public int calculateCategoriesPercent(List<MenuItem> menuItems, int CategoryId)
+        public int CalculateCategoriesPercent(List<MenuItem> menuItems, int CategoryId)
         {
             int sum = 0;
             foreach (var element in menuItems)
@@ -172,7 +172,7 @@ namespace Spice.Areas.Admin
             return sum;
         }
 
-        public int calculateBrandPercent(List<MenuItem> menuItems, int subCategoryId)
+        public int CalculateBrandPercent(List<MenuItem> menuItems, int subCategoryId)
         {
             int sum = 0;
             foreach (var element in menuItems)

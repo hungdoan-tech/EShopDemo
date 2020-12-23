@@ -7,9 +7,9 @@ namespace Spice.Models.Chart
 {
     public class OverviewDataDashboad
     {
-        public int userCount { get; set; }
-        public int productCount { get; set; }
-        public int likeCount { get; set; }
-        public int ratingCount { get; set; }
+        public int UserCount { get; set; }
+        public int ProductCount { get; set; }
+        public int LikeCount { get; set; }
+        public int RatingCount { get; set; }
     }
 }

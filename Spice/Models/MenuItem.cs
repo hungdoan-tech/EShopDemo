@@ -16,7 +16,11 @@ namespace Spice.Models
         public double Thickness { get; set; }
         public string Band { get; set; }
         public string Crystal { get; set; }
+        
+        #nullable enable
         public string? Image { get; set; }
+        #nullable disable
+
         [Range(1, int.MaxValue, ErrorMessage = " Price should be greater than ${1}")]
         public double Price { get; set; }
         public Boolean IsPublish { get; set; }

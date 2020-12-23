@@ -44,9 +44,7 @@ namespace Spice.Data
             var managerRoleResult = _roleManager.CreateAsync(new IdentityRole(SD.ManagerUser)).GetAwaiter().GetResult();
             var repositoryRoleResult = _roleManager.CreateAsync(new IdentityRole(SD.RepositoryManager)).GetAwaiter().GetResult();
             var shipperRoleResult = _roleManager.CreateAsync(new IdentityRole(SD.Shipper)).GetAwaiter().GetResult();
-            var enduserRoleResult = _roleManager.CreateAsync(new IdentityRole(SD.CustomerEndUser)).GetAwaiter().GetResult();
-            
-            Thread.Sleep(2000);
+            var enduserRoleResult = _roleManager.CreateAsync(new IdentityRole(SD.CustomerEndUser)).GetAwaiter().GetResult();           
 
             _userManager.CreateAsync(new ApplicationUser
             {
@@ -58,20 +56,7 @@ namespace Spice.Data
             }, "Admin123*").GetAwaiter().GetResult();
 
             IdentityUser user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "admin@gmail.com");
-            await _userManager.AddToRoleAsync(user, SD.ManagerUser);
-
-            _userManager.CreateAsync(new ApplicationUser
-            {
-                UserName = "admin2@gmail.com",
-                Email = "admin2@gmail.com",
-                Name = "Admin",
-                EmailConfirmed = true,
-                PhoneNumber = "1112223333"
-            }, "Admin123*").GetAwaiter().GetResult();
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "admin2@gmail.com");
-            await _userManager.AddToRoleAsync(user, SD.ManagerUser);
-
-            Thread.Sleep(2000);
+            await _userManager.AddToRoleAsync(user, SD.ManagerUser);            
 
             _userManager.CreateAsync(new ApplicationUser
             {
@@ -82,55 +67,7 @@ namespace Spice.Data
                 PhoneNumber = "1112223333"
             }, "Admin123*").GetAwaiter().GetResult();
             user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "repository@gmail.com");
-            await _userManager.AddToRoleAsync(user, SD.RepositoryManager);
-
-            _userManager.CreateAsync(new ApplicationUser
-            {
-                UserName = "repository2@gmail.com",
-                Email = "repository2@gmail.com",
-                Name = "Repository Manager",
-                EmailConfirmed = true,
-                PhoneNumber = "1112223333"
-            }, "Admin123*").GetAwaiter().GetResult();
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "repository2@gmail.com");
-            await _userManager.AddToRoleAsync(user, SD.RepositoryManager);
-
-            Thread.Sleep(2000);
-
-            _userManager.CreateAsync(new ApplicationUser
-            {
-                UserName = "shipper@gmail.com",
-                Email = "shipper@gmail.com",
-                Name = "Shipper",
-                EmailConfirmed = true,
-                PhoneNumber = "1112223333"
-            }, "Admin123*").GetAwaiter().GetResult();
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "shipper@gmail.com");
-            await _userManager.AddToRoleAsync(user, SD.Shipper);
-
-            _userManager.CreateAsync(new ApplicationUser
-            {
-                UserName = "shipper2@gmail.com",
-                Email = "shipper2@gmail.com",
-                Name = "Shipper",
-                EmailConfirmed = true,
-                PhoneNumber = "1112223333"
-            }, "Admin123*").GetAwaiter().GetResult();
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "shipper2@gmail.com");
-            await _userManager.AddToRoleAsync(user, SD.Shipper);
-
-            Thread.Sleep(2000);
-
-            _userManager.CreateAsync(new ApplicationUser
-            {
-                UserName = "17110154@student.hcmute.edu.vn",
-                Email = "17110154@student.hcmute.edu.vn",
-                Name = "Normal User",
-                EmailConfirmed = true,
-                PhoneNumber = "1112223333"
-            }, "Admin123*").GetAwaiter().GetResult();
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Email == "17110154@student.hcmute.edu.vn");
-            await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
+            await _userManager.AddToRoleAsync(user, SD.RepositoryManager);        
         }
     }
 }

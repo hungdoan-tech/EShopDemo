@@ -36,16 +36,16 @@
 </nav>
 <div class="row icon-button">
     <div class="col-lg-3">
-        <button><i class="far fa-user" style="background-color: #15aabf; color: white"></i>  USERS (@Model.userCount)</button>
+        <button><i class="far fa-user" style="background-color: #15aabf; color: white"></i>  USERS (@Model.UserCount)</button>
     </div>
     <div class="col-lg-3">
-        <button><i class="fas fa-shopping-cart" style="background-color: rgb(69, 118, 233); color: white"></i>  PRODUCT (@Model.productCount)</button>
+        <button><i class="fas fa-shopping-cart" style="background-color: rgb(69, 118, 233); color: white"></i>  PRODUCT (@Model.ProductCount)</button>
     </div>
     <div class="col-lg-3">
-        <button><i class="fas fa-heart" style="background-color: rgb(246, 76, 76); color: white"></i>  LIKE (@Model.likeCount)</button>
+        <button><i class="fas fa-heart" style="background-color: rgb(246, 76, 76); color: white"></i>  LIKE (@Model.LikeCount)</button>
     </div>
     <div class="col-lg-3">
-        <button><i class="far fa-star" style="background-color: rgb(241, 238, 131); color: white"></i>  RATING (@Model.ratingCount)</button>
+        <button><i class="far fa-star" style="background-color: rgb(241, 238, 131); color: white"></i>  RATING (@Model.RatingCount)</button>
     </div>
 </div>
 <div class="container-fluid">
@@ -63,7 +63,6 @@
         <div id="columnChart" class="col-lg-6"></div>
     </div>
 </div>
-<button><a asp-action="getCategoriesPercent">content</a></button>
 @section Scripts
 {
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>

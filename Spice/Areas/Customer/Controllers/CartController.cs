@@ -7,7 +7,7 @@ using Spice.Extensions;
 using Spice.Models.ViewModels;
 using Spice.Service.ServiceInterfaces;
 using Spice.Utility;
-using System.Collections.Generic;
+
 
 namespace Spice.Areas.Customer.Controllers
 {
@@ -17,7 +17,7 @@ namespace Spice.Areas.Customer.Controllers
         private readonly IFacadeCartService _facadeCartService;
 
         [BindProperty]
-        public OrderDetailsCart detailCart { get; set; }
+        public OrderDetailsCart DetailCart { get; set; }
 
         public CartController(IFacadeCartService FacadeService)
         {
@@ -26,27 +26,27 @@ namespace Spice.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-            detailCart = new OrderDetailsCart()
+            DetailCart = new OrderDetailsCart()
             {
                 OrderHeader = new Models.OrderHeader()
             };
 
-            detailCart.OrderHeader.OrderTotal = 0;
-            _facadeCartService.PrepareForIndexCart(detailCart);
-            return View(detailCart);
+            DetailCart.OrderHeader.OrderTotal = 0;
+            _facadeCartService.PrepareForIndexCart(DetailCart);
+            return View(DetailCart);
         }
 
         [Authorize]
         public IActionResult Summary()
         {
-            detailCart = new OrderDetailsCart();
+            DetailCart = new OrderDetailsCart();
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            _facadeCartService.CreateOrderHeaderBeforeSumary(detailCart, claim);
-            _facadeCartService.CheckCouponBeforeSumary(detailCart);
+            _facadeCartService.CreateOrderHeaderBeforeSumary(DetailCart, claim);
+            _facadeCartService.CheckCouponBeforeSumary(DetailCart);
 
-            return View(detailCart);
+            return View(DetailCart);
         }
 
         [Authorize]
@@ -58,10 +58,10 @@ namespace Spice.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            _facadeCartService.SaveObjectsToDB(detailCart,claim);
-            _facadeCartService.ApplyCoupon(detailCart);
-            _facadeCartService.ChargeMoney(detailCart, stripeToken);
-            _facadeCartService.SendCommittedEmail(detailCart, claim);
+            _facadeCartService.SaveObjectsToDB(DetailCart,claim);
+            _facadeCartService.ApplyCoupon(DetailCart);
+            _facadeCartService.ChargeMoney(DetailCart, stripeToken);
+            _facadeCartService.SendCommittedEmail(DetailCart, claim);
             _facadeCartService.ClearSession();
 
             return RedirectToAction("Index", "Home");
@@ -69,11 +69,11 @@ namespace Spice.Areas.Customer.Controllers
 
         public IActionResult AddCoupon()
         {
-            if (detailCart.OrderHeader.CouponCode == null)
+            if (DetailCart.OrderHeader.CouponCode == null)
             {
-                detailCart.OrderHeader.CouponCode = "";
+                DetailCart.OrderHeader.CouponCode = "";
             }
-            HttpContext.Session.SetString(SD.ssCouponCode, detailCart.OrderHeader.CouponCode);
+            HttpContext.Session.SetString(SD.ssCouponCode, DetailCart.OrderHeader.CouponCode);
             return RedirectToAction(nameof(Index));
         }
 

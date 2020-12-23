@@ -28,7 +28,7 @@ namespace Spice.Data
         public DbSet<ImportHistory> ImportHistories { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<FavoritedProduct> FavoritedProducts { get; set; }
-        protected override async void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
@@ -265,8 +265,7 @@ namespace Spice.Data
 
             modelBuilder.Entity<Coupon>().HasData
                         (
-                        //new Coupon { Id = 1, Name = "15OFF", CouponType = "0", Discount = 15, MinimumAmount = 75, IsActive = true }
-                            new Coupon( 1, "15OFF", "0", 15, 75, true )
+                            new Coupon { Id = 1, Name = "15OFF", CouponType = "0", Discount = 15, MinimumAmount = 75, IsActive = true }                            
                         );
 
             modelBuilder.Entity<News>().HasData

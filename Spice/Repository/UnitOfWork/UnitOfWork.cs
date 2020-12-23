@@ -1,5 +1,6 @@
 ﻿using Spice.Data;
 using Spice.Models;
+using Spice.Repository.RepositoryInterface;
 using Spice.RepositoryInterface;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,17 @@ namespace Spice.Repository
 {
     public class UnitOfWork : IDisposable, IUnitOfWork
     {
-        private ApplicationDbContext _context;
-        private ICategoryRepository categoryRepository;
-        private ISubCategoryRepository subCategoryRepository;
-        private ICouponRepository couponRepository;
-        private IImportHistoryRepository importHistoryRepository;
-        private IApplicationUserRepository applicationUserRepository;
-        private INewsRepository newsRepository;
-        private IMenuItemRepository menuItemRepository;
-        private IOrderHeaderRepository orderHeaderRepository;
-        private IOrderDetailRepository orderDetailRepository;
-        private IRatingRepository ratingRepository;
+        private readonly ApplicationDbContext _context;
+        private readonly ICategoryRepository categoryRepository;
+        private readonly ISubCategoryRepository subCategoryRepository;
+        private readonly ICouponRepository couponRepository;
+        private readonly IImportHistoryRepository importHistoryRepository;
+        private readonly IApplicationUserRepository applicationUserRepository;
+        private readonly INewsRepository newsRepository;
+        private readonly IMenuItemRepository menuItemRepository;
+        private readonly IOrderHeaderRepository orderHeaderRepository;
+        private readonly IOrderDetailRepository orderDetailRepository;
+        private readonly IRatingRepository ratingRepository;
 
         private bool disposed = false;
 
@@ -101,11 +102,7 @@ namespace Spice.Repository
         {
             get
             {
-                if (this.ratingRepository == null)
-                {
-                    this.ratingRepository = new RatingRepository(_context);
-                }
-                return this.ratingRepository;
+                return this.ratingRepository ?? new RatingRepository(_context);
             }
         }
 

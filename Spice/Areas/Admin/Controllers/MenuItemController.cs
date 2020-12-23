@@ -50,7 +50,7 @@ namespace Spice.Areas.Admin.Controllers
 
         [HttpPost,ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePOST()
+        public IActionResult CreatePOST()
         {
             //MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 

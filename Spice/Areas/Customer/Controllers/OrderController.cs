@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -13,6 +14,7 @@ using Spice.Repository;
 using Spice.Service.ServiceInterfaces;
 using Spice.Service.State;
 using Spice.Utility;
+using Spice.Utils;
 
 namespace Spice.Areas.Customer.Controllers
 {
@@ -22,8 +24,8 @@ namespace Spice.Areas.Customer.Controllers
         private readonly IOrderContext _orderContext;
         private readonly ApplicationDbContext _db;
 
-        private int PageSize = 5;
-        private int PageAdminSize = 10;
+        private readonly int PageSize = 5;
+        private readonly int PageAdminSize = 10;
         public OrderController(ApplicationDbContext db, IOrderContext orderContext)
         {
             this._db = db;
@@ -99,7 +101,7 @@ namespace Spice.Areas.Customer.Controllers
 
         [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
         [Route("~/Admin/Order/ManageOrder")]
-        public async Task<IActionResult> ManageOrder(int productPage = 1)
+        public async Task<IActionResult> ManageOrder()
         {
 
             List<OrderDetailsViewModel> orderDetailsVM = new List<OrderDetailsViewModel>();

@@ -22,7 +22,7 @@ namespace Spice.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly IUnitOfWork _unitOfWork;
-        private int PageSize = 3;
+        private readonly int PageSize = 3;
         private readonly IUserService _userService;
         public HomeController(ApplicationDbContext db, IUnitOfWork unitOfWork, IUserService userService)
         {
@@ -32,7 +32,7 @@ namespace Spice.Controllers
         }
 
 
-        public async Task<IActionResult> Index(int productPage = 1)
+        public async Task<IActionResult> Index()
         {
             IndexHomeVM IndexVM = new IndexHomeVM()
             {
@@ -242,12 +242,15 @@ namespace Spice.Controllers
         public IActionResult CreateRating(MenuItemsAndQuantity temp)
         {            
             var userId = _userService.GetUserId();
-            Rating rating = new Rating();
-            rating.UserId = userId;
-            rating.PublishedDate = temp.CustomerRating.PublishedDate;
-            rating.RatingStar = temp.CustomerRating.RatingStar;
-            rating.Comment = temp.CustomerRating.Comment;
-            rating.MenuItemId = temp.CustomerRating.MenuItemId;
+
+            Rating rating = new Rating()
+            {
+                UserId = userId,
+                PublishedDate = temp.CustomerRating.PublishedDate,
+                RatingStar = temp.CustomerRating.RatingStar,
+                Comment = temp.CustomerRating.Comment,
+                MenuItemId = temp.CustomerRating.MenuItemId
+            };
                 
             _unitOfWork.RatingRepository.Create(rating);
             _unitOfWork.SaveChanges();
