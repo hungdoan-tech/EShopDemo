@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Spice.Models;
 using Microsoft.AspNetCore.Http;
 using Spice.Utility;
+using System.Threading;
 
 namespace Spice.Areas.Identity.Pages.Account
 {
@@ -79,6 +80,7 @@ namespace Spice.Areas.Identity.Pages.Account
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 var users = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+
                 var isInRoleAdmin = await _signInManager.UserManager.IsInRoleAsync(users, SD.ManagerUser);
                 var isInRoleShipper = await _signInManager.UserManager.IsInRoleAsync(users, SD.Shipper);
                 var isInRoleReManager = await _signInManager.UserManager.IsInRoleAsync(users, SD.RepositoryManager);

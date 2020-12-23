@@ -50,7 +50,7 @@ namespace Spice.Areas.Admin.Controllers
 
         [HttpPost,ActionName("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePOST()
+        public IActionResult CreatePOST()
         {
             //MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
@@ -85,7 +85,7 @@ namespace Spice.Areas.Admin.Controllers
             else
             {
                 //no file was uploaded, so use default
-                var uploads = Path.Combine(webRootPath, @"images\" + SD.DefaultFoodImage);
+                var uploads = Path.Combine(webRootPath, @"images\" + SD.DefaultProductNewsImage);
                 System.IO.File.Copy(uploads, webRootPath + @"\images\" + MenuItemVM.MenuItem.Id + ".png");
                 menuItemFromDb.Image = @"\images\" + MenuItemVM.MenuItem.Id + ".png";
             }
@@ -124,10 +124,10 @@ namespace Spice.Areas.Admin.Controllers
             }
             //MenuItemVM.MenuItem.SubCategoryId = Convert.ToInt32(Request.Form["SubCategoryId"].ToString());
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid == false)
             {
                 //MenuItemVM.SubCategory = await _db.SubCategory.Where(s => s.CategoryId == MenuItemVM.MenuItem.CategoryId).ToListAsync();
-                return View(MenuItemVM);
+                return LocalRedirect("/MenuItem/Edit/" + id);
             }
 
             //Work on the image saving section

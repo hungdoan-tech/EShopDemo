@@ -28,19 +28,18 @@ namespace Spice.Service
 
         public OrderDetailsCart SaveOrderHeaderAddOrderDetail(OrderDetailsCart detailCart, Claim claim)
         {
-            detailCart.listCart = _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart).ToList();
+            detailCart.ListCart = _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart).ToList();
             detailCart.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
             detailCart.OrderHeader.OrderDate = DateTime.Now;
             detailCart.OrderHeader.UserId = claim.Value;
             detailCart.OrderHeader.Status = SD.StatusSubmitted;
 
-            List<OrderDetails> orderDetailsList = new List<OrderDetails>();
             _unitOfWork.OrderHeaderRepository.Create(detailCart.OrderHeader);
             _unitOfWork.SaveChanges();
 
             detailCart.OrderHeader.OrderTotalOriginal = 0;
 
-            foreach (var item in detailCart.listCart)
+            foreach (var item in detailCart.ListCart)
             {
                 item.Item = _unitOfWork.MenuItemRepository.ReadOne(item.Item.Id);
                 _unitOfWork.MenuItemRepository.ReadOne(item.Item.Id).Quantity -= item.Quantity;
@@ -102,11 +101,11 @@ namespace Spice.Service
 
             if (cart != null)
             {
-                detailCart.listCart = cart.ToList();
+                detailCart.ListCart = cart.ToList();
             }
 
             double CalTotal = 0;
-            foreach (var eachItem in detailCart.listCart)
+            foreach (var eachItem in detailCart.ListCart)
             {
                 eachItem.Item = _unitOfWork.MenuItemRepository.ReadOne(eachItem.Item.Id);
                 CalTotal += (eachItem.Item.Price * eachItem.Quantity);
@@ -131,9 +130,9 @@ namespace Spice.Service
 
             if (cart != null)
             {
-                detailCart.listCart = cart.ToList();
+                detailCart.ListCart = cart.ToList();
 
-                foreach (var eachItem in detailCart.listCart)
+                foreach (var eachItem in detailCart.ListCart)
                 {
                     try
                     {
@@ -153,13 +152,12 @@ namespace Spice.Service
                     }
                 }
                 detailCart.OrderHeader.OrderTotalOriginal = detailCart.OrderHeader.OrderTotal;
-
                 detailCart = this.CheckCouponBeforeSumary(detailCart);
                 return detailCart;
             }
             else
             {
-                detailCart.listCart = new List<MenuItemsAndQuantity>();
+                detailCart.ListCart = new List<MenuItemsAndQuantity>();
                 return detailCart;
             }
         }

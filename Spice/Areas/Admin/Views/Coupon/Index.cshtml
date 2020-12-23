@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="/css/Table.css">
 </head>
 
 <div id="content">
@@ -39,43 +40,47 @@
                     <div class="container-fluid">
                         @if (Model.Count() > 0)
                         {
-                            <table class="table table-striped border">
-                                <tr class="table-secondary">
-                                    <th>
-                                        @Html.DisplayNameFor(m => m.Name)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(m => m.Discount)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(m => m.MinimumAmount)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(m => m.IsActive)
-                                    </th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(m => item.Name)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => item.Discount)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => item.MinimumAmount)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(m => item.IsActive)
-                                        </td>
-                                        <td>
-                                            <partial name="_TableButtonPartial" model="item.Id" />
-                                        </td>
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr class="table-secondary">
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.Name)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.Discount)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.MinimumAmount)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.IsActive)
+                                        </th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
-                                }
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(m => item.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.Discount)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.MinimumAmount)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.IsActive)
+                                            </td>
+                                            <td>
+                                                <partial name="_TableButtonPartial" model="item.Id" />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
                             </table>
                         }
                         else

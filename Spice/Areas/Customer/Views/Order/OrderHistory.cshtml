@@ -1,14 +1,14 @@
 ﻿@model Spice.Models.ViewModels.OrderListViewModel
 @using Spice.Utility
 @{
-    ViewData["Title"] = "Danh Sách Hóa Đơn Đã Mua";
+    ViewData["Title"] = "List of orders you have paid";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container mt-5">
     <div class="row">
         <div class="col-6">
-            <h2 class="text-info">Danh Sách Hóa Đơn Đã Mua</h2>
+            <h2 class="text-info">List of orders you have paid</h2>
         </div>
         <div class="col-6 text-right">
         </div>
@@ -21,21 +21,21 @@
                 <tr class="table-secondary">
                     <th>
                         @*@Html.DisplayNameFor(m => m.Orders[0].OrderHeader.Id)*@
-                        Mã Hóa Đơn
+                        Invoice Identity
                     </th>
                     <th>
                         @*@Html.DisplayNameFor(m => m.Orders[0].OrderHeader.PickupName)*@
-                        Khách Hàng
+                        Customer
                     </th>
                     <th>
                         @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.ApplicationUser.Email)
                     </th>
                     <th>
                         @*@Html.DisplayNameFor(m => m.Orders[0].OrderHeader.OrderTotal)*@
-                        Tổng Cộng
+                        Total
                     </th>
                     <th>
-                        Tổng Số Lượng Sản Phẩm
+                        Product's Count Total
                     </th>
                     <th></th>
 
@@ -89,7 +89,7 @@
     <div class="modal-dialog-centered modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-success text-light justify-content-center">
-                <h5 class="modal-title">Chi Tiết Hóa Đơn</h5>
+                <h5 class="modal-title">Invoice Detail</h5>
             </div>
             <div class="modal-body justify-content-center" id="myModalContent">
 
@@ -104,7 +104,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info text-light justify-content-center">
-                <h5 class="modal-title">Tình Trạng Đơn Hàng </h5>
+                <h5 class="modal-title">Order Status</h5>
             </div>
             <div class="modal-body justify-content-center" id='myOrderStatusContent'>
             </div>

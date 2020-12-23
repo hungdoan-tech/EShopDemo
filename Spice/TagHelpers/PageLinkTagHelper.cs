@@ -52,8 +52,6 @@ namespace Spice.TagHelpers
             }
 
             output.Content.AppendHtml(result.InnerHtml);
-
         }
-
     }
 }

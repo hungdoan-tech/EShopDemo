@@ -1,14 +1,14 @@
 ﻿@model Spice.Models.ViewModels.OrderListViewModel
 @using Spice.Utility
 @{
-    ViewData["Title"] = "Theo Dõi Đơn Hàng";
+    ViewData["Title"] = "List of current orders";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container mt-5">
     <div class="row">
         <div class="col-6">
-            <h2 class="text-info">Theo Dõi Đơn Hàng</h2>
+            <h2 class="text-info">List of current orders</h2>
         </div>
     </div>
     <br />
@@ -18,26 +18,26 @@
             <table class="table table-striped border">
                 <tr class="table-secondary">
                     <th>
-                        Mã Hóa Đơn
+                        Invoice Identity
                     </th>
                     <th>
-                        Khách Hàng
+                        Customer
                     </th>
                     <th>
                         @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.ApplicationUser.Email)
                     </th>
                     <th>
-                        Ngày Thanh Toán
+                        Payment Date
                     </th>
                     <th>
-                        Tổng Cộng
+                        Total
                     </th>
                     <th>
-                        Tình Trạng
+                        Status
                     </th>
+                    <th>
 
-                    <th></th>
-
+                    </th>
                 </tr>
                 @foreach (var item in Model.Orders)
                 {
@@ -68,13 +68,13 @@
                             -->
 
                             <a asp-area="Customer" asp-controller="Order" asp-action="DetailTracking" asp-route-Id="@item.OrderHeader.Id" class="genric-btn info large  anchorDetail">
-                                <i class="far fa-list-alt"></i> Chi Tiết
+                                <i class="far fa-list-alt"></i> Detail
                             </a>
 
                             @if (item.OrderHeader.Status == SD.StatusSubmitted || item.OrderHeader.Status == SD.StatusInProcess || item.OrderHeader.Status == SD.StatusCompleted || item.OrderHeader.Status == SD.StatusReady)
                             {
                                 <button type="button" class="genric-btn info-border large btnOrderStatus" data-id="@item.OrderHeader.Id" data-toggle="modal">
-                                    <i class="far fa-clock"></i> Tình Trạng
+                                    <i class="far fa-clock"></i> Status
                                 </button>
                             }
                         </td>
@@ -89,7 +89,7 @@
         }
         else
         {
-            <p>Không có đơn hàng để theo dõi.</p>
+            <p>You don't have any existing order to monitor cunrrently.</p>
         }
     </div>
 </div>
@@ -98,7 +98,7 @@
     <div class="modal-dialog-centered modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-success text-light justify-content-center">
-                <h5 class="modal-title">Chi Tiết Hóa Đơn</h5>
+                <h5 class="modal-title">Invoice Detail</h5>
             </div>
             <div class="modal-body justify-content-center" id="myModalContent">
 
@@ -113,7 +113,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-info text-light justify-content-center">
-                <h5 class="modal-title">Tình Trạng Đơn Hàng </h5>
+                <h5 class="modal-title">Order Status</h5>
             </div>
             <div class="modal-body justify-content-center" id='myOrderStatusContent'>
             </div>
