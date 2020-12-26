@@ -5,6 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+   a:hover{
+       text-decoration-line: underline;
+       color: black;
+   }
+</style>
 <div class="container mt-5">
     <div class="row">
         <div class="col-6">
@@ -58,6 +64,7 @@
                         <td>
                             @Html.DisplayFor(m => item.OrderDetails.Count)
                         </td>
+
                         <td>
                             <button type="submit" class="genric-btn info large anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
                                 <i class="far fa-list-alt"></i>Detail
@@ -68,6 +75,10 @@
                                     <i class="far fa-clock"></i>Status 
                                 </button>
                             }
+                            &nbsp;
+                            <a id="btnPDF" href="/Customer/Order/PrintOrder?id=@item.OrderHeader.Id" target="_blank">
+                                        <i class="fa fa-print" aria-hidden="true"></i> &nbsp;Print
+                            </a>
                         </td>
                     </tr>
                 }
@@ -118,7 +129,7 @@
 
 @section scripts
     {
-    <script>
+    <script type="text/javascript">
         var PostBackURL = '/Customer/Order/GetOrderDetails';
         var OrderStatusURL = '/Customer/Order/GetOrderStatus';
 

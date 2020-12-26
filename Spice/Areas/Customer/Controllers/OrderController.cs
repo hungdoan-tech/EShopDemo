@@ -5,11 +5,13 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
 using Spice.Models;
 using Spice.Models.ViewModels;
+using Spice.Reports;
 using Spice.Repository;
 using Spice.Service.ServiceInterfaces;
 using Spice.Service.State;
@@ -22,13 +24,15 @@ namespace Spice.Areas.Customer.Controllers
     {
         private readonly IOrderContext _orderContext;
         private readonly ApplicationDbContext _db;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         private readonly int PageSize = 5;
         private readonly int PageAdminSize = 10;
-        public OrderController(ApplicationDbContext db, IOrderContext orderContext)
+        public OrderController(ApplicationDbContext db, IOrderContext orderContext, IWebHostEnvironment webHostEnvironment)
         {
             this._db = db;
             this._orderContext = orderContext;
+            this._webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -379,6 +383,13 @@ namespace Spice.Areas.Customer.Controllers
             };
 
             return View(orderListVM);
+        }
+        [Authorize]
+        public ActionResult PrintOrder(int id)
+        {
+            List<OrderDetails> orderDetails = _db.OrderDetails.Include(n=>n.OrderHeader).Include(n=>n.MenuItem).Where(m => m.OrderId == id).ToList();
+            OrderReport rpt = new OrderReport(_webHostEnvironment);
+            return File(rpt.Report(orderDetails), "application/pdf");
         }
     }
 }
