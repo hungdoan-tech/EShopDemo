@@ -385,9 +385,9 @@ namespace Spice.Areas.Customer.Controllers
             return View(orderListVM);
         }
         [Authorize]
-        public ActionResult PrintOrder(int id)
+        public ActionResult PrintOrder(int id, string userId)
         {
-            List<OrderDetails> orderDetails = _db.OrderDetails.Include(n=>n.OrderHeader).Include(n=>n.MenuItem).Where(m => m.OrderId == id).ToList();
+            List<OrderDetails> orderDetails = _db.OrderDetails.Include(n=>n.OrderHeader).Include(n=>n.MenuItem).Where(m => m.OrderId == id).Where(m=>m.OrderHeader.UserId == userId).ToList();
             OrderReport rpt = new OrderReport(_webHostEnvironment);
             return File(rpt.Report(orderDetails), "application/pdf");
         }
