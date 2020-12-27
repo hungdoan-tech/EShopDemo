@@ -110,12 +110,28 @@ namespace Spice.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, int starNumber = 0, int ratingPage = 1)
         {
             var userId = _userService.GetUserId();
             var menuItemFromDb = await _db.MenuItem.Include(m => m.Category).Include(m => m.SubCategory).Where(m => m.Id == id).FirstOrDefaultAsync();
-            var listStar = _db.Ratings.Where(a => a.MenuItemId == id).Include(a => a.ApplicationUser).ToList();
-           
+
+            var listStar = _db.Ratings.Where(a => a.MenuItemId == id).Include(a => a.ApplicationUser).OrderByDescending(p=>p.Id).ToList();
+
+
+            StringBuilder param = new StringBuilder();
+            var listRatingByStarNumber = listStar.ToList();
+            if (starNumber == 0)
+            {
+                listRatingByStarNumber = listStar.ToList();
+            }
+            else if(starNumber > 0)
+            {
+                listRatingByStarNumber = listRatingByStarNumber.Where(a => a.RatingStar == starNumber).ToList();
+
+            }    
+            
+            param.Append("/Customer/Home/Details/" + id + "?starNumber="+starNumber + "&ratingPage=:");
+
             FavoritedProduct favoritedProduct = new FavoritedProduct();
             if (userId != null)
             {
@@ -135,7 +151,7 @@ namespace Spice.Controllers
                 productStar.totalThreeStar = listStar.Where(a => a.RatingStar == 3).Count();
                 productStar.totalFourStar = listStar.Where(a => a.RatingStar == 4).Count();
                 productStar.totalFiveStar = listStar.Where(a => a.RatingStar == 5).Count();
-                productStar.averageStar = listStar.Average(a => a.RatingStar);
+                productStar.averageStar = Math.Round(listStar.Average(a => a.RatingStar),1);
             }
             else {
                 productStar.totalOneStar = 0;
@@ -160,10 +176,20 @@ namespace Spice.Controllers
                 Quantity = 1,
                 News = await _db.News.Where(n => n.MenuItemId == id).FirstOrDefaultAsync(),
                 SimilarProducts = similarPriceProducts.ToList(),
-                ExistedRatings = listStar.Take(3).ToList(),
+                ExistedRatings = listRatingByStarNumber.Skip((ratingPage - 1)*PageSize).Take(PageSize).ToList(),
                 ProductStar = productStar,
                 FavoritedProduct = favoritedProduct
             };
+            var count = listRatingByStarNumber.Count();
+            menuItemsAndQuantity.PagingInfo = new PagingInfo()
+            {
+                CurrentPage = ratingPage,
+                ItemsPerPage = PageSize,
+                TotalItem = count,
+                urlParam = param.ToString()
+            };
+            ViewBag.starNumber = starNumber;
+            ViewBag.pageSize = this.PageSize;
             return View(menuItemsAndQuantity);
         }
 

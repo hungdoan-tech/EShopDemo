@@ -10,9 +10,10 @@
 <br />
 <head>
     <style>
-        html{
-           scroll-behavior: smooth;
+        html {
+            scroll-behavior: smooth;
         }
+
         .be-comment-block {
             margin-bottom: 50px !important;
             border: 1px solid #edeff2;
@@ -148,9 +149,11 @@
             width: 150px;
             height: 150px;
         }
-        .lens:hover{
-            cursor: zoom-in;
-        }
+
+            .lens:hover {
+                cursor: zoom-in;
+            }
+
         .image {
             width: 400px;
             height: 400px;
@@ -263,16 +266,19 @@
             padding: 0px;
             margin: 0px;
         }
-        .product-details{
+
+        .product-details {
             margin-bottom: 100px;
         }
-        .trans-rating:hover{
+
+        .trans-rating:hover {
             cursor: pointer;
             background-color: #edeff2;
             border-radius: 10px;
         }
-        .favorit-items i{
-            color:red;
+
+        .favorit-items i {
+            color: red;
         }
     </style>
 </head>
@@ -610,7 +616,7 @@
         <div class="row">
             <div class="col-lg-7">
                 <label>Your comment</label>
-                <textarea class = "focus-rating-for" asp-for="CustomerRating.Comment" type="text" style="width: 100%" placeholder="Type your review this product"></textarea>
+                <textarea class="focus-rating-for" asp-for="CustomerRating.Comment" type="text" style="width: 100%" placeholder="Type your review this product"></textarea>
             </div>
         </div>
         <div class="row" style="visibility:hidden;position:absolute">
@@ -651,17 +657,33 @@
         </div>
     </div>
 </form>
-
+<br />
 <div class="container">
-    <h4>Recent rating from other customer</h4>
+    <div class="row">
+        <div class="col-6">
+            <h4>Recent rating from other customer</h4>
+        </div>
+        <div>
+            <select name="menu1" id="menu1"> 
+                <option value="0">All</option>
+                <option value="5">5-star</option>
+                <option value="4">4-star</option>
+                <option value="3">3-star</option>
+                <option value="2">2-star</option>
+                <option value="1">1-star</option>
+            </select>
+
+        </div>
+    </div>
     @foreach (var comment in Model.ExistedRatings)
     {
         <div class="row">
             <div class="be-comment col-lg-7">
                 <div class="be-img-comment ">
-                    <a href="blog-detail-2.html">
+                                @*<a href="blog-detail-2.html">
                         <img src="/assets/img/author/author_3.png" alt="" class="be-ava-comment">
-                    </a>
+                    </a>*@
+                    <i class="fa fa-user-circle-o" aria-hidden="true" style="font-size:50px"></i>
                 </div>
                 <div class="be-comment-content">
                     <span class="be-comment-name">
@@ -686,6 +708,14 @@
             </div>
         </div>
     }
+    <div class="col-7">
+        <form method="get" class="tab-content">
+            <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="page-link"
+                 page-class-normal="" page-class-selected="active btn-primary"
+                 class="btn-group float-right">
+            </div>
+        </form>
+    </div>
 </div>
 
 <br />
@@ -960,12 +990,12 @@
     const transRating = document.querySelector(".trans-rating");
     const transRatingFor = document.querySelector(".trans-rating-for");
     const focusRatingfor = document.querySelector(".focus-rating-for");
-    
+
     transRating.addEventListener("click", () => {
         var pos = transRatingFor.offsetTop - 270;
         focusRatingfor.focus();
         scrollTo(0, pos);
-        
+
     });
 
     const favorHeart = document.querySelector(".favorit-items i");
@@ -985,6 +1015,20 @@
             favorHeart.className = "fa fa-heart";
         });
     }
+    var urlmenu = document.getElementById('menu1');
+    urlmenu.onchange = function () {
+        change = this.options[this.selectedIndex].value;
+        window.location.href = "?starNumber=" + this.options[this.selectedIndex].value + "&ratingPage=1";
+    };
+
+    const splitLocation = window.location.href.split("=");
+    const resultNumber = splitLocation[1].charAt(0);
+    for (var i = 0; i < urlmenu.length; i++) {
+        if (urlmenu.options[i].value == resultNumber) {
+            urlmenu.selectedIndex = i;
+        }
+    }
+    
 </script>
 
 @section Scripts{
