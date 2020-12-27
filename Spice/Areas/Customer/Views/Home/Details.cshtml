@@ -280,6 +280,27 @@
         .favorit-items i {
             color: red;
         }
+        .similar {
+            position: relative;
+        }
+        .similar .card-body{
+            bottom: 0px;
+        }
+        .similar:hover img {
+            transition: all 0.2s linear;
+            transform: scale(1.2);
+            opacity: 0.3;
+        }
+        .similar:hover .card-body{
+            visibility: visible;
+        }
+        .similar{
+            transition: all 0.5s linear;
+            overflow:hidden;
+        }
+        .similar .card-body {
+            visibility: hidden;
+        }
     </style>
 </head>
 
@@ -726,16 +747,17 @@
     <div class="row">
         @foreach (MenuItem recommendProduct in Model.SimilarProducts)
         {
-            <div class="col-lg-3 col-md-6">
-                <div class="card">
-                    <img src="@recommendProduct.Image" alt="Avatar" style="width:100%; height:50%; margin:auto">
-                    <div class="card-body" style="margin:auto">
-                        <h4 class="card-title">@recommendProduct.Name</h4>
-                        <p class="card-text">@recommendProduct.Price $</p>
-                        <p class="card-text">@recommendProduct.Description</p>
 
-                        <a asp-action="Details" asp-route-id="@recommendProduct.Id" class="btn btn-info btn-sm">Click for detail</a>
-                    </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="card similar">
+                    <a asp-action="Details" asp-route-id="@recommendProduct.Id">
+                        <img src="@recommendProduct.Image" alt="Avatar" style="width:100%; height:50%; margin:auto;">
+                        <div class="card-body" style="margin:auto; position:absolute">
+                            <h4 class="card-title">@recommendProduct.Name</h4>
+                            <p class="card-text">@recommendProduct.Price $</p>
+                            <p class="card-text">@recommendProduct.Description</p>
+                        </div>
+                    </a>
                 </div>
             </div>
         }
