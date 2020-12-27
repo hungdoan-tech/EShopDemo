@@ -1,21 +1,51 @@
 ﻿@model List<FavoritedProduct>
 
 
+<style>
+    .favor {
+        position: relative;
+    }
 
+    .favor .card-body {
+        bottom: 0px;
+    }
+
+    .favor:hover img {
+        transition: all 0.2s linear;
+        transform: scale(1.2);
+        opacity: 0.3;
+    }
+
+    .favor:hover .card-body {
+        visibility: visible;
+    }
+
+    .favor {
+        transition: all 0.5s linear;
+        overflow: hidden;
+    }
+
+    .favor .card-body {
+        visibility: hidden;
+    }
+</style>
 <div class="container">
+    <h3>Your favorite products</h3>
+    <br />
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-lg-3">
-                <div class="card" style="width: 18rem;">
-                    <img class="card-img-top" src="@item.MenuItem.Image" alt="Card image cap">
-                    <div class="card-body">
+        <div class="col-lg-3">
+            <a href="~/Customer/Home/Details/@item.ItemId">
+                <div class="card favor" style="width: 18rem;">
+                    <img class="card-img-top" src="@item.MenuItem.Image" alt="Card image cap" style="width:100%; height:50%; margin:auto;">
+                    <div class="card-body" style="position:absolute">
                         <h5 class="card-title">@item.MenuItem.Name</h5>
-                        <p class="card-text">@item.MenuItem.Price</p>
-                        <a href="~/Customer/Home/Details/@item.ItemId" class="btn btn-primary">Click for detail</a>
+                        <p class="card-text">@item.MenuItem.Price $</p>
                     </div>
                 </div>
-            </div>
+            </a>
+        </div>
         }
     </div>
 </div>
