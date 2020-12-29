@@ -10,9 +10,7 @@
         <title>AdminLTE 3 | Simple Tables</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
-        <!-- Ionicons -->
+        <!-- Font Awesome -->        <!-- Ionicons -->
         <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
         <!-- Theme style -->
         <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
@@ -25,41 +23,6 @@
             <br /><h2 class="text-info"> Orders Ready for Pickup : </h2><br />
 
         <div class="border backgroundWhite">
-            <div class="container border border-secondary" style="height:60px;">
-                <div class="row container">
-                    <div class="col-11">
-                        <div class="row" style="padding-top:10px">
-                            <div class="col-4">
-                                <div style="height:50px;width:400px">
-                                    @Html.Editor("searchName", new { htmlAttributes = new { @class = "form-control", @placeholder = "Name..." } })
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div style="height:50px;width:400px">
-                                    @Html.Editor("searchPhone", new { htmlAttributes = new { @class = "form-control", @placeholder = "Phone..." } })
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-1">
-                        <div class="row" style="padding-top:10px;">
-                            <div style="height:100px;width:400px">
-                                <button type="submit" name="submit" value="Search" class="btn btn-info form-control">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <br />
-
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
             <div>
                 @if (Model.Orders.Count() > 0)
                 {
@@ -72,7 +35,7 @@
                                 @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.PickupName)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.ApplicationUser.Email)
+                                @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.Customer.Email)
                             </th>
                             @*<th>
 @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.PickUpTime)
@@ -96,7 +59,7 @@
                                     @Html.DisplayFor(m => item.OrderHeader.PickupName)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(m => item.OrderHeader.ApplicationUser.Email)
+                                    @Html.DisplayFor(m => item.OrderHeader.Customer.Email)
                                 </td>
                                 @*<td>
                                 @Html.DisplayFor(m => item.OrderHeader.PickUpTime)
@@ -116,10 +79,6 @@
                             </tr>
                         }
                     </table>
-                    <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="btn border"
-                            page-class-normal="btn btn-light" page-class-selected="btn btn-info active"
-                            class="btn-group float-right">
-                    </div>
                     <br />
                 }
                 else

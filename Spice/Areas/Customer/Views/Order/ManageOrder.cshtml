@@ -4,91 +4,143 @@
     ViewData["Title"] = "ManageOrder";
     Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 3 | Simple Tables</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
-    <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-</head>
+<style>
+    .order {
+        margin: 10px;
+        border: 1px solid gray;
+        border-color: rgb(183, 183, 183);
+        padding: 10px;
+        border-radius: 5px;
+    }
+</style>
 <div class="content">
     <form method="post">
         <h2 class="text-info">Manage Order's</h2>
         <br />
         @if (Model.Count > 0)
         {
-            <div class="container row bg-white p-2 border mb-3 rounded">
-                @foreach (var item in Model)
-                {
-                    <div class="col-12 pb-3 pt-3">
-                        <div class="backgroundWhiteBorder10Padding">
-                            <div class="row">
-                                <div class="col-lg-4 col-12">
-                                    Order Number : @item.OrderHeader.Id
-                                    <ul class="text-info">
-                                        @foreach (var details in item.OrderDetails)
-                                        {
-                                            <li>@details.Name x @details.Count</li>
-                                        }
-                                    </ul>
-                                </div>
-                                <div class="col-lg-4 col-12 pb-2">
-                                    @{
-                                        var comments = item.OrderHeader.Comments;
-                                        if (comments == null || comments.Trim().Length == 0)
-                                        {
-                                            item.OrderHeader.Comments = "No Instructions";
-                                        }
-
+        <div class="container row bg-white p-2 border mb-3 rounded">
+            @foreach (var item in Model)
+            {
+                <div class="col-12 pb-3 pt-3 m-3">
+                    <div class="backgroundWhiteBorder10Padding">
+                        <div class="row order">
+                            <div class="col-lg-4 col-12">
+                                Order Number : @item.OrderHeader.Id
+                                <ul class="text-info">
+                                    @foreach (var details in item.OrderDetails)
+                                    {
+                                        <li>@details.Name x @details.Count</li>
                                     }
-                                    <textarea asp-for="@item.OrderHeader.Comments" readonly class="rounded border form-control" style="width:100%;height:75px;"></textarea>
-                                </div>
-                                <div class="col-lg-4 col-12 d-flex align-content-center">
-                                    @if (item.OrderHeader.Status.Equals(SD.StatusSubmitted))
+                                </ul>
+                            </div>
+                            <div class="col-lg-4 col-12 pb-2">
+                                @{
+                                    var comments = item.OrderHeader.Comments;
+                                    if (comments == null || comments.Trim().Length == 0)
+                                    {
+                                        item.OrderHeader.Comments = "No Instructions";
+                                    }
+
+                                }
+                                <textarea asp-for="@item.OrderHeader.Comments" readonly class="rounded border form-control" style="width:100%;height:75px;"></textarea>
+                            </div>
+                            <div class="col-lg-4 col-12 d-flex align-content-center">
+                                @if (item.OrderHeader.Status.Equals(SD.StatusSubmitted))
+                                {
+                                    <div class="col-12">
+                                        <button type="submit" asp-action="OrderPrepare" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-info form-control mb-3">
+                                            <i class="fas fa-check"></i> &nbsp; Fetch Item at Repository
+                                        </button>
+                                        <button type="submit" asp-action="OrderCancel" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-danger form-control mb-3">
+                                            <i class="fas fa-times"></i> &nbsp; Cancel Order
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @if (item.OrderHeader.Status.Equals(SD.StatusInProcess))
                                     {
                                         <div class="col-12">
-                                            <button type="submit" asp-action="OrderPrepare" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-info form-control mb-3">
-                                                <i class="fas fa-check"></i> &nbsp; Fetch Item at Repository
+                                            <button type="button" class="btn btn-success form-control mb-3 onship" data-toggle="modal" data-target="#exampleModalCenter" data-key ="@item.OrderHeader.Id" data-name="@item.OrderHeader.PickupName">
+                                                <i class="fas fa-flag-checkered"></i> &nbsp; On Shipping
+                                            </button>
+                                            @*                                            <button type="submit" asp-action="OrderReady" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-success form-control mb-3">
+                                                <i class="fas fa-flag-checkered"></i> &nbsp; On Shipping
+                                            </button>*@
+                                            <button type="submit" asp-action="OrderSubmit" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-info form-control mb-3">
+                                                <i class="fas fa-backward"></i> &nbsp; Back
                                             </button>
                                             <button type="submit" asp-action="OrderCancel" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-danger form-control mb-3">
                                                 <i class="fas fa-times"></i> &nbsp; Cancel Order
                                             </button>
+
                                         </div>
                                     }
-                                    else
-                                    {
-                                        @if (item.OrderHeader.Status.Equals(SD.StatusInProcess))
-                                        {
-                                            <div class="col-12">
-                                                <button type="submit" asp-action="OrderReady" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-success form-control mb-3">
-                                                    <i class="fas fa-flag-checkered"></i> &nbsp; On Shipping
-                                                </button>
-                                                <button type="submit" asp-action="OrderSubmit" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-info form-control mb-3">
-                                                    <i class="fas fa-backward"></i> &nbsp; Back
-                                                </button>
-                                                <button type="submit" asp-action="OrderCancel" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-danger form-control mb-3">
-                                                    <i class="fas fa-times"></i> &nbsp; Cancel Order
-                                                </button>
-
-                                            </div>
-                                        }
-                                    }
-                                </div>
+                                }
                             </div>
                         </div>
                     </div>
-                }
-            </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title" id="exampleModalLongTitle">Choose Shipper for Order</h3>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h3 class="result-id"></h3>
+                                <h4 class="result-name"></h4>
+                                <br />
+                                @foreach (var shipper in item.lstShipper)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1"  value="@shipper.Id" checked>
+                                        <label class="form-check-label" for="exampleRadios1">
+                                            &nbsp;@shipper.UserName &nbsp; @shipper.PhoneNumber
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button  type="button" class="btn btn-success form-control mb-3 send">
+                                    Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
         }
 
     </form>
 </div>
+<script>
+    var getOrderId;
+    $(".onship").click(function () {
+        var $buttonClicked = $(this);
+        var id = $buttonClicked.attr('data-key');
+        var name = $buttonClicked.attr('data-name');
+        $('.result-id').text('Order ID: ' + id)
+        $('.result-name').text('Customer Name: ' + name);
+        getOrderId = id;
+    })
+    
+    var getShipper = $("input:checked").val();
+    $("input").on("click", function () {
+        getShipper = ($("input:checked").val());
+    })
+    var number = document.querySelectorAll(".send");
+    if (number.length > 0) {
+        document.querySelector(".send").addEventListener("click", function () {
+            console.log(location.href);
+            location.href = location.origin + "/Customer/Order/OrderReady?ShipperId=" + getShipper + "&OrderId=" + getOrderId;
+        });
+    }
+</script>
 

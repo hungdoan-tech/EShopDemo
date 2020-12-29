@@ -119,8 +119,8 @@ namespace Spice.Data
               .Property(a => a.Id)
               .ValueGeneratedOnAdd();
             modelBuilder.Entity<OrderHeader>()
-                .HasOne(a => a.ApplicationUser)
-                .WithMany(b => b.OrderHeaders)
+                .HasOne(a => a.Customer)
+                .WithMany(b => b.CustomerOrderHeaders)
                 .HasForeignKey(a => a.UserId);
             modelBuilder.Entity<OrderHeader>()
                 .Property(a => a.UserId)
@@ -134,6 +134,10 @@ namespace Spice.Data
             modelBuilder.Entity<OrderHeader>()
                 .Property(a => a.OrderTotal)
                 .IsRequired();
+            modelBuilder.Entity<OrderHeader>()
+                .HasOne(a => a.Shipper)
+                .WithMany(b => b.ShipperOrderHeaders)
+                .HasForeignKey(a => a.ShipperId);
 
             //OrderDetails
             modelBuilder.Entity<OrderDetails>()
