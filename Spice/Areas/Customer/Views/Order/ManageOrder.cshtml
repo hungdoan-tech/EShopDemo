@@ -68,7 +68,7 @@
                                         @if (item.OrderHeader.Status.Equals(SD.StatusInProcess))
                                         {
                                             <div class="col-12">
-                                                <button type="submit" asp-action="OrderReady" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-success form-control mb-3">
+                                                <button type="submit" asp-action="OrderReady" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-success form-control mb-3" data-key="@item.OrderHeader.Id.ToString()">
                                                     <i class="fas fa-flag-checkered"></i> &nbsp; On Shipping
                                                 </button>
                                                 <button type="submit" asp-action="OrderSubmit" asp-route-OrderId="@item.OrderHeader.Id" class="btn btn-info form-control mb-3">

@@ -24,11 +24,14 @@ namespace Spice.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly ApplicationDbContext _db;
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, ApplicationDbContext db)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, ApplicationDbContext db, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
             _db = db;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -78,7 +81,14 @@ namespace Spice.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+
+                ApplicationUser currentUser = _db.ApplicationUser.First(a => a.Email == Input.Email.Trim());
+                if (currentUser==null)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return Page();
+                }                
+                var result = await _signInManager.PasswordSignInAsync(currentUser.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 var users = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
 
                 var isInRoleAdmin = await _signInManager.UserManager.IsInRoleAsync(users, SD.ManagerUser);
@@ -110,11 +120,8 @@ namespace Spice.Areas.Identity.Pages.Account
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return Page();
             }
 
             // If we got this far, something failed, redisplay form
