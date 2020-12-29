@@ -17,7 +17,5 @@ namespace Spice.Models
         public virtual ICollection<ImportHistory> ImportHistories { get; set; }
         public virtual ICollection<Rating> Ratings { get; set; }
         public virtual ICollection<FavoritedProduct> FavoritedProducts { get; set; }
-
-        //public virtual ICollection<News> News { get; set; }
     }
 }
