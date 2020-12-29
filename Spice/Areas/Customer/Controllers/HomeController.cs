@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
@@ -22,8 +23,10 @@ namespace Spice.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly int PageSize = 3;
         private readonly IUserService _userService;
+        private readonly int PageSize = 3;
+
+
         public HomeController(ApplicationDbContext db, IUnitOfWork unitOfWork, IUserService userService)
         {
             _unitOfWork = unitOfWork;
@@ -54,7 +57,7 @@ namespace Spice.Controllers
                 ListNews = await _db.News.Where(a => a.Type != "0")
                                          .OrderByDescending(a => a.PublishedDate)
                                          .Take(2)
-                                         .ToListAsync()
+                                         .ToListAsync()                                         
             };
             return View(IndexVM);
         }

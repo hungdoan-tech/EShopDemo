@@ -24,11 +24,14 @@ namespace Spice.Areas.Identity.Pages.Account
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly ApplicationDbContext _db;
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, ApplicationDbContext db)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger, ApplicationDbContext db, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
             _db = db;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -78,18 +81,22 @@ namespace Spice.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
-                var users = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+                ApplicationUser currentUser = _db.ApplicationUser.FirstOrDefault(a => a.Email.ToLower() == Input.Email.Trim().ToLower());
+                if (currentUser==null)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return Page();
+                }                
+                var result = await _signInManager.PasswordSignInAsync(currentUser, Input.Password, Input.RememberMe, lockoutOnFailure: true);
 
-                var isInRoleAdmin = await _signInManager.UserManager.IsInRoleAsync(users, SD.ManagerUser);
-                var isInRoleShipper = await _signInManager.UserManager.IsInRoleAsync(users, SD.Shipper);
-                var isInRoleReManager = await _signInManager.UserManager.IsInRoleAsync(users, SD.RepositoryManager);
+                var isInRoleAdmin = await _signInManager.UserManager.IsInRoleAsync(currentUser, SD.ManagerUser);
+                var isInRoleShipper = await _signInManager.UserManager.IsInRoleAsync(currentUser, SD.Shipper);
+                var isInRoleReManager = await _signInManager.UserManager.IsInRoleAsync(currentUser, SD.RepositoryManager);
                 if (result.Succeeded)
                 {
                     if (isInRoleAdmin || isInRoleReManager || isInRoleShipper)
                     {
                         returnUrl = returnUrl ?? Url.Content("~/Admin");
-
                     }
                     else
                     {
@@ -97,8 +104,6 @@ namespace Spice.Areas.Identity.Pages.Account
                     }
                     var user = await _db.Users.Where(u => u.Email == Input.Email).FirstOrDefaultAsync();
                     _logger.LogInformation("User logged in.");
-
-
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -110,11 +115,8 @@ namespace Spice.Areas.Identity.Pages.Account
                     _logger.LogWarning("User account locked out.");
                     return RedirectToPage("./Lockout");
                 }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
-                }
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return Page();
             }
 
             // If we got this far, something failed, redisplay form

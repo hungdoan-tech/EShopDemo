@@ -9,7 +9,7 @@
         height: 70px;
         margin: 30px;
         background-color: white;
-        border: none;
+        border: none ;
         padding: 0px;
         text-align: left;
         font-weight: 900;
@@ -24,43 +24,47 @@
     }
 
     .icon-button {
-        font-size: 20px
+        font-size: 20px;
+        border-bottom: 1px solid rgb(207, 207, 207);
+        margin-left: 7px;
     }
 </style>
-<nav class="navbar navbar-default" style="background-color:white;">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Admin Dashboard - The business overview</a>
+<div style="background-color: white; ">
+    <nav class="navbar navbar-default" style="background-color:white;">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Admin Dashboard - The business overview</a>
+            </div>
         </div>
-    </div>
-</nav>
-<div class="row icon-button">
-    <div class="col-lg-3">
-        <button><i class="far fa-user" style="background-color: #15aabf; color: white"></i>  USERS (@Model.UserCount)</button>
-    </div>
-    <div class="col-lg-3">
-        <button><i class="fas fa-shopping-cart" style="background-color: rgb(69, 118, 233); color: white"></i>  PRODUCT (@Model.ProductCount)</button>
-    </div>
-    <div class="col-lg-3">
-        <button><i class="fas fa-heart" style="background-color: rgb(246, 76, 76); color: white"></i>  LIKE (@Model.LikeCount)</button>
-    </div>
-    <div class="col-lg-3">
-        <button><i class="far fa-star" style="background-color: rgb(241, 238, 131); color: white"></i>  RATING (@Model.RatingCount)</button>
-    </div>
-</div>
-<div class="container-fluid">
-    <div class="row">
+    </nav>
+    <div class="row icon-button">
         <div class="col-lg-3">
-
+            <button><i class="far fa-user" style="background-color: #15aabf; color: white"></i>  USERS (@Model.UserCount)</button>
+        </div>
+        <div class="col-lg-3">
+            <button><i class="fas fa-shopping-cart" style="background-color: rgb(69, 118, 233); color: white"></i>  PRODUCT (@Model.ProductCount)</button>
+        </div>
+        <div class="col-lg-3">
+            <button><i class="fas fa-heart" style="background-color: rgb(246, 76, 76); color: white"></i>  LIKE (@Model.LikeCount)</button>
+        </div>
+        <div class="col-lg-3">
+            <button><i class="far fa-star" style="background-color: rgb(241, 238, 131); color: white"></i>  RATING (@Model.RatingCount)</button>
         </div>
     </div>
-    <div class="row">
-        <div id="categoryCircleChart" class="col-lg-6"></div>
-        <div id="brandCircleChart" class="col-lg-6"></div>
-    </div>
-    <div class="row" style="margin-top:5%">
-        <div id="lineChart" class="col-lg-6"></div>
-        <div id="columnChart" class="col-lg-6"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+
+            </div>
+        </div>
+        <div class="row">
+            <div id="categoryCircleChart" class="col-lg-6"></div>
+            <div id="brandCircleChart" class="col-lg-6"></div>
+        </div>
+        <div class="row" style="margin-top:5%">
+            <div id="lineChart" class="col-lg-6"></div>
+            <div id="columnChart" class="col-lg-6"></div>
+        </div>
     </div>
 </div>
 @section Scripts

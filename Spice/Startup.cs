@@ -15,8 +15,6 @@ using Spice.Service;
 using Spice.Repository;
 using Spice.Service.ServiceInterfaces;
 using Spice.Service.State;
-using DinkToPdf.Contracts;
-using DinkToPdf;
 
 namespace Spice
 {
@@ -68,18 +66,16 @@ namespace Spice
 
             // Database section
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IDbInitializer, DbInitializer>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Our service section
             services.AddScoped<IFacadeCartService, CartFacadeService>();
             services.AddTransient<IOrderContext, OrderContext>();
             services.AddScoped<IUserService, UserService>();
-            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IDbInitializer dbInitializer)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -96,7 +92,6 @@ namespace Spice
 
             StripeConfiguration.ApiKey = Configuration.GetSection("Stripe")["SecretKey"];
 
-            dbInitializer.Initialize();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

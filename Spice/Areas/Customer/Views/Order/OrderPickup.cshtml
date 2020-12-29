@@ -4,19 +4,7 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>AdminLTE 3 | Simple Tables</title>
-        <!-- Tell the browser to be responsive to screen width -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Font Awesome -->        <!-- Ionicons -->
-        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-        <!-- Theme style -->
-        <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
-        <!-- Google Font: Source Sans Pro -->
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    </head>
+<link rel="stylesheet" href="/css/Table.css">
     <div class="content">
         <form method="get">
 
@@ -26,58 +14,62 @@
             <div>
                 @if (Model.Orders.Count() > 0)
                 {
-                    <table class="table table-striped border">
-                        <tr class="table-secondary">
-                            <th>
-                                @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.Id)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.PickupName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.Customer.Email)
-                            </th>
-                            @*<th>
-@Html.DisplayNameFor(m => m.Orders[0].OrderHeader.PickUpTime)
-</th>*@
-                            <th>
-                                @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.OrderTotal)
-                            </th>
-                            <th>
-                                Total Items
-                            </th>
-                            <th></th>
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr class="table-secondary">
+                                <th>
+                                    @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.Id)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.PickupName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.Customer.Email)
+                                </th>
+                                @*<th>
+            @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.PickUpTime)
+            </th>*@
+                                <th>
+                                    @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.OrderTotal)
+                                </th>
+                                <th>
+                                    Total Items
+                                </th>
+                                <th></th>
 
-                        </tr>
-                        @foreach (var item in Model.Orders)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(m => item.OrderHeader.Id)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(m => item.OrderHeader.PickupName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(m => item.OrderHeader.Customer.Email)
-                                </td>
-                                @*<td>
-                                @Html.DisplayFor(m => item.OrderHeader.PickUpTime)
-                                </td>*@
-                                <td>
-                                    @Html.DisplayFor(m => item.OrderHeader.OrderTotal)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(m => item.OrderDetails.Count)
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-success anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
-                                        <i class="far fa-list-alt"></i> Details
-                                    </button>
-
-                                </td>
                             </tr>
-                        }
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Orders)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(m => item.OrderHeader.Id)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => item.OrderHeader.PickupName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => item.OrderHeader.Customer.Email)
+                                    </td>
+                                    @*<td>
+                @Html.DisplayFor(m => item.OrderHeader.PickUpTime)
+                </td>*@
+                                    <td>
+                                        @Html.DisplayFor(m => item.OrderHeader.OrderTotal)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(m => item.OrderDetails.Count)
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
+                                            <i class="far fa-list-alt"></i> Details
+                                        </button>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
                     </table>
                     <br />
                 }

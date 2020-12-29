@@ -4,21 +4,7 @@
     ViewData["Title"] = "OrderHistoryAdmin";
     Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>AdminLTE 3 | Simple Tables</title>
-        <!-- Tell the browser to be responsive to screen width -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
-        <!-- Ionicons -->
-        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-        <!-- Theme style -->
-        <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
-        <!-- Google Font: Source Sans Pro -->
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    </head>
+<link rel="stylesheet" href="/css/Table.css">
 <br />
 <br />
 <div class="container-fluid">
@@ -32,8 +18,9 @@
         <div>
             @if (Model.Orders.Count() > 0)
             {
-                <table class="table table-striped border">
-                    <tr class="table">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr class="table-secondary">
                         <th>
                             Order ID
                         </th>
@@ -56,6 +43,8 @@
                         <th></th>
 
                     </tr>
+                </thead>
+                <tbody>
                     @foreach (var item in Model.Orders)
                     {
                         <tr>
@@ -79,10 +68,10 @@
                             </td>
                             <td>
                                 <!--
-                                <button type="submit" class="btn btn-success anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
-                                    <i class="far fa-list-alt"></i> Details
-                                </button>
-                                -->
+                <button type="submit" class="btn btn-success anchorDetail" data-id="@item.OrderHeader.Id" data-toggle="modal">
+                    <i class="far fa-list-alt"></i> Details
+                </button>
+                -->
 
                                 <a asp-area="Customer" asp-controller="Order" asp-action="DetailTracking" asp-route-Id="@item.OrderHeader.Id" class="genric-btn info large  anchorDetail">
                                     <i class="far fa-list-alt"></i> Details
@@ -95,7 +84,8 @@
                             </td>
                         </tr>
                     }
-                </table>
+                </tbody>
+            </table>
                 <div page-model="@Model.PagingInfo" page-classes-enabled="true" page-class="page-link"
                      page-class-normal="" page-class-selected="active btn-primary"
                      class="btn-group float-right">
