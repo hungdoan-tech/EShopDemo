@@ -346,7 +346,7 @@ namespace Spice.Data
                 new ApplicationUser
                 {
                     Id = "acsdkcmks_123ncjasncj", // primary key                    
-                    UserName = "Admin1@gmail.com",
+                    UserName = "Admin 1",
                     Email = "Admin1@gmail.com",
                     EmailConfirmed = true,
                     PhoneNumber = "1112223333",
@@ -355,7 +355,7 @@ namespace Spice.Data
                 new ApplicationUser
                 {
                     Id = "acsdkcmks_125ncjasncj", // primary key
-                    UserName = "Repository1@gmail.com",
+                    UserName = "Repository 1",
                     Email = "Repository1@gmail.com",
                     EmailConfirmed = true,
                     PhoneNumber = "1112223333",
@@ -364,7 +364,7 @@ namespace Spice.Data
                  new ApplicationUser
                  {
                      Id = "acsdkcmks_127ncjasncj", // primary key
-                     UserName = "Repository1@gmail.com",
+                     UserName = "Shipper 1",
                      Email = "Shipper1@gmail.com",
                      EmailConfirmed = true,
                      PhoneNumber = "1112223333",
@@ -372,8 +372,17 @@ namespace Spice.Data
                  },
                  new ApplicationUser
                  {
+                     Id = "acsdkcmks_224ncjasncj", // primary key
+                     UserName = "Shipper 2",
+                     Email = "Shipper2@gmail.com",
+                     EmailConfirmed = true,
+                     PhoneNumber = "1112223333",
+                     PasswordHash = hasher.HashPassword(null, "Admin123*")
+                 },
+                 new ApplicationUser
+                 {
                      Id = "acsdkcmks_129ncjasncj", // primary key
-                     UserName = "17110154@student.hcmute.edu.vn",
+                     UserName = "Hung Doan HCMCUTE",
                      Email = "17110154@student.hcmute.edu.vn",
                      EmailConfirmed = true,
                      PhoneNumber = "1112223333",
@@ -398,6 +407,11 @@ namespace Spice.Data
                 {
                     RoleId = "asbcjo_389asavdf",
                     UserId = "acsdkcmks_127ncjasncj"
+                },
+                new IdentityUserRole<string>
+                {
+                    RoleId = "asbcjo_389asavdf",
+                    UserId = "acsdkcmks_224ncjasncj"
                 },
                 new IdentityUserRole<string>
                 {

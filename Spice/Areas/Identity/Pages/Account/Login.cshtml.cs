@@ -81,25 +81,22 @@ namespace Spice.Areas.Identity.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-
-                ApplicationUser currentUser = _db.ApplicationUser.First(a => a.Email == Input.Email.Trim());
+                ApplicationUser currentUser = _db.ApplicationUser.FirstOrDefault(a => a.Email.ToLower() == Input.Email.Trim().ToLower());
                 if (currentUser==null)
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }                
-                var result = await _signInManager.PasswordSignInAsync(currentUser.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
-                var users = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+                var result = await _signInManager.PasswordSignInAsync(currentUser, Input.Password, Input.RememberMe, lockoutOnFailure: true);
 
-                var isInRoleAdmin = await _signInManager.UserManager.IsInRoleAsync(users, SD.ManagerUser);
-                var isInRoleShipper = await _signInManager.UserManager.IsInRoleAsync(users, SD.Shipper);
-                var isInRoleReManager = await _signInManager.UserManager.IsInRoleAsync(users, SD.RepositoryManager);
+                var isInRoleAdmin = await _signInManager.UserManager.IsInRoleAsync(currentUser, SD.ManagerUser);
+                var isInRoleShipper = await _signInManager.UserManager.IsInRoleAsync(currentUser, SD.Shipper);
+                var isInRoleReManager = await _signInManager.UserManager.IsInRoleAsync(currentUser, SD.RepositoryManager);
                 if (result.Succeeded)
                 {
                     if (isInRoleAdmin || isInRoleReManager || isInRoleShipper)
                     {
                         returnUrl = returnUrl ?? Url.Content("~/Admin");
-
                     }
                     else
                     {
@@ -107,8 +104,6 @@ namespace Spice.Areas.Identity.Pages.Account
                     }
                     var user = await _db.Users.Where(u => u.Email == Input.Email).FirstOrDefaultAsync();
                     _logger.LogInformation("User logged in.");
-
-
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
