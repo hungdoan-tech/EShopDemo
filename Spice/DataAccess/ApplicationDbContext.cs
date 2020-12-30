@@ -143,6 +143,7 @@ namespace Spice.Data
                 .HasOne(a => a.Shipper)
                 .WithMany(b => b.ShipperOrderHeaders)
                 .HasForeignKey(a => a.ShipperId);
+                /*.OnDelete(DeleteBehavior.SetNull);*/
             #endregion
 
             #region //OrderDetails
