@@ -5,147 +5,104 @@
     Layout = "~/Views/Shared/_AdminDashboard.cshtml";
 }
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 3 | Simple Tables</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="../../lib/fontawesome-free/css/all.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
-    <!-- Google Font: Source Sans Pro -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-</head>
-<body>
-    <style>
-        .thead-dark{
-            background: rgb(128, 128, 128);
-            color: white;
-        }
-        tr{
-            cursor: pointer;
-            transition: height .5s linear;
-        }
-        tbody tr:hover{
-            background: rgb(237, 237, 237);
-        }
-        tbody tr:active .img-index {
-            visibility: visible;
-            border: 1px solid;
-            height: 200px;
-            width: 200px;
-        }
-        .img-index {
-            position: absolute;
-            background: white;
-            border: none;
-            width: 0px;
-            height: 0px;
-            visibility: hidden;
-            transition-delay: 1s;
-            transition: height .5s linear;
-        }
-    </style>
-    <div id="content">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <br />
-                <h2 class="text-info"> Menu Item List</h2>
+
+
+
+<link rel="stylesheet" href="/css/Table.css" >
+<div id="content">
+    <nav class="navbar navbar-default" style="background-color: white">
+        <div class="container-fluid">
+            <br />
+            <h2 class="text-info"> Menu Item List</h2>
+            <br />
+            <div>
+                <div class="row">
+                    <div class="col-6 text-right">
+                        <partial name="_CreateButtonPartial" />
+                    </div>
+                </div>
                 <br />
                 <div>
-                    <div class="row">
-                        <div class="col-6 text-right">
-                            <partial name="_CreateButtonPartial" />
-                        </div>
-                    </div>
-                    <br />
-                    <div>
-                        <div class="container-fluid">
-                            @if (Model.Count() > 0)
-                            {
-                                <table class="table">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(m => m.Name)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => m.Price)
-                                            </th>
+                    <div class="container-fluid">
+                        @if (Model.Count() > 0)
+                        {
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.Name)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.Price)
+                                        </th>
 
-                                            <th>
-                                                @Html.DisplayNameFor(m => m.Category)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => m.SubCategory)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => m.Quantity)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => m.IsPublish)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => m.Tag)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(m => m.PublishedDate)
-                                            </th>
-                                            <th></th>
-                                            <th></th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.Category)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.SubCategory)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.Quantity)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.IsPublish)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.Tag)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(m => m.PublishedDate)
+                                        </th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(m => item.Name) 
+                                                <br/>
+                                                <img src = "@Html.DisplayFor(m => item.Image)" class="img-index" />
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.Price)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.Category.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.SubCategory.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.Quantity)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.IsPublish)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.Tag)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.PublishedDate)
+                                            </td>
+                                            <td>
+                                                <partial name="_TableButtonPartial" model="item.Id" />
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model)
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(m => item.Name) 
-                                                    <br/>
-                                                    <img src = "@Html.DisplayFor(m => item.Image)" class="img-index" />
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => item.Price)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => item.Category.Name)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => item.SubCategory.Name)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => item.Quantity)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => item.IsPublish)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => item.Tag)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => item.PublishedDate)
-                                                </td>
-                                                <td>
-                                                    <partial name="_TableButtonPartial" model="item.Id" />
-                                                </td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            }
-                            else
-                            {
-                                <p>No menu item exists...</p>
-                            }
-                        </div>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p>No menu item exists...</p>
+                        }
                     </div>
                 </div>
             </div>
-        </nav>
-    </div>
-</body>
+        </div>
+    </nav>
+</div>

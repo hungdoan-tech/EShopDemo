@@ -131,9 +131,9 @@
                     </li>
 
                 </ul>
-                @if (Model.OrderHeader.Status.Equals(SD.StatusReady) && (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.Shipper)))
+                @if (Model.OrderHeader.Status.Equals(SD.StatusCompleted) && (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.Shipper)))
                 {
-                    <button type="submit" class="btn btn-success form-control"><i class="genric-btn info large  anchorDetail"></i>Xác Nhận</button>
+                    <img src="@Model.OrderHeader.CustomerSignature" style="width:100%"/>
                 }
                 @*else
                 {

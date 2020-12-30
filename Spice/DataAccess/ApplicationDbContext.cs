@@ -124,8 +124,8 @@ namespace Spice.Data
               .Property(a => a.Id)
               .ValueGeneratedOnAdd();
             modelBuilder.Entity<OrderHeader>()
-                .HasOne(a => a.ApplicationUser)
-                .WithMany(b => b.OrderHeaders)
+                .HasOne(a => a.Customer)
+                .WithMany(b => b.CustomerOrderHeaders)
                 .HasForeignKey(a => a.UserId);
             modelBuilder.Entity<OrderHeader>()
                 .Property(a => a.UserId)
@@ -139,6 +139,11 @@ namespace Spice.Data
             modelBuilder.Entity<OrderHeader>()
                 .Property(a => a.OrderTotal)
                 .IsRequired();
+            modelBuilder.Entity<OrderHeader>()
+                .HasOne(a => a.Shipper)
+                .WithMany(b => b.ShipperOrderHeaders)
+                .HasForeignKey(a => a.ShipperId);
+                /*.OnDelete(DeleteBehavior.SetNull);*/
             #endregion
 
             #region //OrderDetails
@@ -347,6 +352,7 @@ namespace Spice.Data
                 {
                     Id = "acsdkcmks_123ncjasncj", // primary key                    
                     UserName = "Admin 1",
+                    Name = "John",
                     Email = "Admin1@gmail.com",
                     EmailConfirmed = true,
                     PhoneNumber = "1112223333",
@@ -356,6 +362,7 @@ namespace Spice.Data
                 {
                     Id = "acsdkcmks_125ncjasncj", // primary key
                     UserName = "Repository 1",
+                    Name = "Bob",
                     Email = "Repository1@gmail.com",
                     EmailConfirmed = true,
                     PhoneNumber = "1112223333",
@@ -365,6 +372,7 @@ namespace Spice.Data
                  {
                      Id = "acsdkcmks_127ncjasncj", // primary key
                      UserName = "Shipper 1",
+                     Name = "Alice",
                      Email = "Shipper1@gmail.com",
                      EmailConfirmed = true,
                      PhoneNumber = "1112223333",
@@ -374,6 +382,7 @@ namespace Spice.Data
                  {
                      Id = "acsdkcmks_224ncjasncj", // primary key
                      UserName = "Shipper 2",
+                     Name = "Drew",
                      Email = "Shipper2@gmail.com",
                      EmailConfirmed = true,
                      PhoneNumber = "1112223333",
@@ -383,6 +392,7 @@ namespace Spice.Data
                  {
                      Id = "acsdkcmks_129ncjasncj", // primary key
                      UserName = "Hung Doan HCMCUTE",
+                     Name = "Hung Doan",
                      Email = "17110154@student.hcmute.edu.vn",
                      EmailConfirmed = true,
                      PhoneNumber = "1112223333",

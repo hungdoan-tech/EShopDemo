@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
@@ -13,6 +14,7 @@ using Spice.Models;
 using Spice.Models.ViewModels;
 using Spice.Reports;
 using Spice.Repository;
+using Spice.Service;
 using Spice.Service.ServiceInterfaces;
 using Spice.Service.State;
 using Spice.Utility;
@@ -25,14 +27,17 @@ namespace Spice.Areas.Customer.Controllers
         private readonly IOrderContext _orderContext;
         private readonly ApplicationDbContext _db;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<IdentityUser> _userManager;
+
 
         private readonly int PageSize = 5;
         private readonly int PageAdminSize = 10;
-        public OrderController(ApplicationDbContext db, IOrderContext orderContext, IWebHostEnvironment webHostEnvironment)
+        public OrderController(ApplicationDbContext db, IOrderContext orderContext, IWebHostEnvironment webHostEnvironment, UserManager<IdentityUser> userManager)
         {
             this._db = db;
             this._orderContext = orderContext;
             this._webHostEnvironment = webHostEnvironment;
+            this._userManager = userManager;
         }
 
         public IActionResult Index()
@@ -48,7 +53,7 @@ namespace Spice.Areas.Customer.Controllers
 
             OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel()
             {
-                OrderHeader = await _db.OrderHeader.Include(o => o.ApplicationUser).FirstOrDefaultAsync(o => o.Id == id && o.UserId == claim.Value),
+                OrderHeader = await _db.OrderHeader.Include(o => o.Customer).FirstOrDefaultAsync(o => o.Id == id && o.UserId == claim.Value),
                 OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == id).ToListAsync()
             };
 
@@ -74,7 +79,7 @@ namespace Spice.Areas.Customer.Controllers
 
             
 
-            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
+            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.Customer).Where(u => u.UserId == claim.Value).ToListAsync();
 
             foreach (OrderHeader item in OrderHeaderList)
             {
@@ -111,13 +116,15 @@ namespace Spice.Areas.Customer.Controllers
 
             List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Where(o => o.Status == SD.StatusSubmitted || o.Status == SD.StatusInProcess).OrderByDescending(u => u.OrderDate).ToListAsync();
 
+            var temp = await _userManager.GetUsersInRoleAsync(SD.Shipper);
 
             foreach (OrderHeader item in OrderHeaderList)
             {
                 OrderDetailsViewModel individual = new OrderDetailsViewModel
                 {
                     OrderHeader = item,
-                    OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
+                    OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync(),
+                    lstShipper = (List<IdentityUser>)temp
                 };
                 orderDetailsVM.Add(individual);
             }
@@ -130,10 +137,10 @@ namespace Spice.Areas.Customer.Controllers
         {
             OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel()
             {
-                OrderHeader = await _db.OrderHeader.Include(el => el.ApplicationUser).FirstOrDefaultAsync(m => m.Id == Id),
+                OrderHeader = await _db.OrderHeader.Include(el => el.Customer).FirstOrDefaultAsync(m => m.Id == Id),
                 OrderDetails = await _db.OrderDetails.Where(m => m.OrderId == Id).ToListAsync()
             };
-            orderDetailsViewModel.OrderHeader.ApplicationUser = await _db.ApplicationUser.FirstOrDefaultAsync(u => u.Id == orderDetailsViewModel.OrderHeader.UserId);
+            orderDetailsViewModel.OrderHeader.Customer = await _db.ApplicationUser.FirstOrDefaultAsync(u => u.Id == orderDetailsViewModel.OrderHeader.UserId);
             return PartialView("_IndividualOrderDetails", orderDetailsViewModel);
         }
 
@@ -152,7 +159,7 @@ namespace Spice.Areas.Customer.Controllers
 
 
 
-            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToListAsync();
+            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.Customer).Where(u => u.UserId == claim.Value).ToListAsync();
 
             foreach (OrderHeader item in OrderHeaderList)
             {
@@ -186,10 +193,10 @@ namespace Spice.Areas.Customer.Controllers
         {
             OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel()
             {
-                OrderHeader = await _db.OrderHeader.Include(el => el.ApplicationUser).FirstOrDefaultAsync(m => m.Id == Id),
+                OrderHeader = await _db.OrderHeader.Include(el => el.Customer).FirstOrDefaultAsync(m => m.Id == Id),
                 OrderDetails = await _db.OrderDetails.Where(m => m.OrderId == Id).ToListAsync()
             };
-            orderDetailsViewModel.OrderHeader.ApplicationUser = await _db.ApplicationUser.FirstOrDefaultAsync(u => u.Id == orderDetailsViewModel.OrderHeader.UserId);
+            orderDetailsViewModel.OrderHeader.Customer = await _db.ApplicationUser.FirstOrDefaultAsync(u => u.Id == orderDetailsViewModel.OrderHeader.UserId);
 
             return View(orderDetailsViewModel);
         }
@@ -202,7 +209,7 @@ namespace Spice.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            List<OrderHeader> OrderHeaderList =  _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.UserId == claim.Value).ToList();
+            List<OrderHeader> OrderHeaderList =  _db.OrderHeader.Include(o => o.Customer).Where(u => u.UserId == claim.Value).ToList();
             var ItemCount = OrderHeaderList.Where(o => !o.Status.Equals(SD.StatusCompleted)).Count();
             return new JsonResult(ItemCount);
         }
@@ -217,8 +224,11 @@ namespace Spice.Areas.Customer.Controllers
 
 
         [Authorize(Roles = SD.RepositoryManager + "," + SD.ManagerUser)]
-        public IActionResult OrderReady(int OrderId)
+        public IActionResult OrderReady(int OrderId, string ShipperId)
         {
+            var chosenOrder = _db.OrderHeader.First(a => a.Id == OrderId);
+            chosenOrder.ShipperId = ShipperId;
+            _db.SaveChanges();
             this._orderContext.SetState(new OnShippingState());
             this._orderContext.ApplyState(OrderId);
             return RedirectToAction("ManageOrder", "Order");
@@ -247,102 +257,56 @@ namespace Spice.Areas.Customer.Controllers
         [ActionName("OrderPickup")]
         public IActionResult OrderPickupPost(int OrderId)
         {
+            string webRootPath = _webHostEnvironment.WebRootPath;
+            var files = HttpContext.Request.Form.Files;
+            var orderHeader = _db.OrderHeader.Where(m=>m.Id == OrderId).First();
+
+            if (files.Count > 0)
+            {
+                //files has been uploaded
+                var uploads = Path.Combine(webRootPath, "images");
+                var extension = Path.GetExtension(files[0].FileName);
+
+                using (var filesStream = new FileStream(Path.Combine(uploads, "Signature" + orderHeader.Id + extension), FileMode.Create))
+                {
+                    files[0].CopyTo(filesStream);
+                }
+                orderHeader.CustomerSignature = @"\images\" + "Signature" + orderHeader.Id + extension;
+            }
+            else
+            {
+                return RedirectToAction("OrderPickup", "Order");
+            }
+
+            _db.SaveChanges();
+
             this._orderContext.SetState(new CompletedState());
             this._orderContext.ApplyState(OrderId);            
-            return RedirectToAction("ManageOrder", "Order");
+            return RedirectToAction("OrderPickup", "Order");
         }
 
         [Authorize(Roles = SD.ManagerUser + "," + SD.Shipper)]
         [Route("~/Admin/Order/OrderPickup")]
-        public async Task<IActionResult> OrderPickup(int productPage = 1, string searchEmail=null, string searchPhone = null, string searchName = null)
+        public async Task<IActionResult> OrderPickup([FromServices] IUserService userService)
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = userService.GetUserId();
 
             OrderListViewModel orderListVM = new OrderListViewModel()
             {
                 Orders = new List<OrderDetailsViewModel>()
             };
 
-            StringBuilder param = new StringBuilder();
-            param.Append("/Admin/Order/OrderPickup?productPage=:");
-            param.Append("&searchName=");
-            if(searchName!=null)
-            {
-                param.Append(searchName);
-            }
-            param.Append("&searchEmail=");
-            if (searchEmail != null)
-            {
-                param.Append(searchEmail);
-            }
-            param.Append("&searchPhone=");
-            if (searchPhone != null)
-            {
-                param.Append(searchPhone);
-            }
-
-            List<OrderHeader> OrderHeaderList = new List<OrderHeader>();
-            if (searchName != null || searchEmail != null || searchPhone != null)
-            {
-                var user = new ApplicationUser();
-
-                if(searchName!=null)
-                {
-                    OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser)
-                                                .Where(u => u.PickupName.ToLower().Contains(searchName.ToLower()))
-                                                .OrderByDescending(o => o.OrderDate).ToListAsync();
-                }
-                else
-                {
-                    if (searchEmail != null)
-                    {
-                        user = await _db.ApplicationUser.Where(u => u.Email.ToLower().Contains(searchEmail.ToLower())).FirstOrDefaultAsync();
-                        OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser)
-                                                    .Where(o=>o.UserId==user.Id)
-                                                    .OrderByDescending(o => o.OrderDate).ToListAsync();
-                    }
-                    else
-                    {
-                        if (searchPhone != null)
-                        {
-                            OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser)
-                                                        .Where(u => u.PhoneNumber.Contains(searchPhone))
-                                                        .OrderByDescending(o => o.OrderDate).ToListAsync();
-                        }
-                    }
-                }
-            }
-            else
-            {
-                OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).Where(u => u.Status == SD.StatusReady).ToListAsync();
-            }
-
-            foreach (OrderHeader item in OrderHeaderList)
-                {
-                    OrderDetailsViewModel individual = new OrderDetailsViewModel
-                    {
-                        OrderHeader = item,
-                        OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
-                    };
-                    orderListVM.Orders.Add(individual);
-                }
+            var OrderHeaderList = await _db.OrderHeader.Include(o => o.Customer).Where(u => u.Status == SD.StatusReady && u.ShipperId == userId).ToListAsync();
             
-
-
-            var count = orderListVM.Orders.Count;
-            orderListVM.Orders = orderListVM.Orders.OrderByDescending(p => p.OrderHeader.Id)
-                                 .Skip((productPage - 1) * PageSize)
-                                 .Take(PageSize).ToList();
-
-            orderListVM.PagingInfo = new PagingInfo
+            foreach (OrderHeader item in OrderHeaderList)
             {
-                CurrentPage = productPage,
-                ItemsPerPage = PageSize,
-                TotalItem = count,
-                urlParam = param.ToString()
-            };
-
+                OrderDetailsViewModel individual = new OrderDetailsViewModel
+                {
+                    OrderHeader = item,
+                    OrderDetails = await _db.OrderDetails.Where(o => o.OrderId == item.Id).ToListAsync()
+                };
+                orderListVM.Orders.Add(individual);
+            }
             return View(orderListVM);
         }
 
@@ -357,7 +321,7 @@ namespace Spice.Areas.Customer.Controllers
                 Orders = new List<OrderDetailsViewModel>()
             };
 
-            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.ApplicationUser).ToListAsync();
+            List<OrderHeader> OrderHeaderList = await _db.OrderHeader.Include(o => o.Customer).ToListAsync();
 
             foreach (OrderHeader item in OrderHeaderList)
             {

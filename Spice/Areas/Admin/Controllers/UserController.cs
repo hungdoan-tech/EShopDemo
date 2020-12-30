@@ -67,11 +67,23 @@ namespace Spice.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            applicationUser.LockoutEnd = DateTime.Now;
+            applicationUser.LockoutEnd = null;
 
-            _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
+
+        public IActionResult DeleteUser(string id)
+        {
+            var user = _unitOfWork.ApplicationUserRepository.ReadOneByStringID(id);
+            if(user == null)
+            {
+                return View();
+            }
+            _unitOfWork.ApplicationUserRepository.Delete(user);
+            _unitOfWork.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        } 
     }
 }

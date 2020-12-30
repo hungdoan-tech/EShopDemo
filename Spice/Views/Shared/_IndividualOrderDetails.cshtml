@@ -4,7 +4,7 @@
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 
-<form asp-action="OrderPickup" asp-controller="Order" asp-route-orderId="@Model.OrderHeader.Id" method="post">
+<form asp-action="OrderPickup" asp-controller="Order" asp-route-orderId="@Model.OrderHeader.Id" method="post" enctype="multipart/form-data">
     <div class="container row border ml-1 backgroundWhiteBorder10Padding" style="width:100%">
         <div class="col-lg-8 col-12" style="border-right:1px solid #bbb9b9">
             <br />
@@ -20,18 +20,18 @@
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label asp-for="OrderHeader.ApplicationUser.Email"></label>
+                    <label asp-for="OrderHeader.Customer.Email"></label>
                 </div>
                 <div class="col-9">
-                    <input asp-for="OrderHeader.ApplicationUser.Email" disabled class="form-control" />
+                    <input asp-for="OrderHeader.Customer.Email" disabled class="form-control" />
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-3">
-                    <label asp-for="OrderHeader.ApplicationUser.PhoneNumber"></label>
+                    <label asp-for="OrderHeader.Customer.PhoneNumber"></label>
                 </div>
                 <div class="col-9">
-                    <input asp-for="OrderHeader.ApplicationUser.PhoneNumber" disabled class="form-control" />
+                    <input asp-for="OrderHeader.Customer.PhoneNumber" disabled class="form-control" />
                 </div>
             </div>
             <div class="form-group row">
@@ -96,12 +96,23 @@
             </ul>
             @if (Model.OrderHeader.Status.Equals(SD.StatusReady) && (User.IsInRole(SD.ManagerUser) || User.IsInRole(SD.Shipper)))
             {
-                <button type="submit"  class="btn btn-success form-control"><i class="far fa-thumbs-up"></i> Confirm Pickup</button>
+                <div class="form-group row">
+                    <div class="col-2">
+                        <label asp-for="OrderHeader.CustomerSignature" class="col-form-label"></label>
+                    </div>
+                    <div class="col-5">
+                        <div>
+                            <input asp-for="OrderHeader.CustomerSignature" type="file" name="files" multiple class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <button type="submit" class="btn btn-success form-control"><i class="far fa-thumbs-up"></i> Confirm Pickup</button>
             }
             @*else
-            { 
-                <button type="submit" disabled class="btn btn-info form-control">@Model.OrderHeader.Status</button>
-            }*@
+        {
+            <button type="submit" disabled class="btn btn-info form-control">@Model.OrderHeader.Status</button>
+        }*@
         </div>
 
     </div>

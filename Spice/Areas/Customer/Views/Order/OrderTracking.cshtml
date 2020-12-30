@@ -24,7 +24,7 @@
                         Customer
                     </th>
                     <th>
-                        @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.ApplicationUser.Email)
+                        @Html.DisplayNameFor(m => m.Orders[0].OrderHeader.Customer.Email)
                     </th>
                     <th>
                         Payment Date
@@ -49,7 +49,7 @@
                             @Html.DisplayFor(m => item.OrderHeader.PickupName)
                         </td>
                         <td>
-                            @Html.DisplayFor(m => item.OrderHeader.ApplicationUser.Email)
+                            @Html.DisplayFor(m => item.OrderHeader.Customer.Email)
                         </td>
                         <td>
                             @Html.DisplayFor(m => item.OrderHeader.OrderDate)
