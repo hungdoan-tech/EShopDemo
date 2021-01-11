@@ -61,17 +61,21 @@ namespace Spice
 
             // Config section
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.AddTransient<IEmailService, EmailService>();
+            services.AddSingleton<IEmailSender, EmailSender>();
 
             // Database section
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddSingleton<IUnitOfWork, UnitOfWork>();
 
             // Our service section
-            services.AddScoped<IFacadeCartService, CartFacadeService>();
-            services.AddTransient<IOrderContext, OrderContext>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddSingleton<IOrderContext, OrderContext>();
+            services.AddSingleton<IFacadeCartService, CartFacadeService>();            
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IHomeService, HomeService>();
+            services.AddSingleton<IPaymentService, PaymentService>();
+            services.AddSingleton<IEmailService, EmailService>();
+            services.AddSingleton<ISessionService, SessionService>();
+            services.AddSingleton<ICartService, CartService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -105,7 +109,6 @@ namespace Spice
                         pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
                     endpoints.MapRazorPages();
                     endpoints.MapControllers();
-
                 });
             }
         }

@@ -20,5 +20,10 @@ namespace Spice.Service
             var lstShoppingCart = new List<MenuItemsAndQuantity>();
             _httpContextAccessor.HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
         }
+
+        public object GetSession(string code)
+        {
+            return _httpContextAccessor.HttpContext.Session.Get(code);
+        }
     }
 }

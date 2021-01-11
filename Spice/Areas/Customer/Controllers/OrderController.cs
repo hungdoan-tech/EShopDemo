@@ -348,6 +348,7 @@ namespace Spice.Areas.Customer.Controllers
 
             return View(orderListVM);
         }
+
         [Authorize]
         public ActionResult PrintOrder(int id, string userId)
         {

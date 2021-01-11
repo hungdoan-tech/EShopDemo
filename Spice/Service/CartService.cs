@@ -13,16 +13,19 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Spice.Extensions;
 using Spice.Repository;
 using Spice.Models.Builder;
+using Spice.Service.ServiceInterfaces;
 
 namespace Spice.Service
 {
-    public class CartService
+    public class CartService : ICartService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public CartService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+        private readonly ISessionService _sessionService;
+        public CartService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, ISessionService sessionService)
         {
             _unitOfWork = unitOfWork;
+            _sessionService = sessionService;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -84,10 +87,11 @@ namespace Spice.Service
 
         public OrderDetailsCart CheckCouponBeforeSumary(OrderDetailsCart detailCart)
         {
-            if (_httpContextAccessor.HttpContext.Session.GetString(SD.ssCouponCode) != null)
+            string sessionCoupon = _sessionService.GetSession(SD.ssCouponCode).ToString();
+            if (sessionCoupon != null)
             {
-                detailCart.OrderHeader.CouponCode = _httpContextAccessor.HttpContext.Session.GetString(SD.ssCouponCode);
-                var couponFromDb = _unitOfWork.CouponRepository.FirstMatchName(detailCart.OrderHeader.CouponCode.ToLower());
+                detailCart.OrderHeader.CouponCode = sessionCoupon;
+                Coupon couponFromDb = _unitOfWork.CouponRepository.FirstMatchName(detailCart.OrderHeader.CouponCode.ToLower());
                 detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
             }
             return detailCart;
@@ -162,7 +166,7 @@ namespace Spice.Service
             }
         }
 
-        public Boolean CheckCurrentItemQuantity(int cartId)
+        public bool CheckCurrentItemQuantity(int cartId)
         {
             List<MenuItemsAndQuantity> lstShoppingCart = _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
             var menuItemFromDb = _unitOfWork.MenuItemRepository.ReadOneIncludeCategoryAndSubCategory(cartId);
