@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spice", "Spice\Spice.csproj", "{C85632F6-A9E9-49CF-931E-CBBD79E05D20}"
 EndProject
+<<<<<<< HEAD
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spice.UnitTesting", "Spice.UnitTesting\Spice.UnitTesting.csproj", "{F1EB2691-56B7-4DD5-ACFE-9212AA822E23}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{109B6867-A94D-4545-B1A8-430161A2E82C}"
+>>>>>>> bd79d787042e4d64e9b6b6561e1f86a21e3db0a0
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +21,17 @@ Global
 		{C85632F6-A9E9-49CF-931E-CBBD79E05D20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C85632F6-A9E9-49CF-931E-CBBD79E05D20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C85632F6-A9E9-49CF-931E-CBBD79E05D20}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{F1EB2691-56B7-4DD5-ACFE-9212AA822E23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F1EB2691-56B7-4DD5-ACFE-9212AA822E23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1EB2691-56B7-4DD5-ACFE-9212AA822E23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1EB2691-56B7-4DD5-ACFE-9212AA822E23}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{109B6867-A94D-4545-B1A8-430161A2E82C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{109B6867-A94D-4545-B1A8-430161A2E82C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{109B6867-A94D-4545-B1A8-430161A2E82C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{109B6867-A94D-4545-B1A8-430161A2E82C}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> bd79d787042e4d64e9b6b6561e1f86a21e3db0a0
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
