@@ -166,7 +166,7 @@ namespace Spice.Service
 
         public bool CheckCurrentItemQuantity(int cartId)
         {
-            List<MenuItemsAndQuantity> lstShoppingCart = _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
+            List<MenuItemsAndQuantity> lstShoppingCart = _sessionService.GetSessionListQuantity();
             var menuItemFromDb = _unitOfWork.MenuItemRepository.ReadOneIncludeCategoryAndSubCategory(cartId);
             int currentQuantity = lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity;
 
@@ -178,7 +178,8 @@ namespace Spice.Service
             else
             {
                 lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity += 1;
-                _httpContextAccessor.HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
+                _sessionService.Clear();
+
             }
             return flag;
         }

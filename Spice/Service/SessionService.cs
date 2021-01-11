@@ -30,5 +30,9 @@ namespace Spice.Service
         {
             return _httpContextAccessor.HttpContext.Session.Get(code);
         }
+        public List<MenuItemsAndQuantity> GetSessionListQuantity()
+        {
+            return _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
+        }
     }
 }
