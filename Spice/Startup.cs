@@ -65,17 +65,17 @@ namespace Spice
 
             // Database section
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddSingleton<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // Our service section
-            services.AddSingleton<IOrderContext, OrderContext>();
-            services.AddSingleton<IFacadeCartService, CartFacadeService>();            
-            services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<IHomeService, HomeService>();
-            services.AddSingleton<IPaymentService, PaymentService>();
-            services.AddSingleton<IEmailService, EmailService>();
-            services.AddSingleton<ISessionService, SessionService>();
-            services.AddSingleton<ICartService, CartService>();
+            services.AddTransient<IOrderContext, OrderContext>();
+            services.AddTransient<IFacadeCartService, CartFacadeService>();            
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IHomeService, HomeService>();
+            services.AddTransient<IPaymentService, PaymentService>();
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<ISessionService, SessionService>();
+            services.AddTransient<ICartService, CartService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
