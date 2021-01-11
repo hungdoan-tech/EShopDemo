@@ -15,10 +15,15 @@ namespace Spice.Service
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        public void Clear()
+        public void ClearCart()
         {
             var lstShoppingCart = new List<MenuItemsAndQuantity>();
             _httpContextAccessor.HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
+        }
+
+        public void ClearCoupon()
+        {
+            _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart).Clear();
         }
 
         public object GetSession(string code)

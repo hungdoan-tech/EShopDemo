@@ -25,11 +25,11 @@ namespace Spice.Controllers
         private readonly ApplicationDbContext _db;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
-
         private readonly IHomeService _homeService;
+
         private readonly int PageSize = 3;
 
-        public HomeController(ApplicationDbContext db, IUnitOfWork unitOfWork, IUserService userService, HomeService homeService)
+        public HomeController(ApplicationDbContext db, IUnitOfWork unitOfWork, IUserService userService, IHomeService homeService)
         {
             _unitOfWork = unitOfWork;
             _db = db;
