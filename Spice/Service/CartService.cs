@@ -68,7 +68,7 @@ namespace Spice.Service
         }
         public OrderDetailsCart ApplyCoupon(OrderDetailsCart detailCart)
         {
-            string sessionCoupon = _sessionService.GetSession(SD.ssCouponCode).ToString();
+            string sessionCoupon = (string) _sessionService.GetSession(SD.ssCouponCode);
             if (sessionCoupon != null)
             {
                 detailCart.OrderHeader.CouponCode = sessionCoupon;
@@ -93,7 +93,7 @@ namespace Spice.Service
 
         public OrderDetailsCart CheckCouponBeforeSumary(OrderDetailsCart detailCart)
         {
-            string sessionCoupon = _sessionService.GetSession(SD.ssCouponCode).ToString();
+            string sessionCoupon = (string) _sessionService.GetSession(SD.ssCouponCode);
             if (sessionCoupon != null)
             {
                 detailCart.OrderHeader.CouponCode = sessionCoupon;
@@ -136,7 +136,7 @@ namespace Spice.Service
 
        public OrderDetailsCart PrepareForIndexCart(OrderDetailsCart detailCart)
        {
-            var cart = _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
+            var cart = _sessionService.GetSessionListQuantity();
             if (cart != null)
             {
                 detailCart.ListCart = cart.ToList();

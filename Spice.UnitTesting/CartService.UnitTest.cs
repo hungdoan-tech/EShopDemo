@@ -14,16 +14,18 @@ namespace Spice.UnitTesting
 {
     public class CartServiceTest
     {
-        private readonly CartService _cartService;
+        private readonly CartService cartService;
         private readonly Mock<IUnitOfWork> _unitOfWork = new Mock<IUnitOfWork>();
         private readonly Mock<ISessionService> _sessionService = new Mock<ISessionService>();
         private readonly Mock<IHttpContextAccessor> _httpContextAccessor = new Mock<IHttpContextAccessor>();
-        MenuItem item1;
-        MenuItem item2;
+        private MenuItem item1;
+        private MenuItem item2;
+        private OrderDetailsCart detailsCart;
 
         public CartServiceTest()
         {
-            this._cartService = new CartService(_unitOfWork.Object, _httpContextAccessor.Object, _sessionService.Object);
+            this.cartService = new CartService(_unitOfWork.Object, _httpContextAccessor.Object, _sessionService.Object);
+            
             item1 = new MenuItem
             {
                 Id = 1,
@@ -43,6 +45,7 @@ namespace Spice.UnitTesting
                 CategoryId = 2,
                 SubCategoryId = 3
             };
+
             item2 = new MenuItem
             {
                 Id = 3,
@@ -61,11 +64,84 @@ namespace Spice.UnitTesting
                 PublishedDate = DateTime.Now,
                 CategoryId = 2,
                 SubCategoryId = 3
-            };            
+            };
+
+            detailsCart = new OrderDetailsCart()
+            {
+                ListCart = null,
+                OrderHeader = new OrderHeader()
+                {
+                    OrderTotalOriginal = 350,
+                    OrderTotal = 350
+                }
+            };
+        }
+
+
+        #region Unit test ApplyCoupon method 
+
+        [Fact]
+        public void ApplyCoupon_NoSavedCoupon_ShouldHaveNoChangeOnDetailCart()
+        {
+            //Arrange
+            _sessionService.Setup(x => x.GetSession(It.IsAny<String>())).Returns(null);
+
+            //Act
+            OrderDetailsCart tempDetailsCart = this.cartService.ApplyCoupon(this.detailsCart);
+
+            //Assert
+            Assert.Equal(tempDetailsCart.OrderHeader.OrderTotal, tempDetailsCart.OrderHeader.OrderTotalOriginal);
+            Assert.Equal(0, tempDetailsCart.OrderHeader.CouponCodeDiscount);
         }
 
         [Fact]
-        public void CheckCurrentItemQuantity_ValidQuantity_ReturnFalse()
+        public void ApplyCoupon_HaveSavedCoupon_ShouldHaveNoChangeOnDetailCart()
+        {
+            //Arrange
+            Coupon tempCoupon = null;
+            _sessionService.Setup(x => x.GetSession(It.IsAny<String>())).Returns(It.IsAny<String>());
+            _unitOfWork.Setup(x => x.CouponRepository.FirstMatchName(It.IsAny<String>())).Returns(tempCoupon);
+
+            //Act
+            OrderDetailsCart tempDetailsCart = this.cartService.ApplyCoupon(this.detailsCart);
+
+            //Assert
+            Assert.Equal(tempDetailsCart.OrderHeader.OrderTotal, tempDetailsCart.OrderHeader.OrderTotalOriginal);
+            Assert.Equal(0, tempDetailsCart.OrderHeader.CouponCodeDiscount);
+        }
+
+        [Fact]
+        public void ApplyCoupon_HaveSavedCoupon_ShouldHaveChangeOnDetailCart()
+        {
+            //Arrange            
+            Coupon tempCoupon = new Coupon()
+            {
+                Name = "15OFF",
+                CouponType = "0",
+                Discount = 15,
+                IsActive = true,
+                MinimumAmount = 50
+            };
+
+            var expectedOrderTotal = this.detailsCart.OrderHeader.OrderTotalOriginal * (100 - tempCoupon.Discount) / 100;
+            var expectedDiscountAmount = this.detailsCart.OrderHeader.OrderTotalOriginal - expectedOrderTotal;
+
+            _sessionService.Setup(x => x.GetSession(It.IsAny<String>())).Returns(It.IsAny<String>());
+            _unitOfWork.Setup(x => x.CouponRepository.FirstMatchName(It.IsAny<String>())).Returns(tempCoupon);
+
+            //Act
+            OrderDetailsCart tempDetailsCart = this.cartService.ApplyCoupon(this.detailsCart);
+
+            //Assert
+            Assert.Equal(tempDetailsCart.OrderHeader.OrderTotal, tempDetailsCart.OrderHeader.OrderTotalOriginal);
+            Assert.Equal(0, tempDetailsCart.OrderHeader.CouponCodeDiscount);
+        }
+
+        #endregion
+
+        #region Unit test CheckCurrentItemQuantity method
+        [Fact]
+        public void CheckCurrentItemQuantity_ValidQuantity_ShouldReturnFalse()
         {
             //Arrange
            
@@ -88,13 +164,13 @@ namespace Spice.UnitTesting
             this._unitOfWork.Setup(x => x.MenuItemRepository.ReadOneIncludeCategoryAndSubCategory(1)).Returns(item1);
 
             //Act
-            bool result = _cartService.CheckCurrentItemQuantity(1);
+            bool result = cartService.CheckCurrentItemQuantity(1);
 
             //Assert
             Assert.False(result);
         }
         [Fact]
-        public void CheckCurrentItemQuantity_InvalidQuantity_ReturnTrue()
+        public void CheckCurrentItemQuantity_InvalidQuantity_ShouldReturnTrue()
         {
             //Arrange
 
@@ -117,10 +193,34 @@ namespace Spice.UnitTesting
             this._unitOfWork.Setup(x => x.MenuItemRepository.ReadOneIncludeCategoryAndSubCategory(1)).Returns(item1);
 
             //Act
-            bool result = _cartService.CheckCurrentItemQuantity(1);
+            bool result = cartService.CheckCurrentItemQuantity(1);
 
             //Assert
             Assert.True(result);
         }
+        #endregion
+
+        #region  Unit test PrepareForIndexCart method
+
+        [Fact]
+        public void PrepareForIndexCart_CartSessionIsNull_ShoulReturnAEmptyListCart()
+        {
+
+            //Arrange
+            List<MenuItemsAndQuantity> tempListItemAndQuantity = null;
+
+            _sessionService.Setup(x => x.GetSessionListQuantity()).Returns(tempListItemAndQuantity);
+
+
+
+            //Act
+            OrderDetailsCart tempDetailsCart = this.cartService.ApplyCoupon(this.detailsCart);
+
+            //Assert
+            Assert.Equal(tempDetailsCart.OrderHeader.OrderTotal, tempDetailsCart.OrderHeader.OrderTotalOriginal);
+            Assert.Equal(0, tempDetailsCart.OrderHeader.CouponCodeDiscount);
+        }
+
+        #endregion
     }
 }
