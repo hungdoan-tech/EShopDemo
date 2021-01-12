@@ -169,6 +169,10 @@ namespace Spice.Areas.Admin.Controllers
             menuItemFromDb.IsPublish = MenuItemVM.MenuItem.IsPublish;
             menuItemFromDb.CategoryId = MenuItemVM.MenuItem.CategoryId;
             menuItemFromDb.SubCategoryId = MenuItemVM.MenuItem.SubCategoryId;
+            menuItemFromDb.Band = MenuItemVM.MenuItem.Band;
+            menuItemFromDb.Crystal = MenuItemVM.MenuItem.Crystal;
+            menuItemFromDb.Size = MenuItemVM.MenuItem.Size;
+            menuItemFromDb.Thickness = MenuItemVM.MenuItem.Thickness;
 
             _unitOfWork.SaveChanges();
 
