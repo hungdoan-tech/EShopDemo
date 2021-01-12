@@ -178,7 +178,7 @@ namespace Spice.Service
             else
             {
                 lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity += 1;
-                _sessionService.Clear();
+                _sessionService.ClearCart();
 
             }
             return flag;
