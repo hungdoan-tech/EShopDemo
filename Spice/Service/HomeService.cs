@@ -1,4 +1,5 @@
-﻿using Spice.Models.ViewModels;
+﻿using Spice.Models;
+using Spice.Models.ViewModels;
 using Spice.Repository;
 using Spice.Service.ServiceInterfaces;
 using System;
@@ -10,11 +11,14 @@ namespace Spice.Service
 {
     public class HomeService : IHomeService
     {
+
+        private readonly IUserService _userService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public HomeService(IUnitOfWork unitOfWork)
+        public HomeService(IUnitOfWork unitOfWork, IUserService userService)
         {
             this._unitOfWork = unitOfWork;
+            this._userService = userService;
         }
 
         public IndexHomeVM PrepareForHomeIndex()
@@ -27,6 +31,26 @@ namespace Spice.Service
                 ListNews = _unitOfWork.NewsRepository.ReadAllCouponOrNews().Take(2)                                         
             };
             return IndexVM;
+        }
+
+        public void confirmOrRemoveFavoritedProduct(int itemId)
+        {
+            string userId = _userService.GetUserId();            
+            var temp = _unitOfWork.FavoritedProductRepository.findByItemIdAndUserId(itemId, userId);
+            if (temp == null)
+            {
+                FavoritedProduct favoritedProduct = new FavoritedProduct()
+                {
+                    ItemId = itemId,
+                    UserId = userId
+                };
+                _unitOfWork.FavoritedProductRepository.Create(favoritedProduct);                
+            }
+            else
+            {
+                _unitOfWork.FavoritedProductRepository.Delete(temp);
+            }
+            _unitOfWork.SaveChanges();
         }
     }
 }

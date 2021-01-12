@@ -73,6 +73,36 @@ namespace Spice.UnitTesting
             this._unitOfWork.Setup(x => x.CouponRepository.FirstMatchName(It.IsAny<string>())).Returns(coupon);
             double expectedResult = orderDetailsCart.OrderHeader.OrderTotalOriginal * (100 - coupon.Discount) / 100;
 
+
+            
+            var cartItem = new MenuItemsAndQuantity()
+            {
+                Item = new MenuItem()
+                {
+                    Id = 1,
+                    CategoryId = 1,
+                    SubCategoryId = 1,
+                    Name = "Super Hot Item"
+                },
+                Quantity = 4
+            };
+
+            var list = new List<MenuItemsAndQuantity>()
+            {
+                cartItem,
+                new MenuItemsAndQuantity()
+                {
+                    Item = new MenuItem()
+                    {
+                        Id = 5,
+                        CategoryId = 1,
+                        SubCategoryId = 1,
+                        Name = "Super Hot Item"
+                    },
+                    Quantity = 1
+                }
+            };
+
             //Act
             OrderDetailsCart actualResult = _cartService.CheckCouponBeforeSumary(orderDetailsCart);
 

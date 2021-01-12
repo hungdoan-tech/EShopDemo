@@ -9,5 +9,6 @@ namespace Spice.Service.ServiceInterfaces
     public interface IHomeService
     {
         IndexHomeVM PrepareForHomeIndex();
+        public void confirmOrRemoveFavoritedProduct(int id);
     }
 }

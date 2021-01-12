@@ -4,7 +4,7 @@ using Spice.Models.ViewModels;
 using Spice.Service.ServiceInterfaces;
 using Spice.Utility;
 using System.Collections.Generic;
-
+using System.Text.Json;
 
 namespace Spice.Service
 {
@@ -33,6 +33,11 @@ namespace Spice.Service
         public List<MenuItemsAndQuantity> GetSessionListQuantity()
         {
             return _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
+        }
+
+        public void Set<T>(string key, T value)
+        {
+            _httpContextAccessor.HttpContext.Session.SetString(key, JsonSerializer.Serialize(value));
         }
     }
 }

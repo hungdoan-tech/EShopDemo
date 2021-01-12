@@ -22,6 +22,7 @@ namespace Spice.Repository
         private readonly IOrderHeaderRepository orderHeaderRepository;
         private readonly IOrderDetailRepository orderDetailRepository;
         private readonly IRatingRepository ratingRepository;
+        private readonly IFavoritedProductRepository favoritedProductRepository;
 
         private bool disposed = false;
 
@@ -103,6 +104,13 @@ namespace Spice.Repository
             get
             {
                 return this.ratingRepository ?? new RatingRepository(_context);
+            }
+        }
+        public IFavoritedProductRepository FavoritedProductRepository
+        {
+            get
+            {
+                return this.favoritedProductRepository ?? new FavoritedProductRepository(_context);
             }
         }
 

@@ -228,23 +228,7 @@ namespace Spice.Controllers
         [Route("/Home/FavoriteProductConfirm/{id}")]
         public IActionResult FavoriteProductConfirm(int id)
         {
-            string userId = _userService.GetUserId();
-            int productId = id;
-            var temp = _db.FavoritedProducts.FirstOrDefault(a => a.ItemId == productId && a.UserId == userId);
-            if(temp == null)
-            {
-                FavoritedProduct favoritedProduct = new FavoritedProduct()
-                {
-                    ItemId = productId,
-                    UserId = userId
-                };
-                _db.FavoritedProducts.Add(favoritedProduct);
-            }
-            else
-            {
-                _db.Remove(temp);
-            }
-            _db.SaveChanges();
+            this._homeService.confirmOrRemoveFavoritedProduct(id);
             return LocalRedirect("/Customer/Home/Details/" + id);
         }
 

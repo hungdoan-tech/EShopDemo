@@ -8,6 +8,7 @@ namespace Spice.Service.ServiceInterfaces
 {
     public interface ISessionService
     {
+        void Set<T>(string key, T value);
         void ClearCart();
         void ClearCoupon();
         object GetSession(string code);

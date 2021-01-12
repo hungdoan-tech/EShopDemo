@@ -178,10 +178,24 @@ namespace Spice.Service
             else
             {
                 lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity += 1;
-                _sessionService.Clear();
-
+                _sessionService.ClearCart();
             }
             return flag;
+        }
+
+        public void MinusAnItemFromCart(int itemId)
+        {
+            List<MenuItemsAndQuantity> lstShoppingCart = _sessionService.GetSessionListQuantity();
+            var cartItem = lstShoppingCart.Find(c => c.Item.Id == itemId);
+            if (cartItem.Quantity == 1)
+            {
+                lstShoppingCart.Remove(cartItem);
+            }
+            else
+            {
+                lstShoppingCart.Find(c => c.Item.Id == itemId).Quantity -= 1;
+            }
+            _sessionService.Set<List<MenuItemsAndQuantity>>(SD.ssShoppingCart, lstShoppingCart);
         }
     }
 }
