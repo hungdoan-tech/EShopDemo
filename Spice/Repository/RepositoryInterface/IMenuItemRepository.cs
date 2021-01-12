@@ -13,5 +13,6 @@ namespace Spice.RepositoryInterface
         IEnumerable<MenuItem> FilterMostNewMenuItems();
         IEnumerable<MenuItem> FilterMostBestSellerMenuItems();
         MenuItem ReadOneIncludeCategoryAndSubCategory(int? id);
+        List<MenuItem> GetAll();
     }
 }

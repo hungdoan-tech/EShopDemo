@@ -50,5 +50,9 @@ namespace Spice.Repository
         {
             return this.dbSet.Include(m => m.Category).Include(m => m.SubCategory).SingleOrDefault(m => m.Id == id);
         }
+        public List<MenuItem> GetAll()
+        {
+            return this.dbSet.Include(m => m.Category).Include(m => m.SubCategory).ToList();
+        }
     }
 }
