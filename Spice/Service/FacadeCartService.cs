@@ -64,7 +64,7 @@ namespace Spice.Service
 
         public void ClearSession()
         {
-            this._sessionService.Clear();
+            this._sessionService.ClearCart();
         }
 
         public void PrepareForIndexCart(OrderDetailsCart detailCart)

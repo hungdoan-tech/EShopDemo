@@ -68,20 +68,26 @@ namespace Spice.Service
         }
         public OrderDetailsCart ApplyCoupon(OrderDetailsCart detailCart)
         {
-            if (_httpContextAccessor.HttpContext.Session.GetString(SD.ssCouponCode) != null)
+            string sessionCoupon = _sessionService.GetSession(SD.ssCouponCode).ToString();
+            if (sessionCoupon != null)
             {
-                detailCart.OrderHeader.CouponCode = _httpContextAccessor.HttpContext.Session.GetString(SD.ssCouponCode);
+                detailCart.OrderHeader.CouponCode = sessionCoupon;
                 var couponFromDb = _unitOfWork.CouponRepository.FirstMatchName(detailCart.OrderHeader.CouponCode.ToLower());
-                detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
+                if(couponFromDb != null)
+                {
+                    detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
+                }  
+                else
+                {
+                    detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotalOriginal;
+                }
             }
             else
             {
                 detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotalOriginal;
             }
             detailCart.OrderHeader.CouponCodeDiscount = detailCart.OrderHeader.OrderTotalOriginal - detailCart.OrderHeader.OrderTotal;
-
-            _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart).Clear();
-            _unitOfWork.SaveChanges();
+            _sessionService.ClearCoupon();
             return detailCart;
         }
 
@@ -129,42 +135,34 @@ namespace Spice.Service
         }
 
        public OrderDetailsCart PrepareForIndexCart(OrderDetailsCart detailCart)
-        {
+       {
             var cart = _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
-
             if (cart != null)
             {
                 detailCart.ListCart = cart.ToList();
 
                 foreach (var eachItem in detailCart.ListCart)
                 {
-                    try
+                    eachItem.Item = _unitOfWork.MenuItemRepository.ReadOne(eachItem.Item.Id);
+                    detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotal + (eachItem.Item.Price * eachItem.Quantity);
+
+                    eachItem.Item.Description = SD.ConvertToRawHtml(eachItem.Item.Description);
+
+                    if (eachItem.Item.Description.Length > 100)
                     {
-                        eachItem.Item = _unitOfWork.MenuItemRepository.ReadOne(eachItem.Item.Id);
-                        detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotal + (eachItem.Item.Price * eachItem.Quantity);
-
-                        eachItem.Item.Description = SD.ConvertToRawHtml(eachItem.Item.Description);
-
-                        if (eachItem.Item.Description.Length > 100)
-                        {
-                            eachItem.Item.Description = eachItem.Item.Description.Substring(0, 99) + "...";
-                        }
-                    }
-                    catch 
-                    {
-
+                        eachItem.Item.Description = eachItem.Item.Description.Substring(0, 99) + "...";
                     }
                 }
+
                 detailCart.OrderHeader.OrderTotalOriginal = detailCart.OrderHeader.OrderTotal;
-                detailCart = this.CheckCouponBeforeSumary(detailCart);
-                return detailCart;
+                detailCart = this.CheckCouponBeforeSumary(detailCart);                
             }
             else
             {
-                detailCart.ListCart = new List<MenuItemsAndQuantity>();
-                return detailCart;
+                detailCart.ListCart = new List<MenuItemsAndQuantity>();                
             }
-        }
+            return detailCart;
+       }
 
         public bool CheckCurrentItemQuantity(int cartId)
         {

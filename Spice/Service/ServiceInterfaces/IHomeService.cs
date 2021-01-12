@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Spice.Service.ServiceInterfaces
 {
-    interface IHomeService
+    public interface IHomeService
     {
         IndexHomeVM PrepareForHomeIndex();
     }

@@ -11,6 +11,12 @@ namespace Spice.Service
     public class HomeService : IHomeService
     {
         private readonly IUnitOfWork _unitOfWork;
+
+        public HomeService(IUnitOfWork unitOfWork)
+        {
+            this._unitOfWork = unitOfWork;
+        }
+
         public IndexHomeVM PrepareForHomeIndex()
         {
             IndexHomeVM IndexVM = new IndexHomeVM()

@@ -61,7 +61,7 @@ namespace Spice
 
             // Config section
             services.Configure<StripeSettings>(Configuration.GetSection("Stripe"));
-            services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddTransient<IEmailSender, EmailSender>();
 
             // Database section
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
