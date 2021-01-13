@@ -183,7 +183,7 @@ namespace Spice.Service
             return flag;
         }
 
-        public void MinusAnItemFromCart(int itemId)
+        public List<MenuItemsAndQuantity> MinusAnItemFromCart(int itemId)
         {
             List<MenuItemsAndQuantity> lstShoppingCart = _sessionService.GetSessionListQuantity();
             var cartItem = lstShoppingCart.Find(c => c.Item.Id == itemId);
@@ -196,6 +196,7 @@ namespace Spice.Service
                 lstShoppingCart.Find(c => c.Item.Id == itemId).Quantity -= 1;
             }
             _sessionService.Set<List<MenuItemsAndQuantity>>(SD.ssShoppingCart, lstShoppingCart);
+            return lstShoppingCart;
         }
     }
 }
