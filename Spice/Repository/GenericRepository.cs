@@ -74,7 +74,7 @@ namespace Spice.Repository
 
             try
             {
-                this._context.Add(entity);
+                this._context.Add(entity);                
             }
             catch (Exception)
             {

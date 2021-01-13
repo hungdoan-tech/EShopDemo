@@ -12,6 +12,7 @@ namespace Spice.Repository
     {
         public CouponRepository(ApplicationDbContext context) : base(context)
         {
+
         }
 
         public Coupon FirstMatchName(string code)

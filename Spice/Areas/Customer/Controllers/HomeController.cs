@@ -8,6 +8,7 @@ using Spice.Models;
 using Spice.Models.ViewModels;
 using Spice.Repository;
 using Spice.Service;
+using Spice.Service.ServiceInterfaces;
 using Spice.Utility;
 using System;
 using System.Collections.Generic;
@@ -24,41 +25,22 @@ namespace Spice.Controllers
         private readonly ApplicationDbContext _db;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
+        private readonly IHomeService _homeService;
+
         private readonly int PageSize = 3;
 
-
-        public HomeController(ApplicationDbContext db, IUnitOfWork unitOfWork, IUserService userService)
+        public HomeController(ApplicationDbContext db, IUnitOfWork unitOfWork, IUserService userService, IHomeService homeService)
         {
             _unitOfWork = unitOfWork;
             _db = db;
             _userService = userService;
+            _homeService = homeService;
         }
 
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            IndexHomeVM IndexVM = new IndexHomeVM()
-            {
-                ListPopularMenuItem = await _db.MenuItem.Where(a => a.Tag == "2" && a.IsPublish == true)
-                                                        .OrderByDescending(a => a.Id)
-                                                        .Take(6)
-                                                        .Include(a => a.Category)
-                                                        .Include(a => a.SubCategory).ToListAsync(),
-                ListNewMenuItem = await _db.MenuItem.Where(a => a.Tag == "1" && a.IsPublish == true)
-                                                    .OrderByDescending(a => a.Id)
-                                                    .Take(6).Include(a => a.Category)
-                                                    .Include(a => a.SubCategory)
-                                                    .ToListAsync(),
-                ListBestSellerMenuItem = await _db.MenuItem.Where(a => a.Tag == "0" && a.IsPublish == true)
-                                                    .OrderByDescending(a => a.Id)
-                                                    .Take(2).Include(a => a.Category)
-                                                    .Include(a => a.SubCategory)
-                                                    .ToListAsync(),
-                ListNews = await _db.News.Where(a => a.Type != "0")
-                                         .OrderByDescending(a => a.PublishedDate)
-                                         .Take(2)
-                                         .ToListAsync()                                         
-            };
+            IndexHomeVM IndexVM = this._homeService.PrepareForHomeIndex();            
             return View(IndexVM);
         }
 
@@ -246,23 +228,7 @@ namespace Spice.Controllers
         [Route("/Home/FavoriteProductConfirm/{id}")]
         public IActionResult FavoriteProductConfirm(int id)
         {
-            string userId = _userService.GetUserId();
-            int productId = id;
-            var temp = _db.FavoritedProducts.FirstOrDefault(a => a.ItemId == productId && a.UserId == userId);
-            if(temp == null)
-            {
-                FavoritedProduct favoritedProduct = new FavoritedProduct()
-                {
-                    ItemId = productId,
-                    UserId = userId
-                };
-                _db.FavoritedProducts.Add(favoritedProduct);
-            }
-            else
-            {
-                _db.Remove(temp);
-            }
-            _db.SaveChanges();
+            this._homeService.confirmOrRemoveFavoritedProduct(id);
             return LocalRedirect("/Customer/Home/Details/" + id);
         }
 
@@ -295,6 +261,7 @@ namespace Spice.Controllers
 
             return View(listFavor);
         }
+
         public IActionResult Privacy()
         {
             return View();

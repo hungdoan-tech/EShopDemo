@@ -20,6 +20,7 @@ namespace Spice.Repository
         IMenuItemRepository MenuItemRepository { get; }
         IOrderDetailRepository OrderDetailRepository { get; }
         IRatingRepository RatingRepository { get; }
+        IFavoritedProductRepository FavoritedProductRepository { get; }
         Task<int> SaveChangesAsync();
         void SaveChanges();
         void Dispose();

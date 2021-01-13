@@ -58,7 +58,7 @@ namespace Spice.Utility
 
         public static double DiscountedPrice(Coupon couponFromDb, double OriginalOrderTotal)
         {
-            if(couponFromDb==null)
+            if(couponFromDb==null || couponFromDb.IsActive == false)
             {
                 return OriginalOrderTotal;
             }
@@ -76,8 +76,8 @@ namespace Spice.Utility
                         //$10 off $100
                         return Math.Round(OriginalOrderTotal - couponFromDb.Discount, 2);
                     }
-                        if (Convert.ToInt32(couponFromDb.CouponType) == (int)Coupon.ECouponType.Percent)
-                        {
+                    if (Convert.ToInt32(couponFromDb.CouponType) == (int)Coupon.ECouponType.Percent)
+                    {
                         //10% off $100
                         return Math.Round(OriginalOrderTotal - (OriginalOrderTotal* couponFromDb.Discount/100), 2);
                     }

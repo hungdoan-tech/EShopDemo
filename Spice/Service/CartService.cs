@@ -13,16 +13,19 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Spice.Extensions;
 using Spice.Repository;
 using Spice.Models.Builder;
+using Spice.Service.ServiceInterfaces;
 
 namespace Spice.Service
 {
-    public class CartService
+    public class CartService : ICartService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public CartService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+        private readonly ISessionService _sessionService;
+        public CartService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, ISessionService sessionService)
         {
             _unitOfWork = unitOfWork;
+            _sessionService = sessionService;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -65,29 +68,36 @@ namespace Spice.Service
         }
         public OrderDetailsCart ApplyCoupon(OrderDetailsCart detailCart)
         {
-            if (_httpContextAccessor.HttpContext.Session.GetString(SD.ssCouponCode) != null)
+            string sessionCoupon = (string) _sessionService.GetSession(SD.ssCouponCode);
+            if (sessionCoupon != null)
             {
-                detailCart.OrderHeader.CouponCode = _httpContextAccessor.HttpContext.Session.GetString(SD.ssCouponCode);
+                detailCart.OrderHeader.CouponCode = sessionCoupon;
                 var couponFromDb = _unitOfWork.CouponRepository.FirstMatchName(detailCart.OrderHeader.CouponCode.ToLower());
-                detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
+                if(couponFromDb != null)
+                {
+                    detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
+                }  
+                else
+                {
+                    detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotalOriginal;
+                }
             }
             else
             {
                 detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotalOriginal;
             }
             detailCart.OrderHeader.CouponCodeDiscount = detailCart.OrderHeader.OrderTotalOriginal - detailCart.OrderHeader.OrderTotal;
-
-            _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart).Clear();
-            _unitOfWork.SaveChanges();
+            _sessionService.ClearCoupon();
             return detailCart;
         }
 
         public OrderDetailsCart CheckCouponBeforeSumary(OrderDetailsCart detailCart)
         {
-            if (_httpContextAccessor.HttpContext.Session.GetString(SD.ssCouponCode) != null)
+            string sessionCoupon = (string) _sessionService.GetSession(SD.ssCouponCode);
+            if (sessionCoupon != null)
             {
-                detailCart.OrderHeader.CouponCode = _httpContextAccessor.HttpContext.Session.GetString(SD.ssCouponCode);
-                var couponFromDb = _unitOfWork.CouponRepository.FirstMatchName(detailCart.OrderHeader.CouponCode.ToLower());
+                detailCart.OrderHeader.CouponCode = sessionCoupon;
+                Coupon couponFromDb = _unitOfWork.CouponRepository.FirstMatchName(detailCart.OrderHeader.CouponCode.ToLower());
                 detailCart.OrderHeader.OrderTotal = SD.DiscountedPrice(couponFromDb, detailCart.OrderHeader.OrderTotalOriginal);
             }
             return detailCart;
@@ -125,46 +135,38 @@ namespace Spice.Service
         }
 
        public OrderDetailsCart PrepareForIndexCart(OrderDetailsCart detailCart)
-        {
-            var cart = _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
-
+       {
+            var cart = _sessionService.GetSessionListQuantity();
             if (cart != null)
             {
                 detailCart.ListCart = cart.ToList();
 
                 foreach (var eachItem in detailCart.ListCart)
                 {
-                    try
+                    eachItem.Item = _unitOfWork.MenuItemRepository.ReadOne(eachItem.Item.Id);
+                    detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotal + (eachItem.Item.Price * eachItem.Quantity);
+
+                    eachItem.Item.Description = SD.ConvertToRawHtml(eachItem.Item.Description);
+
+                    if (eachItem.Item.Description.Length > 100)
                     {
-                        eachItem.Item = _unitOfWork.MenuItemRepository.ReadOne(eachItem.Item.Id);
-                        detailCart.OrderHeader.OrderTotal = detailCart.OrderHeader.OrderTotal + (eachItem.Item.Price * eachItem.Quantity);
-
-                        eachItem.Item.Description = SD.ConvertToRawHtml(eachItem.Item.Description);
-
-                        if (eachItem.Item.Description.Length > 100)
-                        {
-                            eachItem.Item.Description = eachItem.Item.Description.Substring(0, 99) + "...";
-                        }
-                    }
-                    catch 
-                    {
-
+                        eachItem.Item.Description = eachItem.Item.Description.Substring(0, 99) + "...";
                     }
                 }
+
                 detailCart.OrderHeader.OrderTotalOriginal = detailCart.OrderHeader.OrderTotal;
-                detailCart = this.CheckCouponBeforeSumary(detailCart);
-                return detailCart;
+                detailCart = this.CheckCouponBeforeSumary(detailCart);                
             }
             else
             {
-                detailCart.ListCart = new List<MenuItemsAndQuantity>();
-                return detailCart;
+                detailCart.ListCart = new List<MenuItemsAndQuantity>();                
             }
-        }
+            return detailCart;
+       }
 
-        public Boolean CheckCurrentItemQuantity(int cartId)
+        public bool CheckCurrentItemQuantity(int cartId)
         {
-            List<MenuItemsAndQuantity> lstShoppingCart = _httpContextAccessor.HttpContext.Session.Get<List<MenuItemsAndQuantity>>(SD.ssShoppingCart);
+            List<MenuItemsAndQuantity> lstShoppingCart = _sessionService.GetSessionListQuantity();
             var menuItemFromDb = _unitOfWork.MenuItemRepository.ReadOneIncludeCategoryAndSubCategory(cartId);
             int currentQuantity = lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity;
 
@@ -176,9 +178,25 @@ namespace Spice.Service
             else
             {
                 lstShoppingCart.Find(c => c.Item.Id == cartId).Quantity += 1;
-                _httpContextAccessor.HttpContext.Session.Set(SD.ssShoppingCart, lstShoppingCart);
+                _sessionService.ClearCart();
             }
             return flag;
+        }
+
+        public List<MenuItemsAndQuantity> MinusAnItemFromCart(int itemId)
+        {
+            List<MenuItemsAndQuantity> lstShoppingCart = _sessionService.GetSessionListQuantity();
+            var cartItem = lstShoppingCart.Find(c => c.Item.Id == itemId);
+            if (cartItem.Quantity == 1)
+            {
+                lstShoppingCart.Remove(cartItem);
+            }
+            else
+            {
+                lstShoppingCart.Find(c => c.Item.Id == itemId).Quantity -= 1;
+            }
+            _sessionService.Set<List<MenuItemsAndQuantity>>(SD.ssShoppingCart, lstShoppingCart);
+            return lstShoppingCart;
         }
     }
 }

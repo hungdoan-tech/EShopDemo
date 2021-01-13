@@ -15,9 +15,9 @@ namespace Spice.Service
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         private readonly CartService _cartService;
-        private readonly PaymentService _paymentService;
+        private readonly IPaymentService _paymentService;
         private readonly IEmailService _emailService;
-        private readonly SessionService _sessionService;
+        private readonly ISessionService _sessionService;        
 
         public CartFacadeService(IUnitOfWork unitOfWork, 
                                 IHttpContextAccessor httpContextAccessor,
@@ -27,7 +27,7 @@ namespace Spice.Service
             this._httpContextAccessor = httpContextAccessor;
             this._emailService = emailService;
 
-            this._cartService = new CartService(_unitOfWork, _httpContextAccessor);
+            this._cartService = new CartService(_unitOfWork, _httpContextAccessor, _sessionService);
             this._paymentService = new PaymentService();            
             this._sessionService = new SessionService(_httpContextAccessor);
         }
@@ -64,7 +64,7 @@ namespace Spice.Service
 
         public void ClearSession()
         {
-            this._sessionService.Clear();
+            this._sessionService.ClearCart();
         }
 
         public void PrepareForIndexCart(OrderDetailsCart detailCart)

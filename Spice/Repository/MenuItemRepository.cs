@@ -16,6 +16,31 @@ namespace Spice.Repository
 
         }
 
+        public IEnumerable<MenuItem> FilterMostBestSellerMenuItems()
+        {
+            return this.dbSet.Where(a => a.Tag == "0" && a.IsPublish == true)
+                                                    .OrderByDescending(a => a.Id)
+                                                    .Take(2).Include(a => a.Category)
+                                                    .Include(a => a.SubCategory);
+        }
+
+        public IEnumerable<MenuItem> FilterMostNewMenuItems()
+        {
+            return this.dbSet.Where(a => a.Tag == "1" && a.IsPublish == true)
+                                                    .OrderByDescending(a => a.Id)
+                                                    .Take(6).Include(a => a.Category)
+                                                    .Include(a => a.SubCategory);
+        }
+
+        public IEnumerable<MenuItem> FilterMostPopularMenuItems()
+        {
+            return this.dbSet.Where(a => a.Tag == "2" && a.IsPublish == true)
+                                                         .OrderByDescending(a => a.Id)
+                                                         .Take(6)
+                                                         .Include(a => a.Category)
+                                                         .Include(a => a.SubCategory);
+        }
+
         public IEnumerable<MenuItem> ReadAllIncludeCategoryAndSubCategory()
         {
             return this.dbSet.Include(m => m.Category).Include(m => m.SubCategory);
@@ -24,6 +49,10 @@ namespace Spice.Repository
         public MenuItem ReadOneIncludeCategoryAndSubCategory(int? id)
         {
             return this.dbSet.Include(m => m.Category).Include(m => m.SubCategory).SingleOrDefault(m => m.Id == id);
+        }
+        public List<MenuItem> GetAll()
+        {
+            return this.dbSet.Include(m => m.Category).Include(m => m.SubCategory).ToList();
         }
     }
 }

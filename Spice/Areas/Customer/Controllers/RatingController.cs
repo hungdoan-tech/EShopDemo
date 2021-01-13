@@ -25,7 +25,7 @@ namespace Spice.Areas.Customer.Controllers
         }
 
         //GET 
-        public IActionResult Index(int id)
+        public IActionResult Index()
         {
             return View();
         }
